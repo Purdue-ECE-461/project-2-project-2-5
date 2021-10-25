@@ -1,0 +1,7 @@
+https://github.com/numpy/numpy
+https://github.com/pandas-dev/pandas
+https://www.indeed.com/jobs?q=software%20engineer&l=47906&vjk=80b2e4e2e820a5c5
+https://github.com/spdx/license-list-XML
+https://github.com/jonschlinkert/even
+https://github.com/comparison-sorting/odd-even-merge-sort
+https://www.npmjs.com/package/even
