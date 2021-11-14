@@ -43,7 +43,10 @@ if __name__ == "__main__":
             print('!Unable to interpret arguments given!\n|Acceptable Inputs|\n\"install\" to install dependencies\n\"test\" to test coverage and validate performance\nOr, you may enter an absolute path to a file containing line-delimited URLs\n')
             sys.exit(1)
 
+        #print("Manual addition.!")    
+
         cli = CLIHandler(sys.argv[1])  #create CLIHandler object with command line input
+        #cli = CLIHandler("~/461/project-1-project-1-4/test_url_list.txt") 
         cli.calc()  #make the calculations on all repo objects extracted from the above call
         cli.print_to_console()    #print out the output
     
