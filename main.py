@@ -42,5 +42,5 @@ def download_blob(bucket_name, source_blob_name, destination_file_name):
 
 if __name__ == "__main__":
     # app.run(debug=True)
-    upload_blob("main-registry-461-project-2","smile.zip", "test_zip")
-    download_blob("main-registry-461-project-2","test_zip", "download_test.zip")
+    upload_blob("main-registry-461-project-2","smile_2.zip", "test_zip2")
+    download_blob("main-registry-461-project-2","test_zip2", "download_test2.zip")

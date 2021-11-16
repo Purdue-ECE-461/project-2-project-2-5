@@ -11,16 +11,16 @@ if [ "$1" == "install" ]; then
   pip install Pillow
   export GOOGLE_APPLICATION_CREDENTIALS="./project-2-331602-22c5987270e1.json"
   # ./google-cloud-sdk/install.sh
-  ./google-cloud-sdk/bin/gcloud init
+  # ./google-cloud-sdk/bin/gcloud init
   # gcloud init
-  ./google-cloud-sdk/bin/gcloud components install app-engine-python
-  ./google-cloud-sdk/bin/gcloud config set project project-2-331602
+  # ./google-cloud-sdk/bin/gcloud components install app-engine-python
+  # ./google-cloud-sdk/bin/gcloud config set project project-2-331602
   # ./google-cloud-sdk/bin/gcloud compute ssh instance-1
-  ./google-cloud-sdk/bin/gcloud beta billing projects link project-2-331602  --billing-account 0175E5-C52C07-062983
-  ./google-cloud-sdk/bin/gcloud services enable cloudbuild.googleapis.com
-  ./google-cloud-sdk/bin/gcloud config set gcloudignore/enabled true
+  # ./google-cloud-sdk/bin/gcloud beta billing projects link project-2-331602  --billing-account 0175E5-C52C07-062983
+  # ./google-cloud-sdk/bin/gcloud services enable cloudbuild.googleapis.com
+  # ./google-cloud-sdk/bin/gcloud config set gcloudignore/enabled true
   # ./google-cloud-sdk/bin/gcloud app create --project=project-2-331602
-  ./google-cloud-sdk/bin/gcloud datastore export gs://main-registry-461-project-2 --async
+  # ./google-cloud-sdk/bin/gcloud datastore export gs://main-registry-461-project-2 --async
 
   
   pip install Flask
