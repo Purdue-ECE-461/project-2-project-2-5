@@ -1,0 +1,48 @@
+name: Project 2 Actions
+on: [pull]
+jobs:
+  Prereq:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Installing Dependencies
+      - run:  pip install pylint
+
+on: pull_request
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: action-git-diff-suggestions
+        uses: getsentry/action-git-diff-suggestions@v1
+
+on: [push]
+jobs:
+  Verification:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - name: List files in the repository
+        run: |
+          ls ${{ github.workspace }}
+      
+      - name: Analyze code with pylint
+      - run: |
+          pylint `ls -R|grep .py$|xargs`
+      steps:
+      - uses: actions/checkout@v1
+      - uses: ricardochaves/python-lint@v1.4.0
+        with:
+          python-root-list: "python_alelo tests"
+          use-pylint: true
+          use-pycodestyle: false
+          use-flake8: false
+          use-black: false
+          use-mypy: false
+          use-isort: false
+          extra-pylint-options: ""
+          extra-pycodestyle-options: ""
+          extra-flake8-options: ""
+          extra-black-options: ""
+          extra-mypy-options: ""
+          extra-isort-options: ""
