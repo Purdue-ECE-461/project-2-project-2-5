@@ -262,8 +262,6 @@ def test_coverage():
     Numpassed += test_CalcHandlerNpmjs_functions('https://www.npmjs.com/package/even')  #Test 10
     Numpassed += test_CalcHandlerNpmjs_functions('https://www.npmjs.com/package/fresh')  #Test 11
     Numpassed += test_CalcHandlerNpmjs_functions('https://www.npmjs.com/package/jquery')  #Test 12
-    
-
 
 
     Numpassed += test01(create_repo('https://github.com/jonschlinkert/even'))    #Test 13
@@ -275,6 +273,7 @@ def test_coverage():
     Numpassed += test07(create_repo('https://www.npmjs.com/package/jquery'))    #Test 19
     Numpassed += test08(create_repo('https://github.com/comparison-sorting/odd-even-merge-sort'))    #Test 20
 
+    
     cov.stop()
     #percent = cov.report(skip_empty=True, omit=["test_coverage.py", "LogWrapper.py"],show_missing = True, ignore_errors = True, file=sys.stdout)
     percent = round(cov.xml_report(skip_empty=True, omit=["test_coverage.py", "LogWrapper.py"], ignore_errors = True))
