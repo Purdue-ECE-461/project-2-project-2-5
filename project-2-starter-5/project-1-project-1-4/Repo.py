@@ -67,6 +67,7 @@ class Repo(LogWrapper):
                 + "{:.2f}".format(self.bus_factor_score) + ' ' \
                 + "{:.2f}".format(self.maint_score) + ' ' \
                 + "{:.2f}".format(self.license_score)
+                
 
     #calculate each score
     def do_calc(self)->None:
@@ -189,3 +190,23 @@ class Repo(LogWrapper):
             0.25 * self.correctness_score + \
             0.1  * self.rampup_score)
         return score
+
+    
+    def getNumDependencies(repo) : #repo should be in the form of "expressjs/express"
+        score = 1
+        url = 'https://github.com/{}/network/dependencies'.format(repo)
+
+        print("GET " + url)
+        r = requests.get(url)
+        soup = BeautifulSoup(r.content, "html.parser")
+
+        data = [
+            "{}/{}".format(
+                t.find('a', {"data-repository-hovercards-enabled":""}).text,
+                t.find('a', {"data-hovercard-type":"repository"}).text
+            )
+            for t in soup.findAll("div", {"class": "Box-row"})
+        ]
+        
+        score = score / len(data)
+        return (score)

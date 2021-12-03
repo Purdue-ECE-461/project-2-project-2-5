@@ -92,3 +92,6 @@ class CLIHandler(LogWrapper):
         for repository in self.repo_list: #For all the repo objects
             print(repository.url, repository)
         sys.exit(0)
+        
+    
+
