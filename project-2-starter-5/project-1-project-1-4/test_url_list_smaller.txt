@@ -1,3 +1,0 @@
-https://www.npmjs.com/package/fresh
-https://www.npmjs.com/package/jquery
-https://github.com/comparison-sorting/odd-even-merge-sort
