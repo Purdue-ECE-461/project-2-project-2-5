@@ -10,7 +10,7 @@ import google.cloud.datastore as datastore
 import json
 import sys
 sys.path.append("project1")
-import project1.CLIHandler as CLIHandler
+from project1.CLIHandler import CLIHandler
 
 @app.route("/")
 def homepage():
@@ -37,11 +37,27 @@ def homepage():
 
 
 @app.route("/package", methods=['POST'])
-def create():
+def callHandler():
+    dataFull = request.json
+    metadata = dataFull["metadata"]
+    data = dataFull["data"]
+
+    if "Content" in data.keys():
+        returnvVal = create(metadata, data)
+    else :
+        returnvVal = ingestion(metadata, data)
+    
+    return returnvVal,201
+
+
+    
+
+
+def create(metadata, data):
     # print("hello")
     # Unpack data from JSON object
     # try:
-    dataFull = request.json
+    
     # x_auth = header.split()
     # print(x_auth)
 
@@ -49,8 +65,6 @@ def create():
     # use x_auth[1], x_auth[2]
 
     # dataFull = json.loads(data_raw)
-    metadata = dataFull["metadata"]
-    data = dataFull["data"]
     # id = metadata["ID"]
 
     data_client = datastore.Client()
@@ -67,7 +81,7 @@ def create():
     newEntity["jsprogram"] = data["JSProgram"]
 
     data_client.put(newEntity)
-    return dataFull
+    return metadata
 
     # except:
     #     # if request != "/packages":
@@ -78,34 +92,50 @@ def create():
     #     raise Exception()
 
 
-# @app.route("/https://ece461.purdue.edu/project2/package", methods=['POST'])
-# def ingestion(location, request, header, data_raw):
+def ingestion(metadata, data):
 
-#     try:
-#         x_auth = header.split()
-#         print(x_auth)
+    #x_auth = header.split()
+    #print(x_auth)
 
-#         # function calls for authentication:
-#         # use x_auth[1], x_auth[2]
+    # function calls for authentication:
+    # use x_auth[1], x_auth[2]
 
-#         dataFull = json.loads(data_raw)
-#         data = json.loads(dataFull["data"])
-        
-#         url = data["URL"]
-#         cli = CLIHandler([url])
-#         cli.calc()
-#         cli.print_to_console()
-
-#         return "ingesting package: "+url
-
-#     except:
-#         if request != "https://ece461.purdue.edu/project2/package":
-#             raise NameError(request)
-#         if x_auth[0] != "X-Authorization:":
-#             raise NameError(header)
-#         else:
-#             raise Exception()
+    #dataFull = json.loads(data_raw)
+    #data = json.loads(dataFull["data"])
     
+    url = data["URL"]
+    cli = CLIHandler(url)
+    cli.calc()
+    cli.print_to_console()
+
+    return metadata
+    
+    """
+    try:
+        #x_auth = header.split()
+        #print(x_auth)
+
+        # function calls for authentication:
+        # use x_auth[1], x_auth[2]
+
+        #dataFull = json.loads(data_raw)
+        #data = json.loads(dataFull["data"])
+        
+        url = data["URL"]
+        cli = CLIHandler([url])
+        cli.calc()
+        cli.print_to_console()
+
+        return metadata
+
+    except:
+        if request != "https://ece461.purdue.edu/project2/package":
+            raise NameError(request)
+        if x_auth[0] != "X-Authorization:":
+            raise NameError(header)
+        else:
+            raise Exception()
+    """
     # pass
 
 # @app.route("https://ece461.purdue.edu/project2/package", methods=['GET'])
