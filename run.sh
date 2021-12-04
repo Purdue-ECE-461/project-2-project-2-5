@@ -7,11 +7,8 @@ if [ "$1" == "install" ]; then
   python3 -m venv $virtualEnvironmentName
   source $virtualEnvironmentName/bin/activate
   python3 -m pip --quiet install --upgrade pip #maybe get rid of or add user
-  pip install google-cloud-datastore
-  pip install google-cloud-storage
-  pip install Pillow
+  pip install -r ./requirements.txt
   export GOOGLE_APPLICATION_CREDENTIALS="./project-2-331602-22c5987270e1.json"
-  pip install Flask
   # ./google-cloud-sdk/install.sh
   # ./google-cloud-sdk/bin/gcloud init
   # gcloud init

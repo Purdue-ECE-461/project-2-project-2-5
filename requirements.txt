@@ -1,0 +1,4 @@
+pynacl==1.4.0
+Flask==2.0.2
+google-cloud-datastore==2.4.0
+google-cloud-storage==1.43.0
