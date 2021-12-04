@@ -1,46 +1,282 @@
 
-from flask import Flask, render_template
+from flask import Flask
 # from werkzeug.datastructures import FileStorage
-from google.cloud import storage
-# from PIL import Image
+
+# from PIL import ImageS
 # from google.oauth2 import service_account
 
-
 app = Flask(__name__)
+import google.cloud.datastore as datastore
+import json
+import sys
+sys.path.append("project1")
+import project1.CLIHandler as CLIHandler
 
 @app.route("/")
 def homepage():
     return "<p>Hello, World!</p>"
 
-def upload_blob(bucket_name, source_file_name, destination_blob_name):
-    storage_client = storage.Client()
-    # gcp_json_credentials_dict = json.loads(gcp_credentials_string)
-    # credentials = service_account.Credentials.from_service_account_info(gcp_json_credentials_dict)
-    # storage_client = storage.Client(project=gcp_json_credentials_dict['project-2-331602'], credentials=credentials)
-    bucket = storage_client.bucket(bucket_name)
-    blob = bucket.blob(destination_blob_name)
-    # image = Image.open(source_file_name)
-    # fs = FileStorage()
-    # image.save(fs, format="JPEG")
-    blob.upload_from_filename(source_file_name)
+@app.route("/<id>")
+def newhome(id):
+    return "<p>Hello, World! </p>" + id
 
-    print("File {} uploaded to {}.".format(source_file_name,destination_blob_name))
+# @app.route("/https://ece461.purdue.edu/project2/package", methods=['POST'])
+# def upload_blob(bucket_name, source_file_name, destination_blob_name):
+#     storage_client = storage.Client()
+#     # gcp_json_credentials_dict = json.loads(gcp_credentials_string)
+#     # credentials = service_account.Credentials.from_service_account_info(gcp_json_credentials_dict)
+#     # storage_client = storage.Client(project=gcp_json_credentials_dict['project-2-331602'], credentials=credentials)
+#     bucket = storage_client.bucket(bucket_name)
+#     blob = bucket.blob(destination_blob_name)
+#     # image = Image.open(source_file_name)
+#     # fs = FileStorage()
+#     # image.save(fs, format="JPEG")
+#     blob.upload_from_filename(source_file_name)
 
-def download_blob(bucket_name, source_blob_name, destination_file_name):
-    storage_client = storage.Client()
-    # gcp_json_credentials_dict = json.loads(gcp_credentials_string)
-    # credentials = service_account.Credentials.from_service_account_info(gcp_json_credentials_dict)
-    # storage_client = storage.Client(project=gcp_json_credentials_dict['project-2-331602'], credentials=credentials)
-    bucket = storage_client.bucket(bucket_name)
-    blob = bucket.blob(source_blob_name)
-    # image = Image.open(source_file_name)
-    # fs = FileStorage()
-    # image.save(fs, format="JPEG")
-    blob.download_to_filename(destination_file_name)
+#     print("File {} uploaded to {}.".format(source_file_name,destination_blob_name))
 
-    print("Downloaded storage object {} from bucket {} to local file {}.".format(source_blob_name, bucket_name, destination_file_name))
+
+@app.route("/https://ece461.purdue.edu/project2/package", methods=['POST'])
+def create(location, request, header, data_raw):
+
+    # Unpack data from JSON object
+    try:
+        x_auth = header.split()
+        print(x_auth)
+
+        # function calls for authentication:
+        # use x_auth[1], x_auth[2]
+
+        dataFull = json.loads(data_raw)
+        metadata = json.loads(dataFull["metadata"])
+        # data = json.loads(dataFull["data"])
+        # id = metadata["ID"]
+
+        data_client = datastore.Client()
+        full_key = data_client.key(metadata["Name"], metadata["Version"], metadata["ID"])
+        newEntity = datastore.Entity(key=full_key)
+        newEntity.update(dataFull["data"])
+        # newEntity["name"] = metadata["Name"]
+        # newEntity["version"] = metadata["Version"]
+        # newEntity["id"] = metadata["ID"]
+        # newEntity["content"] = data["Content"]
+        # newEntity["url"] = data["URL"]
+        # newEntity["jsprogram"] = data["JSProgram"]
+
+        data_client.put(newEntity)
+        return "creating package: " + newEntity["url"]
+
+    except:
+        if request != "https://ece461.purdue.edu/project2/package":
+            raise NameError(request)
+        if x_auth[0] != "X-Authorization:":
+            raise NameError(header)
+        else:
+            raise Exception()
+
+
+@app.route("/https://ece461.purdue.edu/project2/package", methods=['POST'])
+def ingestion(location, request, header, data_raw):
+
+    try:
+        x_auth = header.split()
+        print(x_auth)
+
+        # function calls for authentication:
+        # use x_auth[1], x_auth[2]
+
+        dataFull = json.loads(data_raw)
+        data = json.loads(dataFull["data"])
+        
+        url = data["URL"]
+        cli = CLIHandler([url])
+        cli.calc()
+        cli.print_to_console()
+
+        return "ingesting package: "+url
+
+    except:
+        if request != "https://ece461.purdue.edu/project2/package":
+            raise NameError(request)
+        if x_auth[0] != "X-Authorization:":
+            raise NameError(header)
+        else:
+            raise Exception()
+    
+    # pass
+
+# @app.route("https://ece461.purdue.edu/project2/package", methods=['GET'])
+# def download_blob(bucket_name, source_blob_name, destination_file_name):
+#     storage_client = storage.Client()
+#     # gcp_json_credentials_dict = json.loads(gcp_credentials_string)
+#     # credentials = service_account.Credentials.from_service_account_info(gcp_json_credentials_dict)
+#     # storage_client = storage.Client(project=gcp_json_credentials_dict['project-2-331602'], credentials=credentials)
+#     bucket = storage_client.bucket(bucket_name)
+#     blob = bucket.blob(source_blob_name)
+#     # image = Image.open(source_file_name)
+#     # fs = FileStorage()
+#     # image.save(fs, format="JPEG")
+#     blob.download_to_filename(destination_file_name)
+
+#     print("Downloaded storage object {} from bucket {} to local file {}.".format(source_blob_name, bucket_name, destination_file_name))
+
+@app.route("/https://ece461.purdue.edu/project2/package/<id>", methods=['GET'])
+def getPackageByID(location, request, header):
+        # Unpack data from JSON object
+    try:
+        x_auth = header.split()
+        print(x_auth)
+        
+        # function calls for authentication:
+        # use x_auth[1], x_auth[2]
+        id = request
+        id.replace("https://ece461.purdue.edu/project2/package/","")
+
+        metadata = {}
+        data = {}
+        dataFull = {}
+        
+        data_client = datastore.Client()
+        keys = []
+        i = 1
+        while data_client.key(id, i) != None:
+            keys.append(data_client.key(id, i))
+        key = data_client.key('package', id)
+        package = key.get()
+        metadata["Name"] = package.name
+        metadata["Version"] = package.version
+        metadata["ID"] = package.id
+        metadata_obj = json.dumps(metadata)
+        data["Content"] = package.content
+        data_obj = json.dumps(data)
+        dataFull["metadata"] = metadata_obj
+        dataFull["data"] = data_obj
+        dataFull_obj = json.dumps(dataFull)
+
+        print(dataFull_obj)
+        return "getting package by ID: " + id
+
+    except:
+        if request != "https://ece461.purdue.edu/project2/package/" + id:
+            raise NameError(request)
+        if x_auth[0] != "X-Authorization:":
+            raise NameError(header)
+        if package.id != id:
+            raise NameError(id)
+        else:
+            raise Exception()
+
+@app.route("/https://ece461.purdue.edu/project2/package/<id>", methods=['PUT'])
+def packageUpdate(location, request, header, data_raw):
+        # Unpack data from JSON object
+    try:
+        x_auth = header.split()
+        print(x_auth)
+        
+        # function calls for authentication:
+        # use x_auth[1], x_auth[2]
+        id = request
+        id.replace("https://ece461.purdue.edu/project2/package/","")
+
+        dataFull = json.loads(data_raw)
+        metadata = json.loads(dataFull["metadata"])
+        data = json.loads(dataFull["data"])
+        # id = metadata["ID"]
+
+        data_client = datastore.Client()
+        key = data_client.key(metadata["Name"], metadata["ID"])
+
+        key = data_client.key('package', id)
+        package = key.get()
+        package.content = data["Content"]
+        package.put()
+
+        print(data_raw)
+        return "Updating package content: "+package.id
+
+    except:
+        if request != "https://ece461.purdue.edu/project2/package/" + package.id:
+            raise NameError(request)
+        if x_auth[0] != "X-Authorization:":
+            raise NameError(header)
+        if package.id != id:
+            raise NameError(id)
+        if package.id != metadata["ID"]:
+            raise NameError(metadata["ID"])
+        if package.version != metadata["Version"]:
+            raise NameError(metadata["Version"])
+        if package.name != metadata["Name"]:
+            raise NameError(metadata["Name"])
+        else:
+            raise Exception()
+
+@app.route("/https://ece461.purdue.edu/project2/package/<id>", methods=['DEL'])
+def deletePackage(location, request, header):
+        # Unpack data from JSON object
+    try:
+        x_auth = header.split()
+        print(x_auth)
+        
+        # function calls for authentication:
+        # use x_auth[1], x_auth[2]
+        id = request
+        id.replace("https://ece461.purdue.edu/project2/package/","")
+        
+        data_client = datastore.Client()
+
+        key = data_client.key('package', id)
+        package = key.get()
+        idCheck = package.id
+        package.key.delete()
+
+        return "deleting entity: " + id
+
+    except:
+        if request != "https://ece461.purdue.edu/project2/package/" + id:
+            raise NameError(request)
+        if x_auth[0] != "X-Authorization:":
+            raise NameError(header)
+        if idCheck != id:
+            raise NameError(id)
+        else:
+            raise Exception()
+
+@app.route("/https://ece461.purdue.edu/project2/package/byName/<name>", methods=['GET'])
+def getPackageByName(location, request, header):
+    try:
+        x_auth = header.split()
+        print(x_auth)
+        
+        # function calls for authentication:
+        # use x_auth[1], x_auth[2]
+        name = request
+        name.replace("https://ece461.purdue.edu/project2/package/byName/","")
+        
+        data_client = datastore.Client()
+
+        key = data_client.key('package', id)
+        package = key.get()
+        idCheck = package.id
+        package.key.delete()
+
+        return "deleting entity: " + id
+
+    except:
+        if request != "https://ece461.purdue.edu/project2/package/" + name:
+            raise NameError(request)
+        if x_auth[0] != "X-Authorization:":
+            raise NameError(header)
+        if idCheck != id:
+            raise NameError(id)
+        else:
+            raise Exception()
+
+@app.route("/https://ece461.purdue.edu/project2/package/:<id>/rate", methods=['GET'])
+def getPackageRate(id):
+    return "getting rate by id: " + id
+    # pass
 
 if __name__ == "__main__":
-    # app.run(debug=True)
-    upload_blob("main-registry-461-project-2","smile_2.zip", "test_zip2")
-    download_blob("main-registry-461-project-2","test_zip2", "download_test2.zip")
+    app.run(debug=True)
+    # upload_blob("main-registry-461-project-2","smile_2.zip", "test_zip2")
+    # download_blob("main-registry-461-project-2","test_zip2", "download_test2.zip")

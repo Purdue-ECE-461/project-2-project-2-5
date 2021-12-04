@@ -7,9 +7,11 @@ if [ "$1" == "install" ]; then
   python3 -m venv $virtualEnvironmentName
   source $virtualEnvironmentName/bin/activate
   python3 -m pip --quiet install --upgrade pip #maybe get rid of or add user
-  pip install --upgrade google-cloud-storage
+  pip install google-cloud-datastore
+  pip install google-cloud-storage
   pip install Pillow
   export GOOGLE_APPLICATION_CREDENTIALS="./project-2-331602-22c5987270e1.json"
+  pip install Flask
   # ./google-cloud-sdk/install.sh
   # ./google-cloud-sdk/bin/gcloud init
   # gcloud init
@@ -21,15 +23,15 @@ if [ "$1" == "install" ]; then
   # ./google-cloud-sdk/bin/gcloud config set gcloudignore/enabled true
   # ./google-cloud-sdk/bin/gcloud app create --project=project-2-331602
   # ./google-cloud-sdk/bin/gcloud datastore export gs://main-registry-461-project-2 --async
-
+  python3 project1/run_handler.py "$1"
   
-  pip install Flask
-  export FLASK_APP=main
+  
+  
   # ./google-cloud-sdk/bin/gcloud app deploy
 
   # ./google-cloud-sdk/bin/gcloud app browse
-  # flask run
-  python3 main.py
+  
+  # python3 main.py
 #   python3 run_handler.py "$1"
 elif [ "$1" == "test" ]; then
   printf "\nTesting...\n"
@@ -38,8 +40,8 @@ elif [ "$1" == "test" ]; then
 #   python3 run_handler.py "$1"
 else
   source $virtualEnvironmentName/bin/activate
-  pip install Flask
-#   python3 run_handler.py "$1"
+  export FLASK_APP=main
+  flask run
 fi
 
 deactivate
