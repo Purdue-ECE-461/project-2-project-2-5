@@ -16,9 +16,9 @@ import project1.CLIHandler as CLIHandler
 def homepage():
     return "<p>Hello, World!</p>"
 
-@app.route("/<id>")
-def newhome(id):
-    return "<p>Hello, World! </p>" + id
+# @app.route("/<id>")
+# def newhome(id):
+#     return "<p>Hello, World! </p>" + id
 
 # @app.route("/https://ece461.purdue.edu/project2/package", methods=['POST'])
 # def upload_blob(bucket_name, source_file_name, destination_blob_name):
@@ -36,9 +36,9 @@ def newhome(id):
 #     print("File {} uploaded to {}.".format(source_file_name,destination_blob_name))
 
 
-@app.route("/package", methods=['POST'])
+@app.route("/https://localhost:5000/package", methods=['POST'])
 def create(location, request, header, data_raw):
-
+    # print("hello")
     # Unpack data from JSON object
     try:
         x_auth = header.split()
@@ -67,41 +67,41 @@ def create(location, request, header, data_raw):
         return "creating package: " + newEntity["url"]
 
     except:
-        if request != "/package":
-            raise NameError(request)
+        # if request != "/packages":
+        #     raise NameError(request)
         if x_auth[0] != "X-Authorization:":
             raise NameError(header)
         else:
             raise Exception()
 
 
-@app.route("/https://ece461.purdue.edu/project2/package", methods=['POST'])
-def ingestion(location, request, header, data_raw):
+# @app.route("/https://ece461.purdue.edu/project2/package", methods=['POST'])
+# def ingestion(location, request, header, data_raw):
 
-    try:
-        x_auth = header.split()
-        print(x_auth)
+#     try:
+#         x_auth = header.split()
+#         print(x_auth)
 
-        # function calls for authentication:
-        # use x_auth[1], x_auth[2]
+#         # function calls for authentication:
+#         # use x_auth[1], x_auth[2]
 
-        dataFull = json.loads(data_raw)
-        data = json.loads(dataFull["data"])
+#         dataFull = json.loads(data_raw)
+#         data = json.loads(dataFull["data"])
         
-        url = data["URL"]
-        cli = CLIHandler([url])
-        cli.calc()
-        cli.print_to_console()
+#         url = data["URL"]
+#         cli = CLIHandler([url])
+#         cli.calc()
+#         cli.print_to_console()
 
-        return "ingesting package: "+url
+#         return "ingesting package: "+url
 
-    except:
-        if request != "https://ece461.purdue.edu/project2/package":
-            raise NameError(request)
-        if x_auth[0] != "X-Authorization:":
-            raise NameError(header)
-        else:
-            raise Exception()
+#     except:
+#         if request != "https://ece461.purdue.edu/project2/package":
+#             raise NameError(request)
+#         if x_auth[0] != "X-Authorization:":
+#             raise NameError(header)
+#         else:
+#             raise Exception()
     
     # pass
 
