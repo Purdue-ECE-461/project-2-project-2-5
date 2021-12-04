@@ -40,20 +40,22 @@ class CLIHandler(LogWrapper):
         urls = []   #contains raw URLS in the order given in the file, newline delimitted
         repo_objects = []   #contains GH directory to repo in the order given in the file
 
-        try:
-            URL_file = open(command_line_arg, 'r')  #open file at directory given in argv[1], exit if bad file path
-        except:
-            self.logger.error("Unable to open file at specified absolute path!")
-            print("Unable to open file at specified absolute path!")
-            sys.exit(1)
+        # try:
+        #     URL_file = open(command_line_arg, 'r')  #open file at directory given in argv[1], exit if bad file path
+        # except:
+        #     self.logger.error("Unable to open file at specified absolute path!")
+        #     print("Unable to open file at specified absolute path!")
+        #     sys.exit(1)
         
-        for line_input in URL_file.read().splitlines():  #read in each URL which is on its own line
-            urls.append(line_input) #append the raw URL to the url list            
-            curr_repo = Repo(line_input)    #create a repo object for the URL given
-            repo_objects.append(curr_repo)  #append either successful directory grab, or unsuccessful message for each URL in the input file
-        
-        
-        URL_file.close()    #make sure to close that up
+        # for line_input in URL_file.read().splitlines():  #read in each URL which is on its own line
+        #     urls.append(line_input) #append the raw URL to the url list            
+        #     curr_repo = Repo(line_input)    #create a repo object for the URL given
+        #     repo_objects.append(curr_repo)  #append either successful directory grab, or unsuccessful message for each URL in the input file
+        urls.append(command_line_arg)
+        curr_repo = Repo(command_line_arg)
+        repo_objects.append(curr_repo)
+
+        # URL_file.close()    #make sure to close that up
         return urls, repo_objects
         
     def calc(self):
