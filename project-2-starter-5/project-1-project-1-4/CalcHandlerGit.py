@@ -579,3 +579,5 @@ class CalcHandlerGit(CalcHandler):
         except:
             self.log_exception("get_last3_issues")
             return 0
+
+    

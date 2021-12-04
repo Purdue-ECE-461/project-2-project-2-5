@@ -21,6 +21,7 @@ class Repo(LogWrapper):
             self.license_score = -1
             self.bus_factor_score = -1
             self.maint_score = -1
+            self.dependenciesScore = -1
             try:
                 self.calc_handler = CalcHandlerGit(_url)
             except:
@@ -37,6 +38,7 @@ class Repo(LogWrapper):
             self.license_score = -1
             self.bus_factor_score = -1
             self.maint_score = -1
+            self.dependenciesScore = -1
             try:
                 self.calc_handler = CalcHandlerNpmjs(_url)
             except:
@@ -54,6 +56,7 @@ class Repo(LogWrapper):
             self.license_score = -1
             self.bus_factor_score = -1
             self.maint_score = -1
+            self.dependenciesScore = -1
             #self.calc_handler = CalcHandlerGit(self.repo_directory)
 
     """
@@ -66,7 +69,9 @@ class Repo(LogWrapper):
                 + "{:.2f}".format(self.correctness_score) + ' ' \
                 + "{:.2f}".format(self.bus_factor_score) + ' ' \
                 + "{:.2f}".format(self.maint_score) + ' ' \
-                + "{:.2f}".format(self.license_score)
+                + "{:.2f}".format(self.license_score) + ' '\
+                + "{:.2f}".format(self.dependenciesScore) 
+                # add funciton call.!
                 
 
     #calculate each score
@@ -78,6 +83,7 @@ class Repo(LogWrapper):
         self.bus_factor_score = self.calc_bus_factor_score() #Mohammed -Done
         self.maint_score = self.calc_maint_score() #Mohammed, Ryan - Done
         self.net_score = self.calc_net_score() #Done
+        self.dependenciesScore = self.getNumDependencies(self.repo_directory)
 
     @LogWrapper.log_method_decorator # pragma: no cover
     def calc_correctness_score(self):
@@ -186,12 +192,12 @@ class Repo(LogWrapper):
 
         score = self.license_score * (\
             0.4  * self.maint_score       + \
-            0.25 * self.bus_factor_score  + \
-            0.25 * self.correctness_score + \
-            0.1  * self.rampup_score)
+            0.16 * self.bus_factor_score  + \
+            0.16 * self.correctness_score + \
+            0.1  * self.rampup_score
+            0.18 * self.dependenciesScope)
         return score
 
-    
     def getNumDependencies(repo) : #repo should be in the form of "expressjs/express"
         score = 1
         url = 'https://github.com/{}/network/dependencies'.format(repo)
@@ -210,3 +216,4 @@ class Repo(LogWrapper):
         
         score = score / len(data)
         return (score)
+
