@@ -36,7 +36,7 @@ def newhome(id):
 #     print("File {} uploaded to {}.".format(source_file_name,destination_blob_name))
 
 
-@app.route("/https://ece461.purdue.edu/project2/package", methods=['POST'])
+@app.route("/package", methods=['POST'])
 def create(location, request, header, data_raw):
 
     # Unpack data from JSON object
@@ -67,7 +67,7 @@ def create(location, request, header, data_raw):
         return "creating package: " + newEntity["url"]
 
     except:
-        if request != "https://ece461.purdue.edu/project2/package":
+        if request != "/package":
             raise NameError(request)
         if x_auth[0] != "X-Authorization:":
             raise NameError(header)
