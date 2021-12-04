@@ -50,19 +50,21 @@ def create():
 
     # dataFull = json.loads(data_raw)
     metadata = dataFull["metadata"]
-    # data = json.loads(dataFull["data"])
+    data = dataFull["data"]
     # id = metadata["ID"]
 
     data_client = datastore.Client()
     full_key = data_client.key(metadata["Name"], metadata["Version"], metadata["ID"])
-    newEntity = datastore.Entity(key=full_key)
-    newEntity.update(dataFull["data"])
+    newEntity = datastore.Entity(key=full_key, exclude_from_indexes=["content"])
+    # keys = content.keys()
+    # content_entity = datastore.Entity(exclude_from_indexes=list(keys))
+    # newEntity.update(dataFull["data"])
     # newEntity["name"] = metadata["Name"]
     # newEntity["version"] = metadata["Version"]
     # newEntity["id"] = metadata["ID"]
-    # newEntity["content"] = data["Content"]
-    # newEntity["url"] = data["URL"]
-    # newEntity["jsprogram"] = data["JSProgram"]
+    newEntity["content"] = data["Content"]
+    newEntity["url"] = data["URL"]
+    newEntity["jsprogram"] = data["JSProgram"]
 
     data_client.put(newEntity)
     return dataFull

@@ -41,6 +41,7 @@ elif [ "$1" == "test" ]; then
 else
   source $virtualEnvironmentName/bin/activate
   export FLASK_APP=main
+  export GOOGLE_APPLICATION_CREDENTIALS="./project-2-331602-22c5987270e1.json"
   flask run
 fi
 
