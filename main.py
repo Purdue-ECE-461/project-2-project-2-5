@@ -1,5 +1,5 @@
 
-from flask import Flask
+from flask import Flask, request
 # from werkzeug.datastructures import FileStorage
 
 # from PIL import ImageS
@@ -36,43 +36,44 @@ def homepage():
 #     print("File {} uploaded to {}.".format(source_file_name,destination_blob_name))
 
 
-@app.route("/https://localhost:5000/package", methods=['POST'])
-def create(location, request, header, data_raw):
+@app.route("/package", methods=['POST'])
+def create():
     # print("hello")
     # Unpack data from JSON object
-    try:
-        x_auth = header.split()
-        print(x_auth)
+    # try:
+    dataFull = request.json
+    # x_auth = header.split()
+    # print(x_auth)
 
-        # function calls for authentication:
-        # use x_auth[1], x_auth[2]
+    # function calls for authentication:
+    # use x_auth[1], x_auth[2]
 
-        dataFull = json.loads(data_raw)
-        metadata = json.loads(dataFull["metadata"])
-        # data = json.loads(dataFull["data"])
-        # id = metadata["ID"]
+    # dataFull = json.loads(data_raw)
+    metadata = dataFull["metadata"]
+    # data = json.loads(dataFull["data"])
+    # id = metadata["ID"]
 
-        data_client = datastore.Client()
-        full_key = data_client.key(metadata["Name"], metadata["Version"], metadata["ID"])
-        newEntity = datastore.Entity(key=full_key)
-        newEntity.update(dataFull["data"])
-        # newEntity["name"] = metadata["Name"]
-        # newEntity["version"] = metadata["Version"]
-        # newEntity["id"] = metadata["ID"]
-        # newEntity["content"] = data["Content"]
-        # newEntity["url"] = data["URL"]
-        # newEntity["jsprogram"] = data["JSProgram"]
+    data_client = datastore.Client()
+    full_key = data_client.key(metadata["Name"], metadata["Version"], metadata["ID"])
+    newEntity = datastore.Entity(key=full_key)
+    newEntity.update(dataFull["data"])
+    # newEntity["name"] = metadata["Name"]
+    # newEntity["version"] = metadata["Version"]
+    # newEntity["id"] = metadata["ID"]
+    # newEntity["content"] = data["Content"]
+    # newEntity["url"] = data["URL"]
+    # newEntity["jsprogram"] = data["JSProgram"]
 
-        data_client.put(newEntity)
-        return "creating package: " + newEntity["url"]
+    data_client.put(newEntity)
+    return dataFull
 
-    except:
-        # if request != "/packages":
-        #     raise NameError(request)
-        if x_auth[0] != "X-Authorization:":
-            raise NameError(header)
-        else:
-            raise Exception()
+    # except:
+    #     # if request != "/packages":
+    #     #     raise NameError(request)
+    #     # if x_auth[0] != "X-Authorization:":
+    #     #     raise NameError(header)
+    #     # else:
+    #     raise Exception()
 
 
 # @app.route("/https://ece461.purdue.edu/project2/package", methods=['POST'])
