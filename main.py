@@ -229,7 +229,7 @@ def packageUpdate(id):
 
     dataFull = request.json
     metadata = dataFull["metadata"]
-    data = jdataFull["data"]
+    data = dataFull["data"]
     # id = metadata["ID"]
 
     data_client = datastore.Client()
