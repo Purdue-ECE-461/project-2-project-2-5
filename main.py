@@ -268,7 +268,7 @@ def deletePackage(id):
             if (i >= 1):
                 break
         
-        # return 200
+        return ""
         
     except:
         # if request != "https://ece461.purdue.edu/project2/package/" + id:
