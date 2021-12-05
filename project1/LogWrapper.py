@@ -14,13 +14,14 @@ class LogWrapper(object):
     LEVEL = 0
 
     def __init__(self):
-        load_dotenv()
-        if (os.environ.get('LOG_LEVEL') == '1'):
-            self.LEVEL = logging.INFO
-        elif (os.environ.get('LOG_LEVEL') == '2'):
-            self.LEVEL = logging.DEBUG
-        else:
-            self.LEVEL = logging.CRITICAL
+        pass
+        # load_dotenv()
+        # if (os.environ.get('LOG_LEVEL') == '1'):
+        #     self.LEVEL = logging.INFO
+        # elif (os.environ.get('LOG_LEVEL') == '2'):
+        #     self.LEVEL = logging.DEBUG
+        # else:
+        #     self.LEVEL = logging.CRITICAL
 
     def set_logger(self, name):
         '''Creates a logger object for a class. Takes an argument "name"

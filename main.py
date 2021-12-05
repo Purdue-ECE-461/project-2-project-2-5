@@ -68,14 +68,14 @@ def create(metadata, data):
     # id = metadata["ID"]
 
     data_client = datastore.Client()
-    full_key = data_client.key(metadata["Name"], metadata["Version"], metadata["ID"])
+    full_key = data_client.key("package", metadata["Name"])
     newEntity = datastore.Entity(key=full_key, exclude_from_indexes=["content"])
     # keys = content.keys()
     # content_entity = datastore.Entity(exclude_from_indexes=list(keys))
     # newEntity.update(dataFull["data"])
-    # newEntity["name"] = metadata["Name"]
-    # newEntity["version"] = metadata["Version"]
-    # newEntity["id"] = metadata["ID"]
+    newEntity["name"] = metadata["Name"]
+    newEntity["version"] = metadata["Version"]
+    newEntity["id"] = metadata["ID"]
     newEntity["content"] = data["Content"]
     newEntity["url"] = data["URL"]
     newEntity["jsprogram"] = data["JSProgram"]
@@ -104,7 +104,7 @@ def ingestion(metadata, data):
     #data = json.loads(dataFull["data"])
     
     url = data["URL"]
-    cli = CLIHandler(url)
+    cli = CLIHandler([url])
     cli.calc()
     cli.print_to_console()
 
@@ -153,54 +153,59 @@ def ingestion(metadata, data):
 
 #     print("Downloaded storage object {} from bucket {} to local file {}.".format(source_blob_name, bucket_name, destination_file_name))
 
-@app.route("/https://ece461.purdue.edu/project2/package/<id>", methods=['GET'])
-def getPackageByID(location, request, header):
+
+
+
+@app.route("/package/<id>", methods=['GET'])
+def getPackageByID(id):
         # Unpack data from JSON object
+
     try:
-        x_auth = header.split()
-        print(x_auth)
+        # x_auth = header.split()
+        # print(x_auth)
         
         # function calls for authentication:
         # use x_auth[1], x_auth[2]
-        id = request
-        id.replace("https://ece461.purdue.edu/project2/package/","")
-
         metadata = {}
         data = {}
         dataFull = {}
         
         data_client = datastore.Client()
-        keys = []
-        i = 1
-        while data_client.key(id, i) != None:
-            keys.append(data_client.key(id, i))
-        key = data_client.key('package', id)
-        package = key.get()
-        metadata["Name"] = package.name
-        metadata["Version"] = package.version
-        metadata["ID"] = package.id
-        metadata_obj = json.dumps(metadata)
-        data["Content"] = package.content
-        data_obj = json.dumps(data)
-        dataFull["metadata"] = metadata_obj
-        dataFull["data"] = data_obj
-        dataFull_obj = json.dumps(dataFull)
-
-        print(dataFull_obj)
-        return "getting package by ID: " + id
+        query = data_client.query(kind = "package")
+        query.add_filter("id", "=", id)
+        i = 0
+        for package in query.fetch():
+            i = i + 1
+            metadata["Name"] = package["name"]
+            metadata["Version"] = package["version"]
+            metadata["ID"] = package["id"]
+            data["Content"] = package["content"]
+            data["URL"] = package["url"]
+            data["JSProgram"] = package["jsprogram"]
+            
+            if (i >= 1):
+                break
+       
+        dataFull["metadata"] = metadata
+        dataFull["data"] = data
+           
+        return dataFull
 
     except:
-        if request != "https://ece461.purdue.edu/project2/package/" + id:
-            raise NameError(request)
-        if x_auth[0] != "X-Authorization:":
-            raise NameError(header)
-        if package.id != id:
+        # if request != "https://ece461.purdue.edu/project2/package/" + id:
+        #     raise NameError(request)
+        # if x_auth[0] != "X-Authorization:":
+        #     raise NameError(header)
+        # if package.id != id:
+        #     raise NameError(id)
+        if i > 1:
             raise NameError(id)
-        else:
-            raise Exception()
+        # else:
+        #     raise Exception()
+        pass
 
-@app.route("/https://ece461.purdue.edu/project2/package/<id>", methods=['PUT'])
-def packageUpdate(location, request, header, data_raw):
+@app.route("/package/<id>", methods=['PUT'])
+def packageUpdate(id):
         # Unpack data from JSON object
     try:
         x_auth = header.split()
@@ -243,8 +248,8 @@ def packageUpdate(location, request, header, data_raw):
         else:
             raise Exception()
 
-@app.route("/https://ece461.purdue.edu/project2/package/<id>", methods=['DEL'])
-def deletePackage(location, request, header):
+@app.route("/package/<id>", methods=['DEL'])
+def deletePackage(id):
         # Unpack data from JSON object
     try:
         x_auth = header.split()
@@ -274,8 +279,8 @@ def deletePackage(location, request, header):
         else:
             raise Exception()
 
-@app.route("/https://ece461.purdue.edu/project2/package/byName/<name>", methods=['GET'])
-def getPackageByName(location, request, header):
+@app.route("/package/byName/<name>", methods=['GET'])
+def getPackageByName(name):
     try:
         x_auth = header.split()
         print(x_auth)
@@ -304,7 +309,7 @@ def getPackageByName(location, request, header):
         else:
             raise Exception()
 
-@app.route("/https://ece461.purdue.edu/project2/package/:<id>/rate", methods=['GET'])
+@app.route("/package/:<id>/rate", methods=['GET'])
 def getPackageRate(id):
     return "getting rate by id: " + id
     # pass
