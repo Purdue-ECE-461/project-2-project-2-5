@@ -252,29 +252,31 @@ def packageUpdate(id):
 def deletePackage(id):
         # Unpack data from JSON object
     try:
-        x_auth = header.split()
-        print(x_auth)
+        # x_auth = header.split()
+        # print(x_auth)
         
         # function calls for authentication:
         # use x_auth[1], x_auth[2]
-        id = request
-        id.replace("https://ece461.purdue.edu/project2/package/","")
-        
         data_client = datastore.Client()
-
-        key = data_client.key('package', id)
-        package = key.get()
-        idCheck = package.id
-        package.key.delete()
+        query = data_client.query(kind = "package")
+        query.add_filter("id", "=", id)
+        i = 0
+        for package in query.fetch():
+            i = i + 1
+            package.key.delete()
+            
+            if (i >= 1):
+                break
+        
 
         return "deleting entity: " + id
 
     except:
-        if request != "https://ece461.purdue.edu/project2/package/" + id:
-            raise NameError(request)
-        if x_auth[0] != "X-Authorization:":
-            raise NameError(header)
-        if idCheck != id:
+        # if request != "https://ece461.purdue.edu/project2/package/" + id:
+        #     raise NameError(request)
+        # if x_auth[0] != "X-Authorization:":
+        #     raise NameError(header)
+        if i > 1:
             raise NameError(id)
         else:
             raise Exception()
