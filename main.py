@@ -74,7 +74,7 @@ def create(metadata, data):
     query.add_filter("version", "=", metadata["Version"])
     queryList = list(query.fetch())
     if len(queryList) > 0:
-        return 403
+        return ""
 
     full_key = data_client.key("package", metadata["Name"] + ": " + metadata["Version"] + ": " + metadata["ID"])
     newEntity = datastore.Entity(key=full_key, exclude_from_indexes=["content"])
