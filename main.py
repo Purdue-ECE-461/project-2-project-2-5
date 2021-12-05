@@ -43,11 +43,11 @@ def callHandler():
     data = dataFull["data"]
 
     if "Content" in data.keys():
-        returnvVal = create(metadata, data)
+        returnvVal, responseVal = create(metadata, data)
     else :
-        returnvVal = ingestion(metadata, data)
+        returnvVal,responseVal = ingestion(metadata, data)
     
-    return returnvVal,201
+    return returnvVal,responseVal
 
 
     
@@ -74,7 +74,7 @@ def create(metadata, data):
     query.add_filter("version", "=", metadata["Version"])
     queryList = list(query.fetch())
     if len(queryList) > 0:
-        return ""
+        return "", 403
 
     full_key = data_client.key("package", metadata["Name"] + ": " + metadata["Version"] + ": " + metadata["ID"])
     newEntity = datastore.Entity(key=full_key, exclude_from_indexes=["content"])
@@ -89,7 +89,7 @@ def create(metadata, data):
     newEntity["jsprogram"] = data["JSProgram"]
 
     data_client.put(newEntity)
-    return metadata
+    return metadata, 201
 
     # except:
         # if request != "/packages":
@@ -119,7 +119,7 @@ def ingestion(metadata, data):
     cli.calc()
     cli.print_to_console()
 
-    return metadata
+    return metadata, 201
     
     """
     try:
