@@ -218,46 +218,61 @@ def getPackageByID(id):
 @app.route("/package/<id>", methods=['PUT'])
 def packageUpdate(id):
         # Unpack data from JSON object
-    try:
-        x_auth = header.split()
-        print(x_auth)
+    # try:
+        # x_auth = header.split()
+        # print(x_auth)
         
         # function calls for authentication:
         # use x_auth[1], x_auth[2]
-        id = request
-        id.replace("https://ece461.purdue.edu/project2/package/","")
+        # id = request
+        # id.replace("https://ece461.purdue.edu/project2/package/","")
 
-        dataFull = json.loads(data_raw)
-        metadata = json.loads(dataFull["metadata"])
-        data = json.loads(dataFull["data"])
-        # id = metadata["ID"]
+    dataFull = request.json
+    metadata = dataFull["metadata"]
+    data = jdataFull["data"]
+    # id = metadata["ID"]
 
-        data_client = datastore.Client()
-        key = data_client.key(metadata["Name"], metadata["ID"])
+    data_client = datastore.Client()
+    query = data_client.query(kind = "package")
+    query.add_filter("id", "=", metadata["ID"])
+    query.add_filter("name", "=", metadata["Name"])
+    query.add_filter("version", "=", metadata["Version"])
+    queryList = list(query.fetch())
+    if len(queryList) > 1 or len(queryList) == 0:
+        return "", 400
 
-        key = data_client.key('package', id)
-        package = key.get()
-        package.content = data["Content"]
-        package.put()
+    for package in query.fetch():
+        package["content"] = data["Content"]
+        package["url"] = data["URL"]
+        package["jsprogram"] = data["JSProgram"]
 
-        print(data_raw)
-        return "Updating package content: "+package.id
+    data_client.put(newEntity)
+    return "", 200
+        # key = data_client.key(metadata["Name"], metadata["ID"])
 
-    except:
-        if request != "https://ece461.purdue.edu/project2/package/" + package.id:
-            raise NameError(request)
-        if x_auth[0] != "X-Authorization:":
-            raise NameError(header)
-        if package.id != id:
-            raise NameError(id)
-        if package.id != metadata["ID"]:
-            raise NameError(metadata["ID"])
-        if package.version != metadata["Version"]:
-            raise NameError(metadata["Version"])
-        if package.name != metadata["Name"]:
-            raise NameError(metadata["Name"])
-        else:
-            raise Exception()
+        # key = data_client.key('package', id)
+        # package = key.get()
+        # package.content = data["Content"]
+        # package.put()
+
+        # print(data_raw)
+        # return "Updating package content: "+package.id
+
+    # except:
+    #     if request != "https://ece461.purdue.edu/project2/package/" + package.id:
+    #         raise NameError(request)
+    #     if x_auth[0] != "X-Authorization:":
+    #         raise NameError(header)
+    #     if package.id != id:
+    #         raise NameError(id)
+    #     if package.id != metadata["ID"]:
+    #         raise NameError(metadata["ID"])
+    #     if package.version != metadata["Version"]:
+    #         raise NameError(metadata["Version"])
+    #     if package.name != metadata["Name"]:
+    #         raise NameError(metadata["Name"])
+    #     else:
+    #         raise Exception()
 
 @app.route("/package/<id>", methods=['DELETE'])
 def deletePackage(id):
