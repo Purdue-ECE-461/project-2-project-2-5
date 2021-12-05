@@ -68,7 +68,9 @@ def create(metadata, data):
     # id = metadata["ID"]
 
     data_client = datastore.Client()
-    full_key = data_client.key("package", metadata["Name"])
+    # query = data_client.query(kind = "package")
+    # query.add_filter("id", "=", metadata["ID"])
+    full_key = data_client.key("package1", metadata["ID"], metadata["Name"], metadata["Version"])
     newEntity = datastore.Entity(key=full_key, exclude_from_indexes=["content"])
     # keys = content.keys()
     # content_entity = datastore.Entity(exclude_from_indexes=list(keys))
