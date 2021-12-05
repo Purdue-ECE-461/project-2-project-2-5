@@ -246,7 +246,7 @@ def packageUpdate(id):
         package["url"] = data["URL"]
         package["jsprogram"] = data["JSProgram"]
 
-    data_client.put(newEntity)
+    data_client.put(package)
     return "", 200
         # key = data_client.key(metadata["Name"], metadata["ID"])
 
