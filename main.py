@@ -248,7 +248,7 @@ def packageUpdate(id):
         else:
             raise Exception()
 
-@app.route("/package/<id>", methods=['DEL'])
+@app.route("/package/<id>", methods=['DELETE'])
 def deletePackage(id):
         # Unpack data from JSON object
     try:
