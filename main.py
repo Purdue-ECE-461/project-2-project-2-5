@@ -263,7 +263,7 @@ def deletePackage(id):
         i = 0
         for package in query.fetch():
             i = i + 1
-            package.key.delete()
+            package.delete(key)
             
             if (i >= 1):
                 break
