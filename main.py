@@ -258,15 +258,15 @@ def deletePackage(id):
         # function calls for authentication:
         # use x_auth[1], x_auth[2]
         data_client = datastore.Client()
-        query = data_client.query(kind = "package")
-        query.add_filter("id", "=", id)
+        # query = data_client.query(kind = "package")
+        # query.add_filter("id", "=", id)
         i = 0
-        for package in query.fetch():
-            i = i + 1
-            package.delete(key)
+        # for package in query.fetch():
+        key = data_client.key("package", package["name"])
+        data_client.delete(key)
             
-            if (i >= 1):
-                break
+            # if (i >= 1):
+            #     break
         
         return 200
         
