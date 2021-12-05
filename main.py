@@ -68,9 +68,15 @@ def create(metadata, data):
     # id = metadata["ID"]
 
     data_client = datastore.Client()
-    # query = data_client.query(kind = "package")
-    # query.add_filter("id", "=", metadata["ID"])
-    full_key = data_client.key("package1", metadata["ID"])
+    query = data_client.query(kind = "package")
+    query.add_filter("id", "=", metadata["ID"])
+    query.add_filter("name", "=", metadata["Name"])
+    query.add_filter("version", "=", metadata["Version"])
+    queryList = list(query.fetch())
+    if len(queryList) > 0:
+        return 403
+
+    full_key = data_client.key("package", metadata["Name"] + ": " + metadata["Version"] + ": " + metadata["ID"])
     newEntity = datastore.Entity(key=full_key, exclude_from_indexes=["content"])
     # keys = content.keys()
     # content_entity = datastore.Entity(exclude_from_indexes=list(keys))
@@ -86,12 +92,15 @@ def create(metadata, data):
     return metadata
 
     # except:
-    #     # if request != "/packages":
-    #     #     raise NameError(request)
-    #     # if x_auth[0] != "X-Authorization:":
-    #     #     raise NameError(header)
-    #     # else:
-    #     raise Exception()
+        # if request != "/packages":
+        #     raise NameError(request)
+        # if x_auth[0] != "X-Authorization:":
+        #     raise NameError(header)
+        # if len(queryList) > 0:
+        #     raise NameError(metadata["Name"] + ": " + metadata["Version"] + ": " + metadata["ID"])
+
+        # else:
+            # raise Exception()
 
 
 def ingestion(metadata, data):
