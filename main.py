@@ -125,7 +125,7 @@ def ingestion(metadata, data):
     query.add_filter("name", "=", metadata["Name"])
     query.add_filter("version", "=", metadata["Version"])
     queryList = list(query.fetch())
-    if len(queryList) > 1:
+    if len(queryList) != 1:
         return "", 403
 
     # full_key = data_client.key("package", metadata["Name"] + ": " + metadata["Version"] + ": " + metadata["ID"])
