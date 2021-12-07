@@ -299,34 +299,35 @@ def packageUpdate(id):
 @app.route("/package/<id>", methods=['DELETE'])
 def deletePackage(id):
         # Unpack data from JSON object
-    try:
+    # try:
         # x_auth = header.split()
         # print(x_auth)
         
         # function calls for authentication:
         # use x_auth[1], x_auth[2]
-        data_client = datastore.Client()
-        query = data_client.query(kind = "package")
-        query.add_filter("id", "=", id)
-        i = 0
-        for package in query.fetch():
-            key = data_client.key("package", package["name"])
-            data_client.delete(key)
-            
-            if (i >= 1):
-                break
+    data_client = datastore.Client()
+    query = data_client.query(kind = "package")
+    query.add_filter("id", "=", id)
+    i = 0
+    for package in query.fetch():
+        i = i + 1
+        key = data_client.key("package", package["name"])
+        data_client.delete(key)
         
-        return ""
+    if i != 1:
+        return "", 400
+    
+    return "", 200
         
-    except:
-        # if request != "https://ece461.purdue.edu/project2/package/" + id:
-        #     raise NameError(request)
-        # if x_auth[0] != "X-Authorization:":
-        #     raise NameError(header)
-        if i > 1:
-            raise NameError(id)
-        else:
-            raise Exception()
+    # except:
+    #     # if request != "https://ece461.purdue.edu/project2/package/" + id:
+    #     #     raise NameError(request)
+    #     # if x_auth[0] != "X-Authorization:":
+    #     #     raise NameError(header)
+    #     if i > 1:
+    #         raise NameError(id)
+    #     else:
+    #         raise Exception()
 
 @app.route("/package/byName/<name>", methods=['GET'])
 def getPackageByName(name):
