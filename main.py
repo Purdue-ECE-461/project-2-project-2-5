@@ -405,6 +405,12 @@ def getPackageRate(id):
     return "", 200
     # pass
 
+@app.route("/packages", methods=['POST'])
+def getPackages():
+    offset = request.args
+    return offset
+
+
 
 @app.route("/reset", methods=['DELETE'])
 def deleteRegistry():
