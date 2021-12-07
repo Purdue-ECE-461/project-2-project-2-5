@@ -67,6 +67,9 @@ def create(metadata, data):
     # dataFull = json.loads(data_raw)
     # id = metadata["ID"]
 
+    if len(data) != 3 or len(metadata) != 3 or "ID" not in metadata or "Name" not in metadata or "Version" not in metadata or "Content" not in data or "URL" not in data or "JSProgram" not in data:
+        return "", 400
+
     data_client = datastore.Client()
     query = data_client.query(kind = "package")
     query.add_filter("id", "=", metadata["ID"])
