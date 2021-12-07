@@ -359,9 +359,19 @@ def getPackageByName(name):
         else:
             raise Exception()
 
-@app.route("/package/:<id>/rate", methods=['GET'])
+@app.route("/package/<id>/rate", methods=['GET'])
 def getPackageRate(id):
-    return "getting rate by id: " + id
+    data_client = datastore.Client()
+    query = data_client.query(kind = "package")
+    query.add_filter("id", "=", id)
+    queryList = list(query.fetch())
+    if len(queryList) != 1:
+        return "", 400
+
+    for package in query.fetch():
+        # pass package["url"] into project 1, returnVal = returnVal from project1
+
+    return "", 200
     # pass
 
 
