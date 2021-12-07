@@ -364,6 +364,21 @@ def getPackageRate(id):
     return "getting rate by id: " + id
     # pass
 
+
+@app.route("/reset", methods=['DELETE'])
+def deleteRegistry():
+    
+    # Check authentication
+
+    data_client = datastore.Client()
+    query = data_client.query(kind = "package")
+    for package in query.fetch():
+        key = data_client.key("package", package["name"] + ": " + package["version"] + ": " + package["id"])
+        data_client.delete(key)
+
+    return "", 200
+
+
 if __name__ == "__main__":
     app.run(debug=True)
     # upload_blob("main-registry-461-project-2","smile_2.zip", "test_zip2")
