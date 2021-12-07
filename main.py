@@ -128,12 +128,12 @@ def ingestion(metadata, data):
     if len(queryList) > 1:
         return "", 403
 
-    full_key = data_client.key("package", metadata["Name"] + ": " + metadata["Version"] + ": " + metadata["ID"])
+    # full_key = data_client.key("package", metadata["Name"] + ": " + metadata["Version"] + ": " + metadata["ID"])
     for package in query.fetch():
         if package["url"] != "":
             return "", 403
         package["url"] = data["URL"]
-    data_client.put(package)
+        data_client.put(package)
 
     url = data["URL"]
     # cli = CLIHandler([url])
