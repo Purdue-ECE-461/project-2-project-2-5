@@ -361,6 +361,7 @@ def getPackageByName(name):
 
 @app.route("/package/<id>/rate", methods=['GET'])
 def getPackageRate(id):
+    url = ""
     data_client = datastore.Client()
     query = data_client.query(kind = "package")
     query.add_filter("id", "=", id)
@@ -370,10 +371,10 @@ def getPackageRate(id):
 
     for package in query.fetch():
         url = package["url"]
-        print(url)
+        
         # pass package["url"] into project 1, returnVal = returnVal from project1
 
-    return "", 200
+    return url, 200
     # pass
 
 
