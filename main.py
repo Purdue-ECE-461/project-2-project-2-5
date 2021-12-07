@@ -68,7 +68,7 @@ def create(metadata, data):
     # id = metadata["ID"]
 
     if len(data) != 3 or len(metadata) != 2 or "ID" not in metadata or "Name" not in metadata or "Version" not in metadata or "Content" not in data or "JSProgram" not in data:
-        return ""+len(data)+len(metadata), 400
+        return "", 400
 
     data_client = datastore.Client()
     query = data_client.query(kind = "package")
@@ -132,7 +132,7 @@ def ingestion(metadata, data):
     newEntity = datastore.Entity(key=full_key, exclude_from_indexes=["content"])
     newEntity["url"] = data["URL"]
     data_client.put(newEntity)
-    
+
     url = data["URL"]
     # cli = CLIHandler([url])
     # cli.calc()
