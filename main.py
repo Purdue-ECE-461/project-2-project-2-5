@@ -67,7 +67,7 @@ def create(metadata, data):
     # dataFull = json.loads(data_raw)
     # id = metadata["ID"]
 
-    if len(data) != 2 or len(metadata) != 3 or "ID" not in metadata or "Name" not in metadata or "Version" not in metadata or "Content" not in data or "JSProgram" not in data:
+    if len(data) != 2 or len(metadata) != 3 or "ID" not in metadata or "Name" not in metadata or "Version" not in metadata or "Content" not in data or "JSProgram" not in data or data["Content"] == "<base-64>":
         return "", 400
 
     data_client = datastore.Client()
