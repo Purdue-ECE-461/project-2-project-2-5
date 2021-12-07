@@ -331,33 +331,45 @@ def deletePackage(id):
 
 @app.route("/package/byName/<name>", methods=['GET'])
 def getPackageByName(name):
-    try:
-        x_auth = header.split()
-        print(x_auth)
-        
-        # function calls for authentication:
-        # use x_auth[1], x_auth[2]
-        name = request
-        name.replace("https://ece461.purdue.edu/project2/package/byName/","")
-        
-        data_client = datastore.Client()
+    # try:
+    # x_auth = header.split()
+    # print(x_auth)
+    
+    # function calls for authentication:
+    # use x_auth[1], x_auth[2]
 
-        key = data_client.key('package', id)
-        package = key.get()
-        idCheck = package.id
-        package.key.delete()
+    data_client = datastore.Client()
+    query = data_client.query(kind = "package")
+    query.add_filter("name", "=", name)
+    queryList = list(query.fetch())
+    if len(queryList) == 0:
+        return "", 400
 
-        return "deleting entity: " + id
+    returnList = []
 
-    except:
-        if request != "https://ece461.purdue.edu/project2/package/" + name:
-            raise NameError(request)
-        if x_auth[0] != "X-Authorization:":
-            raise NameError(header)
-        if idCheck != id:
-            raise NameError(id)
-        else:
-            raise Exception()
+    for package in query.fetch():
+        newDict = {}
+        newDict["User"] = {} 
+        newDict["User"]["name"] = "name"
+        newDict["User"]["isAdmin"] = "isAdmin"
+        newDict["Date"] = "Date"
+        newDict["PackageMetadata"] = {}
+        newDict["PackageMetadata"]["Name"] = package["name"]
+        newDict["PackageMetadata"]["Version"] = package["version"]
+        newDict["PackageMetadata"]["ID"] = package["id"]
+        newDict["Action"] = "Action"
+        returnList.append(newDict)
+
+    return returnList, 200
+    # except:
+    #     if request != "https://ece461.purdue.edu/project2/package/" + name:
+    #         raise NameError(request)
+    #     if x_auth[0] != "X-Authorization:":
+    #         raise NameError(header)
+    #     if idCheck != id:
+    #         raise NameError(id)
+    #     else:
+    #         raise Exception()
 
 @app.route("/package/<id>/rate", methods=['GET'])
 def getPackageRate(id):
@@ -374,7 +386,7 @@ def getPackageRate(id):
         
         # pass package["url"] into project 1, returnVal = returnVal from project1
 
-    return url, 200
+    return "", 200
     # pass
 
 
