@@ -67,7 +67,7 @@ def create(metadata, data):
     # dataFull = json.loads(data_raw)
     # id = metadata["ID"]
 
-    if len(data) != 3 or len(metadata) != 2 or "ID" not in metadata or "Name" not in metadata or "Version" not in metadata or "Content" not in data or "JSProgram" not in data:
+    if len(data) != 2 or len(metadata) != 3 or "ID" not in metadata or "Name" not in metadata or "Version" not in metadata or "Content" not in data or "JSProgram" not in data:
         return "", 400
 
     data_client = datastore.Client()
@@ -116,7 +116,7 @@ def ingestion(metadata, data):
 
     #dataFull = json.loads(data_raw)
     #data = json.loads(dataFull["data"])
-    if len(data) != 3 or len(metadata) != 2 or "ID" not in metadata or "Name" not in metadata or "Version" not in metadata or "URL" not in data or "JSProgram" not in data:
+    if len(data) != 2 or len(metadata) != 3 or "ID" not in metadata or "Name" not in metadata or "Version" not in metadata or "URL" not in data or "JSProgram" not in data:
         return ""+len(data)+len(metadata), 400
 
     data_client = datastore.Client()
