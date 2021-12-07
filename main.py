@@ -1,5 +1,5 @@
 
-from flask import Flask, request
+from flask import Flask, request, jsonify
 # from werkzeug.datastructures import FileStorage
 
 # from PIL import ImageS
@@ -360,7 +360,7 @@ def getPackageByName(name):
         newDict["Action"] = "Action"
         returnList.append(newDict)
 
-    return flask.jsonify(returnList), 200
+    return jsonify((returnList))
     # except:
     #     if request != "https://ece461.purdue.edu/project2/package/" + name:
     #         raise NameError(request)
