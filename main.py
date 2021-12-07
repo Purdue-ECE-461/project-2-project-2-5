@@ -171,49 +171,50 @@ def ingestion(metadata, data):
 def getPackageByID(id):
         # Unpack data from JSON object
 
-    try:
-        # x_auth = header.split()
-        # print(x_auth)
-        
-        # function calls for authentication:
-        # use x_auth[1], x_auth[2]
-        metadata = {}
-        data = {}
-        dataFull = {}
-        
-        data_client = datastore.Client()
-        query = data_client.query(kind = "package")
-        query.add_filter("id", "=", id)
-        i = 0
-        for package in query.fetch():
-            i = i + 1
-            metadata["Name"] = package["name"]
-            metadata["Version"] = package["version"]
-            metadata["ID"] = package["id"]
-            data["Content"] = package["content"]
-            data["URL"] = package["url"]
-            data["JSProgram"] = package["jsprogram"]
-            
-            if (i >= 1):
-                break
-       
-        dataFull["metadata"] = metadata
-        dataFull["data"] = data
-           
-        return dataFull
+    # try:
+    # x_auth = header.split()
+    # print(x_auth)
+    
+    # function calls for authentication:
+    # use x_auth[1], x_auth[2]
+    metadata = {}
+    data = {}
+    dataFull = {}
+    error = { "code": -1, "message": "An error occurred while retrieving package"}
+    
+    data_client = datastore.Client()
+    query = data_client.query(kind = "package")
+    query.add_filter("id", "=", id)
+    i = 0
+    for package in query.fetch():
+        i = i + 1
+        metadata["Name"] = package["name"]
+        metadata["Version"] = package["version"]
+        metadata["ID"] = package["id"]
+        data["Content"] = package["content"]
+        data["URL"] = package["url"]
+        data["JSProgram"] = package["jsprogram"]
 
-    except:
-        # if request != "https://ece461.purdue.edu/project2/package/" + id:
-        #     raise NameError(request)
-        # if x_auth[0] != "X-Authorization:":
-        #     raise NameError(header)
-        # if package.id != id:
-        #     raise NameError(id)
-        if i > 1:
-            raise NameError(id)
-        # else:
-        #     raise Exception()
-        pass
+    if i != 1:
+        return error, 500
+    
+    dataFull["metadata"] = metadata
+    dataFull["data"] = data
+        
+    return dataFull, 200
+
+    # except:
+    #     # if request != "https://ece461.purdue.edu/project2/package/" + id:
+    #     #     raise NameError(request)
+    #     # if x_auth[0] != "X-Authorization:":
+    #     #     raise NameError(header)
+    #     # if package.id != id:
+    #     #     raise NameError(id)
+    #     if i > 1:
+    #         return error, 500
+    #     # else:
+    #     #     raise Exception()
+    #     pass
 
 @app.route("/package/<id>", methods=['PUT'])
 def packageUpdate(id):
