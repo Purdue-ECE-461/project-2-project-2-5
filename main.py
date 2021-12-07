@@ -407,7 +407,7 @@ def getPackageRate(id):
 
 @app.route("/packages", methods=['POST'])
 def getPackages():
-    offset = request.args
+    offset = request.args["offset"]
     return offset
 
 
