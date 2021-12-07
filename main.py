@@ -360,7 +360,7 @@ def getPackageByName(name):
         newDict["Action"] = "Action"
         returnList.append(newDict)
 
-    return jsonify((returnList))
+    return jsonify(returnList)
     # except:
     #     if request != "https://ece461.purdue.edu/project2/package/" + name:
     #         raise NameError(request)
@@ -407,8 +407,31 @@ def getPackageRate(id):
 
 @app.route("/packages", methods=['POST'])
 def getPackages():
-    offset = request.args["offset"]
-    return offset
+    if request.args:
+        offset = request.args["offset"]
+    else:
+        offset = 1
+    
+    dataList = request.json
+    data_client = datastore.Client()
+    query = data_client.query(kind = "package")
+    returnList = []
+    for package in dataList:
+        query.add_filter("name", "=", package["Name"])
+        info = {}
+        info["Name"] = package["name"]
+        # info["Version"] = "0.0.0"
+        # for subPackage in query.fetch():
+        #     newV = subPackage["version"]
+        #     oldV = info["Version"]
+        #     if (float) (newV.replace(".","") >= (float) (oldV.replace(".",""))
+        #         info["Version"] = subPackage["version"]
+        #         info["ID"] = subPackage["id"]
+        # if "ID" in info:
+        #     returnList.append(info)
+
+    # return jsonify(returnList),200
+    return "", 200
 
 
 
