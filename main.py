@@ -370,6 +370,7 @@ def getPackageRate(id):
 
     for package in query.fetch():
         url = package["url"]
+        print(url)
         # pass package["url"] into project 1, returnVal = returnVal from project1
 
     return "", 200
