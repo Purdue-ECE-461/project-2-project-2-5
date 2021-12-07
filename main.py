@@ -88,7 +88,7 @@ def create(metadata, data):
     newEntity["version"] = metadata["Version"]
     newEntity["id"] = metadata["ID"]
     newEntity["content"] = data["Content"]
-    # newEntity["url"] = data["URL"]
+    newEntity["url"] = ""
     newEntity["jsprogram"] = data["JSProgram"]
 
     data_client.put(newEntity)
@@ -130,7 +130,7 @@ def ingestion(metadata, data):
 
     full_key = data_client.key("package", metadata["Name"] + ": " + metadata["Version"] + ": " + metadata["ID"])
     newEntity = datastore.Entity(key=full_key, exclude_from_indexes=["content"])
-    if "url" in newEntity:
+    if newEntity["url"] != "":
         return "", 403
     newEntity["url"] = data["URL"]
     data_client.put(newEntity)
