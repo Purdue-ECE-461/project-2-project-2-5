@@ -117,7 +117,7 @@ def ingestion(metadata, data):
     #dataFull = json.loads(data_raw)
     #data = json.loads(dataFull["data"])
     if len(data) != 2 or len(metadata) != 3 or "ID" not in metadata or "Name" not in metadata or "Version" not in metadata or "URL" not in data or "JSProgram" not in data:
-        return ""+len(data)+len(metadata), 400
+        return "", 400
 
     data_client = datastore.Client()
     query = data_client.query(kind = "package")
@@ -125,11 +125,13 @@ def ingestion(metadata, data):
     query.add_filter("name", "=", metadata["Name"])
     query.add_filter("version", "=", metadata["Version"])
     queryList = list(query.fetch())
-    if len(queryList) > 0:
+    if len(queryList) > 1:
         return "", 403
 
     full_key = data_client.key("package", metadata["Name"] + ": " + metadata["Version"] + ": " + metadata["ID"])
     newEntity = datastore.Entity(key=full_key, exclude_from_indexes=["content"])
+    if "url" in newEntity:
+        return "", 403
     newEntity["url"] = data["URL"]
     data_client.put(newEntity)
 
