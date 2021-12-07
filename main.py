@@ -371,6 +371,22 @@ def getPackageByName(name):
     #     else:
     #         raise Exception()
 
+@app.route("/package/byName/<name>", methods=['DELETE'])
+def deleteAllVersions(name):
+    data_client = datastore.Client()
+    query = data_client.query(kind = "package")
+    query.add_filter("name", "=", name)
+    queryList = list(query.fetch())
+    if len(queryList) == 0:
+        return "", 400
+
+    for package in query.fetch():
+        key = data_client.key("package", package["name"] + ": " + package["version"] + ": " + package["id"])
+        data_client.delete(key)
+
+    return "", 200
+
+
 @app.route("/package/<id>/rate", methods=['GET'])
 def getPackageRate(id):
     url = ""
