@@ -129,11 +129,11 @@ def ingestion(metadata, data):
         return "", 403
 
     full_key = data_client.key("package", metadata["Name"] + ": " + metadata["Version"] + ": " + metadata["ID"])
-    newEntity = datastore.Entity(key=full_key, exclude_from_indexes=["content"])
-    if newEntity["url"] != "":
-        return "", 403
-    newEntity["url"] = data["URL"]
-    data_client.put(newEntity)
+    for package in query.fetch():
+        if package["url"] != "":
+            return "", 403
+        package["url"] = data["URL"]
+    data_client.put(package)
 
     url = data["URL"]
     # cli = CLIHandler([url])
