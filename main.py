@@ -360,7 +360,7 @@ def getPackageByName(name):
         newDict["Action"] = "Action"
         returnList.append(newDict)
 
-    return json.dumps(returnList), 200
+    return flask.jsonify(returnList), 200
     # except:
     #     if request != "https://ece461.purdue.edu/project2/package/" + name:
     #         raise NameError(request)
