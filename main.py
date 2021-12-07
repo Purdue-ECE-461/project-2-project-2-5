@@ -67,8 +67,8 @@ def create(metadata, data):
     # dataFull = json.loads(data_raw)
     # id = metadata["ID"]
 
-    if len(data) != 3 or len(metadata) != 3 or "ID" not in metadata or "Name" not in metadata or "Version" not in metadata or "Content" not in data or "URL" not in data or "JSProgram" not in data:
-        return "", 400
+    if len(data) != 3 or len(metadata) != 2 or "ID" not in metadata or "Name" not in metadata or "Version" not in metadata or "Content" not in data or "JSProgram" not in data:
+        return ""+len(data)+len(metadata), 400
 
     data_client = datastore.Client()
     query = data_client.query(kind = "package")
@@ -88,7 +88,7 @@ def create(metadata, data):
     newEntity["version"] = metadata["Version"]
     newEntity["id"] = metadata["ID"]
     newEntity["content"] = data["Content"]
-    newEntity["url"] = data["URL"]
+    # newEntity["url"] = data["URL"]
     newEntity["jsprogram"] = data["JSProgram"]
 
     data_client.put(newEntity)
@@ -116,11 +116,27 @@ def ingestion(metadata, data):
 
     #dataFull = json.loads(data_raw)
     #data = json.loads(dataFull["data"])
+    if len(data) != 3 or len(metadata) != 2 or "ID" not in metadata or "Name" not in metadata or "Version" not in metadata or "URL" not in data or "JSProgram" not in data:
+        return ""+len(data)+len(metadata), 400
+
+    data_client = datastore.Client()
+    query = data_client.query(kind = "package")
+    query.add_filter("id", "=", metadata["ID"])
+    query.add_filter("name", "=", metadata["Name"])
+    query.add_filter("version", "=", metadata["Version"])
+    queryList = list(query.fetch())
+    if len(queryList) > 0:
+        return "", 403
+
+    full_key = data_client.key("package", metadata["Name"] + ": " + metadata["Version"] + ": " + metadata["ID"])
+    newEntity = datastore.Entity(key=full_key, exclude_from_indexes=["content"])
+    newEntity["url"] = data["URL"]
+    data_client.put(newEntity)
     
     url = data["URL"]
-    cli = CLIHandler([url])
-    cli.calc()
-    cli.print_to_console()
+    # cli = CLIHandler([url])
+    # cli.calc()
+    # cli.print_to_console()
 
     return metadata, 201
     
