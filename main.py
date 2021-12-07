@@ -349,17 +349,15 @@ def getPackageByName(name):
 
     for package in query.fetch():
         newDict = {}
-        user = {} 
-        user["name"] = "name"
-        user["isAdmin"] = "isAdmin"
-        newDict["User"] = json.dumps(user)
-        newDict["Date"] = json.dumps("Date")
-        metadata = {}
-        metadata["Name"] = package["name"]
-        metadata["Version"] = package["version"]
-        metadata["ID"] = package["id"]
-        newDict["PackageMetadata"] = json.dumps(metadata)
-        newDict["Action"] = json.dumps("Action")
+        newDict["User"] = {} 
+        newDict["User"]["name"] = "name"
+        newDict["User"]["isAdmin"] = "isAdmin"
+        newDict["Date"] = "Date"
+        newDict["PackageMetadata"] = {}
+        newDict["PackageMetadata"]["Name"] = package["name"]
+        newDict["PackageMetadata"]["Version"] = package["version"]
+        newDict["PackageMetadata"]["ID"] = package["id"]
+        newDict["Action"] = "Action"
         returnList.append(newDict)
 
     return json.dumps(returnList), 200
