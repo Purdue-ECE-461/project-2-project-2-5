@@ -311,7 +311,7 @@ def deletePackage(id):
     i = 0
     for package in query.fetch():
         i = i + 1
-        key = data_client.key("package", package["name"])
+        key = data_client.key("package", package["name"] + ": " + package["version"] + ": " + package["id"])
         data_client.delete(key)
         
     if i != 1:
