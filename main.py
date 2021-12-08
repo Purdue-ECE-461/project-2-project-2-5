@@ -124,6 +124,15 @@ def ingestion(metadata, data):
     #data = json.loads(dataFull["data"])
     if len(data) != 2 or len(metadata) != 3 or "ID" not in metadata or "Name" not in metadata or "Version" not in metadata or "URL" not in data or "JSProgram" not in data:
         return "", 400
+    
+    url = data["URL"]
+    cli = CLIHandler(url)
+    cli.calc()
+    # net, rampUp, correctness, bus_factor, responsiveness, license_score, dependency_score
+    scores = cli.getScores()
+    for score in scores:
+        if score < 0.5:
+            return "",200
 
     data_client = datastore.Client()
     query = data_client.query(kind = "package")
@@ -140,11 +149,6 @@ def ingestion(metadata, data):
             return "", 403
         package["url"] = data["URL"]
         data_client.put(package)
-
-    url = data["URL"]
-    # cli = CLIHandler([url])
-    # cli.calc()
-    # cli.print_to_console()
 
     return metadata, 201
     
@@ -402,13 +406,21 @@ def getPackageRate(id):
     queryList = list(query.fetch())
     if len(queryList) != 1:
         return "", 400
-
+    info = {}
     for package in query.fetch():
         url = package["url"]
-        
-        # pass package["url"] into project 1, returnVal = returnVal from project1
+        cli = CLIHandler(url)
+        cli.calc()
+        # net, rampUp, correctness, bus_factor, responsiveness, license_score, dependency_score
+        scores = cli.getScores()
+        info["RampUp"] = scores[1]
+        info["Correctness"] = scores[2]
+        info["BusFactor"] = scores[3]
+        info["ResponsiveMaintainer"] = scores[4]
+        info["LicenseScore"] = scores[5]
+        info["GoodPinningPractice"] = scores[6]
 
-    return "", 200
+    return info, 200
     # pass
 
 @app.route("/authenticate", methods=['PUT'])
