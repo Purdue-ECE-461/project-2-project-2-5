@@ -845,7 +845,7 @@ def deleteRegistry():
         return response, 401
 
     for user in q_lookup.fetch():
-        if user["isAdmin"] != True:
+        if user["isAdmin"] not in ["true", "True", True]:
             return "", 401
 
     data_client = datastore.Client()
@@ -874,7 +874,7 @@ def createUser(username):
         return response, 401
 
     for user in q_lookup.fetch():
-        if user["isAdmin"] != True:
+        if user["isAdmin"] not in ["true", "True", True]:
             return "", 401
     
     # full_key = data_client.key("Users", username)
