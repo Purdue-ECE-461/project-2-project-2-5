@@ -3,7 +3,7 @@ from flask import Flask, request, jsonify
 # from werkzeug.datastructures import FileStorage
 import nacl
 from uuid import uuid4
-
+import datetime
 # from PIL import ImageS
 # from google.oauth2 import service_account
 
@@ -444,6 +444,8 @@ def getToken():
             return response, 401
         token = str(uuid4())
         data_user["token"] = token
+        exp_time = datetime.datetime.now() + datetime.timedelta(hours=10)
+        data_user["expiration"] = exp_time
         data_client.put(data_user)
         
         response = "bearer " + token
