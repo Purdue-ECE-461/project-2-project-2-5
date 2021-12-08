@@ -150,15 +150,6 @@ def ingestion(metadata, data):
         package["url"] = data["URL"]
         data_client.put(package)
 
-<<<<<<< Updated upstream
-=======
-    url = data["URL"]
-    # cli = CLIHandler([url])
-    # cli.calc()
-    # cli.getScores()
-    # cli.print_to_console()
-
->>>>>>> Stashed changes
     return metadata, 201
     
     """
