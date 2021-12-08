@@ -857,7 +857,7 @@ def deleteRegistry():
     return "", 200
 
 @app.route("/register", methods=['POST'])
-def createUser():
+def createUser(username):
     # passw = the plaintext password string, don't worry about the other arguments
     recv_json = request.get_json()
 
@@ -869,11 +869,15 @@ def createUser():
     q_lookup.add_filter("token", "=", token)
     res = list(q_lookup.fetch())
 
-    if len(res) == 0:
+    if len(res) != 1:
         response = ""
         return response, 401
+
+    for user in q_lookup.fetch():
+        if user["isAdmin"] != True:
+            return "", 401
     
-    full_key = data_client.key("Users", username)
+    # full_key = data_client.key("Users", username)
     try:
         regis_name = recv_json["User"]["name"]
         regis_isAdmin = recv_json["User"]["isAdmin"]
