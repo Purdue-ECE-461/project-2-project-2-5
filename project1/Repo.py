@@ -82,8 +82,8 @@ class Repo(LogWrapper):
         self.rampup_score = self.calc_rampup_score() #owen - Done
         self.bus_factor_score = self.calc_bus_factor_score() #Mohammed -Done
         self.maint_score = self.calc_maint_score() #Mohammed, Ryan - Done
-        self.net_score = self.calc_net_score() #Done
         self.dependenciesScore = self.getNumDependencies(self.repo_directory)
+        self.net_score = self.calc_net_score() #Done
 
     #@LogWrapper.log_method_decorator # pragma: no cover
     def calc_correctness_score(self):

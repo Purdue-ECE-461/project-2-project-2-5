@@ -94,6 +94,10 @@ class CLIHandler(LogWrapper):
         for repository in self.repo_list: #For all the repo objects
             print(repository.url, repository)
         sys.exit(0)
+    
+    def getScores(self):
+        for repository in self.repo_list:
+            return [repository.net_score, repository.rampup_score, repository.correctness_score, repository.bus_factor_score, repository.maint_score, repository.license_score, repository.dependenciesScore]
         
     
 
