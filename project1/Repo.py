@@ -11,7 +11,7 @@ and calculates metrics on that repository.
 class Repo(LogWrapper):
     def __init__(self, _url):
         super().__init__()
-        self.set_logger(__name__)
+        # self.set_logger(__name__)
         if 'github.com' in _url.lower():   #If a Github URL is passed in do this
             self.is_good_URL = True
             self.url = _url
