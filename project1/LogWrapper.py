@@ -114,6 +114,6 @@ class LogWrapper(object):
         '''Decorator that will perform logging on class instantiations.'''
         def _wrapper(*args):
             self = args[0]
-            function(*args)
+            #function(*args)
             self.log_class_instantiation()
         return _wrapper
