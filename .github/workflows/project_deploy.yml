@@ -1,0 +1,38 @@
+name: Project Deployment (CD)
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+    types: [ closed ]
+
+jobs:
+  deploy:
+    name: Deployment to GCP VMs
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Set up Python 3.8.10
+      uses: actions/setup-python@v2
+      with:
+        python-version: "3.8.10"
+
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v0.3.0
+
+    - name: Installing Dependencies
+      run: |
+        pip3 install --upgrade pip
+        pip install --upgrade setuptools
+        pip install -r requirements.txt
+        gcloud components install cloud-datastore-emulator beta --quiet
+
+    - name: Deploy to app engine
+      uses: google-github-actions/deploy-appengine@v0.2.0
+      with:
+        deliverables: app.yaml
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        credentials: ${{ secrets.GCP_SA_KEY }}
