@@ -1,6 +1,8 @@
 
 from flask import Flask, request, jsonify
 # from werkzeug.datastructures import FileStorage
+import nacl
+from uuid import uuid4
 
 # from PIL import ImageS
 # from google.oauth2 import service_account
@@ -408,6 +410,48 @@ def getPackageRate(id):
 
     return "", 200
     # pass
+
+@app.route("/authenticate", methods=['PUT'])
+def getToken():
+    request.get_data()
+    sp_kind = 'Users'
+
+    dat = request.data.decode("utf-8")
+    body = json.loads(dat)
+
+    try:
+        name = body["User"]["name"]
+        isAdmin = body["User"]["isAdmin"]
+        passw_in = body["Secret"]["password"]
+    except:
+        response = {}
+        return response, 401
+    data_client = datastore.Client()
+
+    q_lookup = data_client.query(kind=sp_kind)
+    data_client.add_filter("name", "=", name)
+    ret_serv = list(q_lookup.fetch())
+
+    if len(ret_serv) == 1:
+        key = data_client.key(sp_kind, name)
+        data_user = data_client.get(key)
+        data_passw = data_user["password"]
+        Hasher = hash.sha512
+        dig_passw = Hasher(passw_in, encoder=nacl.encoding.HexEncoder)
+
+        if data_passw != dig_passw:
+            response = ""
+            return response, 401
+        token = str(uuid4())
+        data_user["token"] = token
+        data_client.put(data_user)
+        
+        response = "bearer " + token
+        return response, 200
+    else:
+        response = ""
+        return response, 401
+
 
 @app.route("/packages", methods=['POST'])
 def getPackages():
