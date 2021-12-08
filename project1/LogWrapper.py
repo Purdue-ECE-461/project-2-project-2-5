@@ -30,18 +30,18 @@ class LogWrapper(object):
 
 
         #TODO: add error handling in here
-        print("hello")
+        # print("hello")
         FORMAT = logging.Formatter("%(asctime)s — %(name)s — %(levelname)s — %(message)s")
-        print("hello")
+        # print("hello")
         # LOG_FILE = os.environ.get('LOG_FILE')
         # print(LOG_FILE)
         # Check to make sure that this doesnt throw an errror if it doesnt have absolute path to log directory
 
         # make handlers
         # file_handler = TimedRotatingFileHandler(LOG_FILE, when='midnight')
-        print("hello")
+        # print("hello")
         # file_handler.setFormatter(FORMAT)
-        print("hello")
+        # print("hello")
 
         #create logger object
         self.logger = logging.getLogger(name)
