@@ -2,6 +2,7 @@
 from flask import Flask, request, jsonify
 # from werkzeug.datastructures import FileStorage
 import nacl
+import nacl.pwhash
 from uuid import uuid4
 import datetime
 # from PIL import ImageS
@@ -448,9 +449,16 @@ def getToken():
         key = data_client.key(sp_kind, name)
         data_user = data_client.get(key)
         data_passw = data_user["password"]
-        Hasher = hash.sha512
-        dig_passw = Hasher(passw_in, encoder=nacl.encoding.HexEncoder)
-
+        dig_passw = nacl.pwhash.argon2id.str(passw_in, opslimit=nacl.pwhash.OPSLIMIT_MODERATE, memlimit=nacl.pwhash.MEMLIMIT_MODERATE)
+        #Hasher = hash.sha512
+        #dig_passw = Hasher(passw_in, encoder=nacl.encoding.HexEncoder)
+        # Alternatively
+        # try:
+        #     nacl.pwhash.argon2id.verify(data_passw, passw_in)
+        # except:
+        #     response = ""
+        #     return response, 401
+            
         if data_passw != dig_passw:
             response = ""
             return response, 401
