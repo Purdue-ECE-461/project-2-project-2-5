@@ -20,7 +20,7 @@ class CLIHandler(LogWrapper):
     #@LogWrapper.log_init_decorator
     def __init__(self, _command_line_arg):
         super().__init__()
-        # self.set_logger(__name__)
+        self.set_logger(__name__)
         
         self.command_line_arg = _command_line_arg
         print(self.command_line_arg)

@@ -33,20 +33,20 @@ class LogWrapper(object):
         print("hello")
         FORMAT = logging.Formatter("%(asctime)s — %(name)s — %(levelname)s — %(message)s")
         print("hello")
-        LOG_FILE = os.environ.get('LOG_FILE')
-        print(LOG_FILE)
+        # LOG_FILE = os.environ.get('LOG_FILE')
+        # print(LOG_FILE)
         # Check to make sure that this doesnt throw an errror if it doesnt have absolute path to log directory
 
         # make handlers
-        file_handler = TimedRotatingFileHandler(LOG_FILE, when='midnight')
+        # file_handler = TimedRotatingFileHandler(LOG_FILE, when='midnight')
         print("hello")
-        file_handler.setFormatter(FORMAT)
+        # file_handler.setFormatter(FORMAT)
         print("hello")
 
         #create logger object
         self.logger = logging.getLogger(name)
         self.logger.setLevel(self.LEVEL)
-        self.logger.addHandler(file_handler)
+        # self.logger.addHandler(file_handler)
         self.logger.propagate = False
 
     # def critical(self, msg)->None:
