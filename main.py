@@ -429,7 +429,7 @@ def getToken():
     data_client = datastore.Client()
 
     q_lookup = data_client.query(kind=sp_kind)
-    data_client.add_filter("name", "=", name)
+    q_lookup.add_filter("name", "=", name)
     ret_serv = list(q_lookup.fetch())
 
     if len(ret_serv) == 1:
