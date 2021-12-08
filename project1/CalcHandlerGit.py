@@ -33,7 +33,7 @@ class CalcHandlerGit(CalcHandler):
     def __init__(self, url):
         # try:
         super().__init__(url)
-        self.set_logger(__name__)
+        #self.set_logger(__name__)
         self.token = os.environ.get('GITHUB_TOKEN')
         self.api_request_header = {'Authorization': 'token %s' % self.token}
         self.api_data = self.__api_http_get_general_repo_data()
@@ -460,7 +460,7 @@ class CalcHandlerGit(CalcHandler):
             if self.git_repo.get_commits().totalCount > 0:
                 return [x for x in self.git_repo.get_commits()]
             else:
-                self.logger.error("Empty commit list")
+                #self.logger.error("Empty commit list")
                 return []
         except:
             self.log_exception("get_commit_list")

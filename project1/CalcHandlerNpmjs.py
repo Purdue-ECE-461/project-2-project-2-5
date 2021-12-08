@@ -12,12 +12,12 @@ class CalcHandlerNpmjs(CalcHandlerGit):
 
     """
     def __init__(self, url):
-        self.set_logger(__name__)
+        #self.set_logger(__name__)
         r = requests.get(url)
         soup = BeautifulSoup(r.content, 'html5lib')
 
         git_url = soup.find("a", {"aria-labelledby": "repository"}).get('href') #find the github URL on html5 file
-        self.logger.info("Npmjs url, extracted %s from the npmjs page.", git_url)
+        #self.logger.info("Npmjs url, extracted %s from the npmjs page.", git_url)
         if git_url == None: #if no github URL is on the npmjs site
             print("No Github URL to scrape!")
             raise ValueError

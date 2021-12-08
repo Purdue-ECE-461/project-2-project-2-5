@@ -20,14 +20,15 @@ class CLIHandler(LogWrapper):
     #@LogWrapper.log_init_decorator
     def __init__(self, _command_line_arg):
         super().__init__()
-        self.set_logger(__name__)
+        #self.set_logger(__name__)
         
         self.command_line_arg = _command_line_arg
         print(self.command_line_arg)
         try:
             self.url_list, self.repo_list = self.parse_arg(_command_line_arg)
         except:
-            self.logger.error("Error in parsing argument.")
+           # self.logger.error("Error in parsing argument.")
+           pass
 
     def parse_arg(self, command_line_arg):
         """
@@ -80,7 +81,8 @@ class CLIHandler(LogWrapper):
         try:
             self.repo_list.sort(key=lambda score: score.net_score, reverse=True) #This will sort by net_score attribute in reverse
         except:
-            self.logger.error("Error in sorting final output")
+            #self.logger.error("Error in sorting final output")
+            pass
 
     def print_to_console(self):
         """

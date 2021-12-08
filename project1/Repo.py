@@ -11,7 +11,7 @@ and calculates metrics on that repository.
 class Repo(LogWrapper):
     def __init__(self, _url):
         super().__init__()
-        self.set_logger(__name__)
+        #self.set_logger(__name__)
         if 'github.com' in _url.lower():   #If a Github URL is passed in do this
             self.is_good_URL = True
             self.url = _url
@@ -48,7 +48,7 @@ class Repo(LogWrapper):
 
         else:       #Else, a non-compatible URL was fed
             self.is_good_URL = False
-            self.logger.error(f"ERROR!\n{_url}\nIS NOT AN ACCEPTABLE INPUT. ONLY GITHUB.COM AND NPMJS.COM URL'S ARE CURRENTLY SUPPORTED. THE SCORE FOR THIS URL WILL NOT BE CALCULATED.\n")
+            #self.logger.error(f"ERROR!\n{_url}\nIS NOT AN ACCEPTABLE INPUT. ONLY GITHUB.COM AND NPMJS.COM URL'S ARE CURRENTLY SUPPORTED. THE SCORE FOR THIS URL WILL NOT BE CALCULATED.\n")
             self.url = _url
             self.net_score = -1
             self.rampup_score = -1
