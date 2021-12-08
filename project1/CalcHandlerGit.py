@@ -141,7 +141,7 @@ class CalcHandlerGit(CalcHandler):
             self.log_exception("check_release_frequency")
             return 0
 
-    @CalcHandler.log_method_decorator # pragma: no cover
+    #@CalcHandler.log_method_decorator # pragma: no cover
     def __api_get_last10_commit_author_count(self)->int:
         """return the number of authors in the last 10% of commits
         return 0 on failure
@@ -165,7 +165,7 @@ class CalcHandlerGit(CalcHandler):
             self.log_exception("get_last10_commit_author_count")
             return 0
 
-    @CalcHandler.log_method_decorator # pragma: no cover
+    #@CalcHandler.log_method_decorator # pragma: no cover
     def __api_check_opened_issues(self)->int:
         """checks if any issues have been opened for the last 100 days
         return 0 on failure
@@ -226,12 +226,12 @@ class CalcHandlerGit(CalcHandler):
         self.code_file_list = f_filtered
         return f_filtered
 
-    @CalcHandler.log_method_decorator # pragma: no cover
+    #@CalcHandler.log_method_decorator # pragma: no cover
     def code_file_count(self)->int:
         """number of code files in the repository"""
         return len(self.file_name_list)
 
-    @CalcHandler.log_method_decorator # pragma: no cover
+    #@CalcHandler.log_method_decorator # pragma: no cover
     def get_code_comment_ratio(self)->int:
         """get the ratio between the number of lines of code and the number of
         lines of comment within the repository.
@@ -285,7 +285,7 @@ class CalcHandlerGit(CalcHandler):
                 self.log_exception(file)
         return total_linecount, comment_linecount
 
-    @CalcHandler.log_method_decorator # pragma: no cover
+    #@CalcHandler.log_method_decorator # pragma: no cover
     def __count_lines_in_file(self, line_list)->int:
         """count the number of non-empty lines in a single file
         """
@@ -319,7 +319,7 @@ class CalcHandlerGit(CalcHandler):
         except:
             return None
 
-    @CalcHandler.log_method_decorator # pragma: no cover
+    #@CalcHandler.log_method_decorator # pragma: no cover
     def get_readme_score(self)->int:
         """calculate readme score based on existence of keywords in README file.
         on exception, return 0
@@ -379,7 +379,7 @@ class CalcHandlerGit(CalcHandler):
             self.log_exception("remove cloned repo")
 
 
-    @CalcHandler.log_method_decorator # pragma: no cover
+    #@CalcHandler.log_method_decorator # pragma: no cover
     def __api_get_subscribers(self)->int:
         """pygithub API request for # subscribers
         return 0 on exception"""
@@ -389,7 +389,7 @@ class CalcHandlerGit(CalcHandler):
             self.log_exception("get_subscribers")
             return 0
 
-    @CalcHandler.log_method_decorator # pragma: no cover
+    #@CalcHandler.log_method_decorator # pragma: no cover
     def __api_get_releases(self)->Any:
         """pygithub API request for # releases
             need to do it through tags because releases function
@@ -404,7 +404,7 @@ class CalcHandlerGit(CalcHandler):
             self.log_exception("get_releases")
             return 0
 
-    @CalcHandler.log_method_decorator # pragma: no cover
+    #@CalcHandler.log_method_decorator # pragma: no cover
     def __api_get_stargazers(self)->int:
         """pygithub API request for # people who starred repository
         return 0 on exception
@@ -416,7 +416,7 @@ class CalcHandlerGit(CalcHandler):
             self.log_exception("get_stargazers")
             return 0
 
-    @CalcHandler.log_method_decorator # pragma: no cover
+    #@CalcHandler.log_method_decorator # pragma: no cover
     def __api_get_network_count(self)->int:
         """pygithub API request for # of forks of the repository
         return 0 on exception
@@ -428,7 +428,7 @@ class CalcHandlerGit(CalcHandler):
             self.log_exception("get_network_count")
             return 0
 
-    @CalcHandler.log_method_decorator # pragma: no cover
+    #@CalcHandler.log_method_decorator # pragma: no cover
     def __api_get_num_commits(self)->int:
         """pygithub API request for # commits
         return 0 on exception
@@ -438,7 +438,7 @@ class CalcHandlerGit(CalcHandler):
         except:
             return 0
 
-    @CalcHandler.log_method_decorator # pragma: no cover
+    #@CalcHandler.log_method_decorator # pragma: no cover
     def __repo_age(self) -> int:
         """pygithub use first repo commit to get repo age
         return 0 on exception
@@ -476,7 +476,7 @@ class CalcHandlerGit(CalcHandler):
             self.log_exception("request_from_github_api")
             return None
 
-    @CalcHandler.log_method_decorator # pragma: no cover
+    #@CalcHandler.log_method_decorator # pragma: no cover
     def __api_http_get_closed_issues(self)->Any:
         """github API, get number of closed issues
         return 0 on exception
@@ -501,7 +501,7 @@ class CalcHandlerGit(CalcHandler):
         url = 'https://api.github.com/repos/' + self.repo_directory
         return self.__api_http_request(url)
 
-    @CalcHandler.log_method_decorator # pragma: no cover
+    #@CalcHandler.log_method_decorator # pragma: no cover
     def __api_get_open_issues(self)->int:
         """pygithub API request to get # open issues
         return 0 on exception
@@ -512,7 +512,7 @@ class CalcHandlerGit(CalcHandler):
             self.log_exception("get_open_issues")
             return 0
 
-    @CalcHandler.log_method_decorator # pragma: no cover
+    #@CalcHandler.log_method_decorator # pragma: no cover
     def get_issue_ratio(self)->int:
         """calculate ratio of open issues to total issues
         formula set up so it will return 0 on failure
@@ -530,7 +530,7 @@ class CalcHandlerGit(CalcHandler):
         list_of_test_files = [fname for fname in self.file_name_list if 'test' in fname]
         return (list_of_test_dirs != []) or (list_of_test_files != [])
 
-    @CalcHandler.log_method_decorator # pragma: no cover
+    #@CalcHandler.log_method_decorator # pragma: no cover
     def get_reliability(self)->int:
         """Reliability is based on 5 factors:
             1. age
