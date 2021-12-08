@@ -483,12 +483,12 @@ def getPackages():
             
             if len(startV) != 3 or len(endV) != 3:
                 return error, 500
-            query.add_filter("major", ">=", int(startV[0]))
-            query.add_filter("major", "<=", int(endV[0]))
-            query.add_filter("minor", ">=", int(startV[1]))
-            query.add_filter("minor", "<=", int(endV[1]))
-            query.add_filter("patch", ">=", int(startV[2]))
-            query.add_filter("patch", "<=", int(endV[2]))
+            query.add_filter(int("version".split(".")[0]), ">=", int(startV[0]))
+            query.add_filter(int("version".split(".")[0]), "<=", int(endV[0]))
+            query.add_filter(int("version".split(".")[1]), ">=", int(startV[1]))
+            query.add_filter(int("version".split(".")[1]), "<=", int(endV[1]))
+            query.add_filter(int("version".split(".")[2]), ">=", int(startV[2]))
+            query.add_filter(int("version".split(".")[2]), "<=", int(endV[2]))
             for currPackage in query.fetch():
                 info = {}
                 info["Name"] = package["Name"]
