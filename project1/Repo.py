@@ -85,7 +85,7 @@ class Repo(LogWrapper):
         self.net_score = self.calc_net_score() #Done
         self.dependenciesScore = self.getNumDependencies(self.repo_directory)
 
-    @LogWrapper.log_method_decorator # pragma: no cover
+    #@LogWrapper.log_method_decorator # pragma: no cover
     def calc_correctness_score(self):
         """correctness metric:
         1. issue to comment ratio (30%)
@@ -98,7 +98,7 @@ class Repo(LogWrapper):
                 .2 * self.calc_handler.get_reliability()
         return score
 
-    @LogWrapper.log_method_decorator # pragma: no cover
+    #@LogWrapper.log_method_decorator # pragma: no cover
     def calc_bus_factor_score(self):
         """bus_factor metric
         return 0 on exception
@@ -122,7 +122,7 @@ class Repo(LogWrapper):
         return score
 
 
-    @LogWrapper.log_method_decorator # pragma: no cover
+    #@LogWrapper.log_method_decorator # pragma: no cover
     def calc_license_score(self):
         """license score metric
         return 0 on exception
@@ -137,7 +137,7 @@ class Repo(LogWrapper):
             return 0
 
 
-    @LogWrapper.log_method_decorator # pragma: no cover
+    #@LogWrapper.log_method_decorator # pragma: no cover
     def calc_rampup_score(self):
         """ramp up score metric
         return 0 on exception
@@ -149,7 +149,7 @@ class Repo(LogWrapper):
         return .4 * readme_score   + \
                 .6 * min(1, (comment_ratio_score) / 0.1)
 
-    @LogWrapper.log_method_decorator # pragma: no cover
+    #@LogWrapper.log_method_decorator # pragma: no cover
     def calc_maint_score(self):
         """maintenance score metric
         return 0 on exception
@@ -186,7 +186,7 @@ class Repo(LogWrapper):
 
         return score
 
-    @LogWrapper.log_method_decorator # pragma: no cover
+    #@LogWrapper.log_method_decorator # pragma: no cover
     def calc_net_score(self):
         """weighted average of all scores """
 

@@ -17,7 +17,7 @@ class CLIHandler(LogWrapper):
     repo_list = []
     command_line_arg = ""
 
-    @LogWrapper.log_init_decorator
+    #@LogWrapper.log_init_decorator
     def __init__(self, _command_line_arg):
         super().__init__()
         self.set_logger(__name__)
