@@ -449,19 +449,17 @@ def getToken():
         key = data_client.key(sp_kind, name)
         data_user = data_client.get(key)
         data_passw = data_user["password"]
-        dig_passw = nacl.pwhash.argon2id.str(passw_in, opslimit=nacl.pwhash.OPSLIMIT_MODERATE, memlimit=nacl.pwhash.MEMLIMIT_MODERATE)
-        #Hasher = hash.sha512
-        #dig_passw = Hasher(passw_in, encoder=nacl.encoding.HexEncoder)
+        #dig_passw = nacl.pwhash.argon2id.str(passw_in, opslimit=nacl.pwhash.OPSLIMIT_MODERATE, memlimit=nacl.pwhash.MEMLIMIT_MODERATE)
         # Alternatively
-        # try:
-        #     nacl.pwhash.argon2id.verify(data_passw, passw_in)
-        # except:
-        #     response = ""
-        #     return response, 401
-            
-        if data_passw != dig_passw:
+        try:
+            res = nacl.pwhash.argon2id.verify(data_passw, passw_in)
+        except:
             response = ""
             return response, 401
+            
+        # if data_passw != dig_passw:
+        #     response = ""
+        #     return response, 401
         token = str(uuid4())
         data_user["token"] = token
         exp_time = datetime.datetime.now() + datetime.timedelta(hours=10)
@@ -667,7 +665,44 @@ def deleteRegistry():
 
     return "", 200
 
+@app.route("/register", methods=['POST'])
 def createUser():
+    # passw = the plaintext password string, don't worry about the other arguments
+    recv_json = request.get_json()
+
+    auth_token = request.headers.get('X-Authorization')
+    token = auth_token.split()[1]
+
+    data_client = datastore.Client()
+    q_lookup = data_client.query(kind='Users')
+    q_lookup.add_filter("token", "=", token)
+    res = list(q_lookup.fetch())
+
+    if len(res) == 0:
+        response = ""
+        return response, 401
+    
+    full_key = data_client.key("Users", username)
+    try:
+        regis_name = recv_json["User"]["name"]
+        regis_isAdmin = recv_json["User"]["isAdmin"]
+        regis_passw = recv_json["Secret"]["password"]
+    except:
+        response = ""
+        return response, 401
+    
+    registration_key = data_client.key("Users", regis_name)
+
+    newEntity = datastore.Entity(key=registration_key)
+    newEntity["name"] = regis_name
+    newEntity["isAdmin"] = regis_isAdmin
+    hashed_passw = nacl.pwhash.argon2id.str(regis_passw, opslimit=nacl.pwhash.OPSLIMIT_MODERATE, memlimit=nacl.pwhash.MEMLIMIT_MODERATE)
+    newEntity["password"] = hashed_passw
+    newEntity["token"] = ""
+    newEntity["expiration"] = ""
+    data_client.put(newEntity)
+    response = {"message" : "Successfully created new user."}
+    return response, 200
 
 if __name__ == "__main__":
     app.run(debug=True)
