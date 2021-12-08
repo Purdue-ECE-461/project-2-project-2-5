@@ -23,6 +23,7 @@ class CLIHandler(LogWrapper):
         self.set_logger(__name__)
         
         self.command_line_arg = _command_line_arg
+        print(self.command_line_arg)
         try:
             self.url_list, self.repo_list = self.parse_arg(_command_line_arg)
         except:
