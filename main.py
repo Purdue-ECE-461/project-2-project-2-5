@@ -463,130 +463,170 @@ def getPackages():
     else:
         offset = 1
     
-    dataList = request.json
+    package = request.json
+    # print(dataList)
     data_client = datastore.Client()
     query = data_client.query(kind = "package")
     returnList = []
     
-    for package in dataList:
-        print(package)
-        query.add_filter("name", "=", package["Name"])
-        version = package["Version"].replace(" ","")
-        version = version.replace("=","")
-        version = version.replace("v","")
-        if "-" in version:
-            print("version: ",version)
-            versions = version.split('-')
-            startV_str = versions[0]
-            endV_str = versions[1]
-            startV = startV_str.split('.')
-            endV = endV_str.split('.')
-            print("start: ",startV," end: ", endV)
-            
-            if len(startV) != 3 or len(endV) != 3:
-                return error, 500
-            query.add_filter(int("version".split(".")[0]), ">=", int(startV[0]))
-            query.add_filter(int("version".split(".")[0]), "<=", int(endV[0]))
-            query.add_filter(int("version".split(".")[1]), ">=", int(startV[1]))
-            query.add_filter(int("version".split(".")[1]), "<=", int(endV[1]))
-            query.add_filter(int("version".split(".")[2]), ">=", int(startV[2]))
-            query.add_filter(int("version".split(".")[2]), "<=", int(endV[2]))
+    # for package in dataList:
+    print("THIS IS THE PACKAGE")
+    print(package)
+    print(package['Name'])
+    query.add_filter("name", "=", package["Name"])
+    version = package["Version"].replace(" ","")
+    version = version.replace("=","")
+    version = version.replace("v","")
+    if "-" in version:
+        print("version: ",version)
+        versions = version.split('-')
+        startV_str = versions[0]
+        endV_str = versions[1]
+        startV = startV_str.split('.')
+        endV = endV_str.split('.')
+        print("start: ",startV," end: ", endV)
+        
+        if len(startV) != 3 or len(endV) != 3:
+            return error, 500
+        # query.add_filter(("version".split(".")[0]), ">=", int(startV[0]))
+        # query.add_filter(("version".split(".")[0]), "<=", int(endV[0]))
+        # query.add_filter(("version".split(".")[1]), ">=", int(startV[1]))
+        # query.add_filter(("version".split(".")[1]), "<=", int(endV[1]))
+        # query.add_filter(("version".split(".")[2]), ">=", int(startV[2]))
+        # query.add_filter(("version".split(".")[2]), "<=", int(endV[2]))
+        
+        for currPackage in query.fetch():
+            print(currPackage["version"], currPackage["major"], currPackage["minor"], currPackage["patch"])
+            print(int(startV[0]),int(startV[1]),int(startV[2]))
+            print(int(endV[0]),int(endV[1]),int(endV[2]))
+            if currPackage["major"] > int(startV[0]) and currPackage["major"] < int(endV[0]):
+                info = {}
+                info["Name"] = package["Name"]
+                info["Version"] = currPackage["version"]
+                info["ID"] = currPackage["id"]
+                print("THIS WORKED: ", info)
+                returnList.append(info)
+            elif currPackage["major"] == int(startV[0]):
+                if currPackage["minor"] > int(startV[1]) and currPackage["major"] <= int(endV[0]):
+                    info = {}
+                    info["Name"] = package["Name"]
+                    info["Version"] = currPackage["version"]
+                    info["ID"] = currPackage["id"]
+                    print("THIS WORKED: ", info)
+                    returnList.append(info)
+                elif currPackage["minor"] == int(startV[1]):
+                    if currPackage["patch"] >= int(startV[2]):
+                        info = {}
+                        info["Name"] = package["Name"]
+                        info["Version"] = currPackage["version"]
+                        info["ID"] = currPackage["id"]
+                        print("THIS WORKED: ", info)
+                        returnList.append(info)
+            elif currPackage["major"] == int(endV[0]):
+                if currPackage["minor"] < int(endV[1]) and currPackage["major"] >= int(startV[0]):
+                    info = {}
+                    info["Name"] = package["Name"]
+                    info["Version"] = currPackage["version"]
+                    info["ID"] = currPackage["id"]
+                    print("THIS WORKED: ", info)
+                    returnList.append(info)
+                elif currPackage["minor"] == int(endV[1]):
+                    if currPackage["patch"] <= int(endV[2]):
+                        info = {}
+                        info["Name"] = package["Name"]
+                        info["Version"] = currPackage["version"]
+                        info["ID"] = currPackage["id"]
+                        print("THIS WORKED: ", info)
+                        returnList.append(info)
+    elif "~" in version:
+        print("version: ",version)
+        version = version.replace("~","")
+        currV = version.split('.')
+        if len(currV) == 3:
+            query.add_filter("major", "=", int(currV[0]))
+            query.add_filter("minor", "=", int(currV[1]))
+            query.add_filter("patch", ">=", int(currV[2]))
             for currPackage in query.fetch():
                 info = {}
                 info["Name"] = package["Name"]
                 info["Version"] = currPackage["version"]
                 info["ID"] = currPackage["id"]
                 returnList.append(info)
-                
-        elif "~" in version:
-            print("version: ",version)
-            version = version.replace("~","")
-            currV = version.split('.')
-            if len(currV) == 3:
-                query.add_filter("major", "=", int(currV[0]))
-                query.add_filter("minor", "=", int(currV[1]))
-                query.add_filter("patch", ">=", int(currV[2]))
-                for currPackage in query.fetch():
-                    info = {}
-                    info["Name"] = package["Name"]
-                    info["Version"] = currPackage["version"]
-                    info["ID"] = currPackage["id"]
-                    returnList.append(info)
-            elif len(currV) == 2:
-                query.add_filter("major", "=", int(currV[0]))
-                query.add_filter("minor", "=", int(currV[1]))
-                for currPackage in query.fetch():
-                    info = {}
-                    info["Name"] = package["Name"]
-                    info["Version"] = currPackage["version"]
-                    info["ID"] = currPackage["id"]
-                    returnList.append(info)
-            elif len(currV) == 1:
-                query.add_filter("major", "=", int(currV[0]))
-                for currPackage in query.fetch():
-                    info = {}
-                    info["Name"] = package["Name"]
-                    info["Version"] = currPackage["version"]
-                    info["ID"] = currPackage["id"]
-                    returnList.append(info)
-            else:
-                return error, 500
-
-        elif "^" in version:
-            print("version: ",version)
-            version = version.replace("^","")
-            currV = version.split('.')
-            if len(currV) != 3:
-                return error, 500
-            if int(currV[0]) != 0:
-                print("going to full carrot")
-                query.add_filter("major", "=", int(currv[0]))
-                query.add_filter("minor", ">=", int(currv[1]))
-                query.add_filter("patch", ">=", int(currv[2]))
-                for currPackage in query.fetch():
-                    info = {}
-                    info["Name"] = package["Name"]
-                    info["Version"] = currPackage["version"]
-                    info["ID"] = currPackage["id"]
-                    returnList.append(info)
-            elif int(currV[0]) == 0 and int(currV[1]) != 0:
-                print("going to minor carrot")
-                query.add_filter("major", "=", int(currv[0]))
-                query.add_filter("minor", "=", int(currv[1]))
-                query.add_filter("patch", ">=", int(currv[2]))
-                for currPackage in query.fetch():
-                    info = {}
-                    info["Name"] = package["Name"]
-                    info["Version"] = currPackage["version"]
-                    info["ID"] = currPackage["id"]
-                    returnList.append(info)
-            else:
-                print("going to patch carrot")
-                query.add_filter("major", "=", int(currv[0]))
-                query.add_filter("minor", "=", int(currv[1]))
-                query.add_filter("patch", "=", int(currv[2]))
-                for currPackage in query.fetch():
-                    info = {}
-                    info["Name"] = package["Name"]
-                    info["Version"] = currPackage["version"]
-                    info["ID"] = currPackage["id"]
-                    returnList.append(info)
-
-
-        else:
-            info = {}
-            info["Name"] = package["Name"]
-            query.add_filter("version", "=", version)
-            i = 0
+        elif len(currV) == 2:
+            query.add_filter("major", "=", int(currV[0]))
+            query.add_filter("minor", "=", int(currV[1]))
             for currPackage in query.fetch():
-                i = i + 1
+                info = {}
+                info["Name"] = package["Name"]
                 info["Version"] = currPackage["version"]
                 info["ID"] = currPackage["id"]
-                if i != 1:
-                    return error, 500
-            if "Version" in info:
-                print(info)
                 returnList.append(info)
+        elif len(currV) == 1:
+            query.add_filter("major", "=", int(currV[0]))
+            for currPackage in query.fetch():
+                info = {}
+                info["Name"] = package["Name"]
+                info["Version"] = currPackage["version"]
+                info["ID"] = currPackage["id"]
+                returnList.append(info)
+        else:
+            return error, 500
+
+    elif "^" in version:
+        print("version: ",version)
+        version = version.replace("^","")
+        currV = version.split('.')
+        if len(currV) != 3:
+            return error, 500
+        if int(currV[0]) != 0:
+            print("going to full carrot")
+            query.add_filter("major", "=", int(currV[0]))
+            query.add_filter("minor", ">=", int(currV[1]))
+            query.add_filter("patch", ">=", int(currV[2]))
+            for currPackage in query.fetch():
+                info = {}
+                info["Name"] = package["Name"]
+                info["Version"] = currPackage["version"]
+                info["ID"] = currPackage["id"]
+                returnList.append(info)
+        elif int(currV[0]) == 0 and int(currV[1]) != 0:
+            print("going to minor carrot")
+            query.add_filter("major", "=", int(currV[0]))
+            query.add_filter("minor", "=", int(currV[1]))
+            query.add_filter("patch", ">=", int(currV[2]))
+            for currPackage in query.fetch():
+                info = {}
+                info["Name"] = package["Name"]
+                info["Version"] = currPackage["version"]
+                info["ID"] = currPackage["id"]
+                returnList.append(info)
+        else:
+            print("going to patch carrot")
+            query.add_filter("major", "=", int(currV[0]))
+            query.add_filter("minor", "=", int(currV[1]))
+            query.add_filter("patch", "=", int(currV[2]))
+            for currPackage in query.fetch():
+                info = {}
+                info["Name"] = package["Name"]
+                info["Version"] = currPackage["version"]
+                info["ID"] = currPackage["id"]
+                returnList.append(info)
+
+
+    else:
+        info = {}
+        info["Name"] = package["Name"]
+        query.add_filter("version", "=", version)
+        i = 0
+        for currPackage in query.fetch():
+            i = i + 1
+            info["Version"] = currPackage["version"]
+            info["ID"] = currPackage["id"]
+            if i != 1:
+                return error, 500
+        if "Version" in info:
+            print(info)
+            returnList.append(info)
 
     return jsonify(returnList), 200
 
