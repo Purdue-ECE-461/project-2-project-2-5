@@ -1,5 +1,6 @@
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Blueprint
+from flask_paginate import Pagination, get_page_parameter
 # from werkzeug.datastructures import FileStorage
 import nacl
 import nacl.pwhash
@@ -82,6 +83,18 @@ def create(metadata, data):
     if len(queryList) > 0:
         return "", 403
 
+    auth_token = request.headers.get('X-Authorization')
+    token = auth_token.split()[1]
+
+    data_client = datastore.Client()
+    q_lookup = data_client.query(kind='Users')
+    q_lookup.add_filter("token", "=", token)
+    res = list(q_lookup.fetch())
+    error = { "code": -1, "message": "An error occurred while validating the user"}
+
+    if len(res) != 1:
+        return error, 500
+
     full_key = data_client.key("package", metadata["Name"] + ": " + metadata["Version"] + ": " + metadata["ID"])
     newEntity = datastore.Entity(key=full_key, exclude_from_indexes=["content"])
     # keys = content.keys()
@@ -99,6 +112,17 @@ def create(metadata, data):
     newEntity["patch"] = int(version[2])
 
     data_client.put(newEntity)
+    for user in q_lookup.fetch():
+        full_key = data_client.key("UserActions", metadata["Name"] + ": " + metadata["Version"] + ": " + metadata["ID"] + ": " + user["name"] +": CREATE")
+        newUserEntity = datastore.Entity(key=full_key)
+        newUserEntity["userName"] = user["name"]
+        newUserEntity["userIsAdmin"] = user["isAdmin"]
+        newUserEntity["packageName"] = metadata["Name"]
+        newUserEntity["packageVersion"] = metadata["Version"]
+        newUserEntity["packageID"] = metadata["ID"]
+        newUserEntity["Date"] = datetime.datetime.now()
+        newUserEntity["Action"] = "CREATE"
+        data_client.put(newUserEntity)
     return metadata, 201
 
     # except:
@@ -126,6 +150,18 @@ def ingestion(metadata, data):
     if len(data) != 2 or len(metadata) != 3 or "ID" not in metadata or "Name" not in metadata or "Version" not in metadata or "URL" not in data or "JSProgram" not in data:
         return "", 400
     
+    auth_token = request.headers.get('X-Authorization')
+    token = auth_token.split()[1]
+
+    data_client = datastore.Client()
+    q_lookup = data_client.query(kind='Users')
+    q_lookup.add_filter("token", "=", token)
+    res = list(q_lookup.fetch())
+    error = { "code": -1, "message": "An error occurred while validating the user"}
+
+    if len(res) != 1:
+        return error, 500
+
     url = data["URL"]
     cli = CLIHandler(url)
     cli.calc()
@@ -150,6 +186,18 @@ def ingestion(metadata, data):
             return "", 403
         package["url"] = data["URL"]
         data_client.put(package)
+    
+    for user in q_lookup.fetch():
+        full_key = data_client.key("UserActions", metadata["Name"] + ": " + metadata["Version"] + ": " + metadata["ID"] + ": " + user["name"] +": INGEST")
+        newUserEntity = datastore.Entity(key=full_key)
+        newUserEntity["userName"] = user["name"]
+        newUserEntity["userIsAdmin"] = user["isAdmin"]
+        newUserEntity["packageName"] = metadata["Name"]
+        newUserEntity["packageVersion"] = metadata["Version"]
+        newUserEntity["packageID"] = metadata["ID"]
+        newUserEntity["Date"] = datetime.datetime.now()
+        newUserEntity["Action"] = "INGEST"
+        data_client.put(newUserEntity)
 
     return metadata, 201
     
@@ -209,6 +257,18 @@ def getPackageByID(id):
     
     # function calls for authentication:
     # use x_auth[1], x_auth[2]
+    auth_token = request.headers.get('X-Authorization')
+    token = auth_token.split()[1]
+
+    data_client = datastore.Client()
+    q_lookup = data_client.query(kind='Users')
+    q_lookup.add_filter("token", "=", token)
+    res = list(q_lookup.fetch())
+    error = { "code": -1, "message": "An error occurred while validating the user"}
+
+    if len(res) != 1:
+        return error, 500
+    
     metadata = {}
     data = {}
     dataFull = {}
@@ -232,6 +292,17 @@ def getPackageByID(id):
     
     dataFull["metadata"] = metadata
     dataFull["data"] = data
+    for user in q_lookup.fetch():
+        full_key = data_client.key("UserActions", metadata["Name"] + ": " + metadata["Version"] + ": " + metadata["ID"] + ": " + user["name"] +": DOWNLOAD BY ID")
+        newUserEntity = datastore.Entity(key=full_key)
+        newUserEntity["userName"] = user["name"]
+        newUserEntity["userIsAdmin"] = user["isAdmin"]
+        newUserEntity["packageName"] = metadata["Name"]
+        newUserEntity["packageVersion"] = metadata["Version"]
+        newUserEntity["packageID"] = metadata["ID"]
+        newUserEntity["Date"] = datetime.datetime.now()
+        newUserEntity["Action"] = "DOWNLOAD BY ID"
+        data_client.put(newUserEntity)
         
     return dataFull, 200
 
@@ -259,6 +330,17 @@ def packageUpdate(id):
         # use x_auth[1], x_auth[2]
         # id = request
         # id.replace("https://ece461.purdue.edu/project2/package/","")
+    auth_token = request.headers.get('X-Authorization')
+    token = auth_token.split()[1]
+
+    data_client = datastore.Client()
+    q_lookup = data_client.query(kind='Users')
+    q_lookup.add_filter("token", "=", token)
+    res = list(q_lookup.fetch())
+    error = { "code": -1, "message": "An error occurred while validating the user"}
+
+    if len(res) != 1:
+        return error, 500
 
     dataFull = request.json
     metadata = dataFull["metadata"]
@@ -280,6 +362,17 @@ def packageUpdate(id):
         package["jsprogram"] = data["JSProgram"]
 
     data_client.put(package)
+    for user in q_lookup.fetch():
+        full_key = data_client.key("UserActions", metadata["Name"] + ": " + metadata["Version"] + ": " + metadata["ID"] + ": " + user["name"] +": UPDATE")
+        newUserEntity = datastore.Entity(key=full_key)
+        newUserEntity["userName"] = user["name"]
+        newUserEntity["userIsAdmin"] = user["isAdmin"]
+        newUserEntity["packageName"] = metadata["Name"]
+        newUserEntity["packageVersion"] = metadata["Version"]
+        newUserEntity["packageID"] = metadata["ID"]
+        newUserEntity["Date"] = datetime.datetime.now()
+        newUserEntity["Action"] = "UPDATE"
+        data_client.put(newUserEntity)
     return "", 200
         # key = data_client.key(metadata["Name"], metadata["ID"])
 
@@ -316,17 +409,40 @@ def deletePackage(id):
         
         # function calls for authentication:
         # use x_auth[1], x_auth[2]
+    auth_token = request.headers.get('X-Authorization')
+    token = auth_token.split()[1]
+
+    data_client = datastore.Client()
+    q_lookup = data_client.query(kind='Users')
+    q_lookup.add_filter("token", "=", token)
+    res = list(q_lookup.fetch())
+    error = { "code": -1, "message": "An error occurred while validating the user"}
+
+    if len(res) != 1:
+        return error, 500
+    
     data_client = datastore.Client()
     query = data_client.query(kind = "package")
     query.add_filter("id", "=", id)
-    i = 0
+    queryList = list(query.fetch())
+    if len(queryList) != 1:
+        return 400
     for package in query.fetch():
-        i = i + 1
+        # i = i + 1
         key = data_client.key("package", package["name"] + ": " + package["version"] + ": " + package["id"])
         data_client.delete(key)
-        
-    if i != 1:
-        return "", 400
+
+        for user in q_lookup.fetch():
+            full_key = data_client.key("UserActions", package["name"] + ": " + package["version"] + ": " + package["id"] + ": " + user["name"] +": DELETE BY ID")
+            newUserEntity = datastore.Entity(key=full_key)
+            newUserEntity["userName"] = user["name"]
+            newUserEntity["userIsAdmin"] = user["isAdmin"]
+            newUserEntity["packageName"] = package["name"]
+            newUserEntity["packageVersion"] = package["version"]
+            newUserEntity["packageID"] = package["id"]
+            newUserEntity["Date"] = datetime.datetime.now()
+            newUserEntity["Action"] = "DELETE BY ID"
+            data_client.put(newUserEntity)
     
     return "", 200
         
@@ -349,9 +465,21 @@ def getPackageByName(name):
     # function calls for authentication:
     # use x_auth[1], x_auth[2]
 
+    auth_token = request.headers.get('X-Authorization')
+    token = auth_token.split()[1]
+
     data_client = datastore.Client()
-    query = data_client.query(kind = "package")
-    query.add_filter("name", "=", name)
+    q_lookup = data_client.query(kind='Users')
+    q_lookup.add_filter("token", "=", token)
+    res = list(q_lookup.fetch())
+    error = { "code": -1, "message": "An error occurred while validating the user"}
+
+    if len(res) != 1:
+        return error, 500
+
+    data_client = datastore.Client()
+    query = data_client.query(kind = "UserActions")
+    query.add_filter("packageName", "=", name)
     queryList = list(query.fetch())
     if len(queryList) == 0:
         return "", 400
@@ -361,15 +489,17 @@ def getPackageByName(name):
     for package in query.fetch():
         newDict = {}
         newDict["User"] = {} 
-        newDict["User"]["name"] = "name"
-        newDict["User"]["isAdmin"] = "isAdmin"
-        newDict["Date"] = "Date"
+        newDict["User"]["name"] = package["userName"]
+        newDict["User"]["isAdmin"] = package["userIsAdmin"]
+        newDict["Date"] = package["Date"]
         newDict["PackageMetadata"] = {}
-        newDict["PackageMetadata"]["Name"] = package["name"]
-        newDict["PackageMetadata"]["Version"] = package["version"]
-        newDict["PackageMetadata"]["ID"] = package["id"]
-        newDict["Action"] = "Action"
+        newDict["PackageMetadata"]["Name"] = package["packageName"]
+        newDict["PackageMetadata"]["Version"] = package["packageVersion"]
+        newDict["PackageMetadata"]["ID"] = package["packageID"]
+        newDict["Action"] = package["Action"]
         returnList.append(newDict)
+
+    returnList.sort(key=sortByDateHelper)
 
     return jsonify(returnList)
     # except:
@@ -381,9 +511,22 @@ def getPackageByName(name):
     #         raise NameError(id)
     #     else:
     #         raise Exception()
+def sortByDateHelper(inputDict):
+    return inputDict["Date"]
 
 @app.route("/package/byName/<name>", methods=['DELETE'])
 def deleteAllVersions(name):
+    auth_token = request.headers.get('X-Authorization')
+    token = auth_token.split()[1]
+
+    data_client = datastore.Client()
+    q_lookup = data_client.query(kind='Users')
+    q_lookup.add_filter("token", "=", token)
+    res = list(q_lookup.fetch())
+    error = { "code": -1, "message": "An error occurred while validating the user"}
+
+    if len(res) != 1:
+        return error, 500
     data_client = datastore.Client()
     query = data_client.query(kind = "package")
     query.add_filter("name", "=", name)
@@ -394,6 +537,18 @@ def deleteAllVersions(name):
     for package in query.fetch():
         key = data_client.key("package", package["name"] + ": " + package["version"] + ": " + package["id"])
         data_client.delete(key)
+    
+        for user in q_lookup.fetch():
+            full_key = data_client.key("UserActions", package["name"] + ": " + package["version"] + ": " + package["id"] + ": " + user["name"] +": DELETE ALL VERSIONS BY NAME")
+            newUserEntity = datastore.Entity(key=full_key)
+            newUserEntity["userName"] = user["name"]
+            newUserEntity["userIsAdmin"] = user["isAdmin"]
+            newUserEntity["packageName"] = package["name"]
+            newUserEntity["packageVersion"] = package["version"]
+            newUserEntity["packageID"] = package["id"]
+            newUserEntity["Date"] = datetime.datetime.now()
+            newUserEntity["Action"] = "DELETE ALL VERSIONS BY NAME"
+            data_client.put(newUserEntity)
 
     return "", 200
 
@@ -407,6 +562,17 @@ def getPackageRate(id):
     queryList = list(query.fetch())
     if len(queryList) != 1:
         return "", 400
+    auth_token = request.headers.get('X-Authorization')
+    token = auth_token.split()[1]
+
+    data_client = datastore.Client()
+    q_lookup = data_client.query(kind='Users')
+    q_lookup.add_filter("token", "=", token)
+    res = list(q_lookup.fetch())
+    error = { "code": -1, "message": "An error occurred while validating the user"}
+
+    if len(res) != 1:
+        return error, 500
     info = {}
     for package in query.fetch():
         url = package["url"]
@@ -420,6 +586,17 @@ def getPackageRate(id):
         info["ResponsiveMaintainer"] = scores[4]
         info["LicenseScore"] = scores[5]
         info["GoodPinningPractice"] = scores[6]
+        for user in q_lookup.fetch():
+            full_key = data_client.key("UserActions", package["name"] + ": " + package["version"] + ": " + package["id"] + ": " + user["name"] +": GET RATE FROM URL")
+            newUserEntity = datastore.Entity(key=full_key)
+            newUserEntity["userName"] = user["name"]
+            newUserEntity["userIsAdmin"] = user["isAdmin"]
+            newUserEntity["packageName"] = package["name"]
+            newUserEntity["packageVersion"] = package["version"]
+            newUserEntity["packageID"] = package["id"]
+            newUserEntity["Date"] = datetime.datetime.now()
+            newUserEntity["Action"] = "GET RATE FROM URL"
+            data_client.put(newUserEntity)
 
     return info, 200
     # pass
@@ -478,9 +655,11 @@ def getPackages():
     error = { "code": -1, "message": "An error occurred while retrieving package"}
     if request.args:
         offset = request.args["offset"]
+        # currPage = [1,2,3..offset]
     else:
         offset = 1
-    
+        # currPage = 1
+
     dataList = request.json
     
     print(dataList)
@@ -489,8 +668,8 @@ def getPackages():
     returnList = []
     
     for package in dataList:
-        print("THIS IS THE PACKAGE")
-        print(package)
+        # print("THIS IS THE PACKAGE")
+        # print(package)
         if "Name" not in package or "Version" not in package:
             return error,500
         query = data_client.query(kind = "package")
@@ -499,13 +678,13 @@ def getPackages():
         version = version.replace("=","")
         version = version.replace("v","")
         if "-" in version:
-            print("range version: ",version)
+            # print("range version: ",version)
             versions = version.split('-')
             startV_str = versions[0]
             endV_str = versions[1]
             startV = startV_str.split('.')
             endV = endV_str.split('.')
-            print("start: ",startV," end: ", endV)
+            # print("start: ",startV," end: ", endV)
             
             if len(startV) != 3 or len(endV) != 3:
                 return error, 500
@@ -542,10 +721,10 @@ def getPackages():
                     info["ID"] = currPackage["id"]
                     # print("THIS WORKED: ", info)
                     returnList.append(info)
-                    print("RANGE: ", returnList)
+                    # print("RANGE: ", returnList)
 
         elif "~" in version:
-            print("tilda version: ",version)
+            # print("tilda version: ",version)
             version = version.replace("~","")
             currV = version.split('.')
             if len(currV) == 3:
@@ -559,7 +738,7 @@ def getPackages():
                         info["Version"] = currPackage["version"]
                         info["ID"] = currPackage["id"]
                         returnList.append(info)
-                        print("TIL: ", returnList)
+                        # print("TIL: ", returnList)
             elif len(currV) == 2:
                 # query.add_filter("major", "=", int(currV[0]))
                 # query.add_filter("minor", "=", int(currV[1]))
@@ -570,7 +749,7 @@ def getPackages():
                         info["Version"] = currPackage["version"]
                         info["ID"] = currPackage["id"]
                         returnList.append(info)
-                        print("TIL: ", returnList)
+                        # print("TIL: ", returnList)
             elif len(currV) == 1:
                 # query.add_filter("major", "=", int(currV[0]))
                 for currPackage in query.fetch():
@@ -580,18 +759,18 @@ def getPackages():
                         info["Version"] = currPackage["version"]
                         info["ID"] = currPackage["id"]
                         returnList.append(info)
-                        print("TIL: ", returnList)
+                        # print("TIL: ", returnList)
             else:
                 return error, 500
 
         elif "^" in version:
-            print("carrot version: ",version)
+            # print("carrot version: ",version)
             version = version.replace("^","")
             currV = version.split('.')
             if len(currV) != 3:
                 return error, 500
             if int(currV[0]) != 0:
-                print("going to full carrot")
+                # print("going to full carrot")
                 # query.add_filter("major", "=", int(currV[0]))
                 # query.add_filter("minor", ">=", int(currV[1]))
                 # query.add_filter("patch", ">=", int(currV[2]))
@@ -602,9 +781,9 @@ def getPackages():
                         info["Version"] = currPackage["version"]
                         info["ID"] = currPackage["id"]
                         returnList.append(info)
-                        print("CAR: ", returnList)
+                        # print("CAR: ", returnList)
             elif int(currV[0]) == 0 and int(currV[1]) != 0:
-                print("going to minor carrot")
+                # print("going to minor carrot")
                 # query.add_filter("major", "=", int(currV[0]))
                 # query.add_filter("minor", "=", int(currV[1]))
                 # query.add_filter("patch", ">=", int(currV[2]))
@@ -615,9 +794,9 @@ def getPackages():
                         info["Version"] = currPackage["version"]
                         info["ID"] = currPackage["id"]
                         returnList.append(info)
-                        print("CAR: ", returnList)
+                        # print("CAR: ", returnList)
             else:
-                print("going to patch carrot")
+                # print("going to patch carrot")
                 # query.add_filter("major", "=", int(currV[0]))
                 # query.add_filter("minor", "=", int(currV[1]))
                 # query.add_filter("patch", "=", int(currV[2]))
@@ -628,27 +807,37 @@ def getPackages():
                         info["Version"] = currPackage["version"]
                         info["ID"] = currPackage["id"]
                         returnList.append(info)
-                        print("CAR: ", returnList)
+                        # print("CAR: ", returnList)
 
         else:
-            print("EXACT VERSION: ",version)
+            # print("EXACT VERSION: ",version)
             info = {}
             info["Name"] = package["Name"]
             query.add_filter("version", "=", version)
             i = 0
             for currPackage in query.fetch():
-                print("in exact for loop")
+                # print("in exact for loop")
                 i = i + 1
                 info["Version"] = currPackage["version"]
                 info["ID"] = currPackage["id"]
                 if i != 1:
                     return error, 500
             if "Version" in info:
-                print(info)
+                # print(info)
                 returnList.append(info)
-                print("EXACT: ", returnList)
-    print(returnList)
-    return jsonify(returnList), 200
+                # print("EXACT: ", returnList)
+    # print(returnList)
+    if len(returnList) > 10:
+        # if offset == 1:
+        if 10*(offset - 1) < (len(returnList) - 1):
+            paginatedList = returnList[10*(offset-1) : min(10*(offset), len(returnList) - 1)]
+            return jsonify(paginatedList),200
+        else:
+            paginatedList = returnList[len(returnList) - 11, len(returnList) - 1]
+            return jsonify(paginatedList),200
+
+    else:
+        return jsonify(returnList), 200
 
 
 
@@ -656,12 +845,48 @@ def getPackages():
 def deleteRegistry():
     
     # Check authentication
+    auth_token = request.headers.get('X-Authorization')
+    token = auth_token.split()[1]
+
+    data_client = datastore.Client()
+    q_lookup = data_client.query(kind='Users')
+    q_lookup.add_filter("token", "=", token)
+    res = list(q_lookup.fetch())
+
+    if len(res) != 1:
+        response = ""
+        return response, 401
+
+    for user in q_lookup.fetch():
+        if user["isAdmin"] not in ["true", "True", True]:
+            return "", 401
 
     data_client = datastore.Client()
     query = data_client.query(kind = "package")
     for package in query.fetch():
         key = data_client.key("package", package["name"] + ": " + package["version"] + ": " + package["id"])
         data_client.delete(key)
+
+    actionQuery = data_client.query(kind="UserActions")
+    for package in actionQuery.fetch():
+        full_key = data_client.key("UserActions", package["packageName"] + ": " + package["packageVersion"] + ": " + package["packageID"] + ": " + package["userName"] +": " + package["Action"])
+        data_client.delete(full_key)
+    
+    userQuery = data_client.query(kind="Users")
+    for entity in userQuery.fetch():
+        full_key = data_client.key("Users", entity["name"])
+        data_client.delete(full_key)
+        
+    
+    registration_key = data_client.key("Users", "ece461defaultadminuser")
+    newEntity = datastore.Entity(key=registration_key)
+    newEntity["name"] = "ece461defaultadminuser"
+    newEntity["isAdmin"] = "True"
+    hashed_passw = nacl.pwhash.argon2id.str("correcthorsebatterystaple123(!__+@**(A", opslimit=nacl.pwhash.OPSLIMIT_MODERATE, memlimit=nacl.pwhash.MEMLIMIT_MODERATE)
+    newEntity["password"] = hashed_passw
+    newEntity["token"] = ""
+    newEntity["expiration"] = ""
+    data_client.put(newEntity)
 
     return "", 200
 
@@ -678,11 +903,15 @@ def createUser():
     q_lookup.add_filter("token", "=", token)
     res = list(q_lookup.fetch())
 
-    if len(res) == 0:
+    if len(res) != 1:
         response = ""
         return response, 401
+
+    for user in q_lookup.fetch():
+        if user["isAdmin"] not in ["true", "True", True]:
+            return "", 401
     
-    full_key = data_client.key("Users", username)
+    # full_key = data_client.key("Users", username)
     try:
         regis_name = recv_json["User"]["name"]
         regis_isAdmin = recv_json["User"]["isAdmin"]
