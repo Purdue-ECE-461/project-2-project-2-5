@@ -867,6 +867,16 @@ def deleteRegistry():
         key = data_client.key("package", package["name"] + ": " + package["version"] + ": " + package["id"])
         data_client.delete(key)
 
+    actionQuery = data_client.query(kind="UserActions")
+    for package in actionQuery.fetch():
+        full_key = data_client.key("UserActions", package["packageName"] + ": " + package["packageVersion"] + ": " + package["packageID"] + ": " + package["userName"] +": " + package["Action"])
+        data_client.delete(full_key)
+    
+    userQuery = data_client.query(kind="Users")
+    for entity in userQuery.fetch():
+        full_key = data_client.key("Users", entity["name"])
+        data_client.delete(full_key)
+        
     return "", 200
 
 @app.route("/register", methods=['POST'])
