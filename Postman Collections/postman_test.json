@@ -27,7 +27,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://project-2-331602.uc.r.appspot.com//package/:id",
+                  "raw": "https://project-2-331602.uc.r.appspot.com/package/:id",
                   "protocol": "https",
                   "host": [
                     "project-2-331602",
@@ -37,7 +37,6 @@
                     "com"
                   ],
                   "path": [
-                    "",
                     "package",
                     ":id"
                   ],
