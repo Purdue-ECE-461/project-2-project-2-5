@@ -934,6 +934,4 @@ def createUser():
     return response, 200
 
 if __name__ == "__main__":
-    app.run(debug=True)
-    # upload_blob("main-registry-461-project-2","smile_2.zip", "test_zip2")
-    # download_blob("main-registry-461-project-2","test_zip2", "download_test2.zip")
+    app.run(port=8080, debug=True)

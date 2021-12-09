@@ -1,5 +1,5 @@
 
-runtime: python38
+runtime: python37
 
 handlers:
 - url: /.*
