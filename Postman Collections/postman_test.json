@@ -166,13 +166,12 @@
                   }
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/package/test/:id",
+                  "raw": "{{baseUrl}}/package/:id",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "package",
-                    "test",
                     ":id"
                   ],
                   "variable": [
@@ -1663,12 +1662,12 @@
   ],
   "variable": [
     {
-      "id": "9c3364d6-a6e4-4a12-9b64-fd17596243dd",
+      "id": "8ac6ea9b-0c60-476d-842e-bf6b61ddb257",
       "key": "baseUrl",
       "value": "https://project-2-331602.uc.r.appspot.com/"
     },
     {
-      "id": "5356097e-3f6c-4708-8eaa-f492bdd224b0",
+      "id": "9852b190-30a2-4572-8733-d3ee6d0fb0bb",
       "key": "token",
       "value": "aQoDB8ngh0sWsHlQVY8zeOwCAwTmYElwvKKZt7KUY1c2KCUa-LLETh0IGKHj7ZMqtbp6qQ-92nCBscdEFo--M3KAWVEuyj6mFB0VZIyf4WaJspmLUtmOvjg5ZSdcQx9erbVjeDiOh0ncn7a7RlvnGB4_sKNucDN3xta6-i3_lks"
     }
