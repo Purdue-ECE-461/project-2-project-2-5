@@ -1,10 +1,9 @@
 
 from flask import Flask, request, jsonify, Blueprint
-from flask_paginate import Pagination, get_page_parameter
 import nacl
 import nacl.pwhash
 from uuid import uuid4
-import datetime
+from datetime import datetime, timedelta
 
 app = Flask(__name__)
 import google.cloud.datastore as datastore
@@ -117,7 +116,7 @@ def create(metadata, data):
         newUserEntity["packageName"] = metadata["Name"]
         newUserEntity["packageVersion"] = metadata["Version"]
         newUserEntity["packageID"] = metadata["ID"]
-        newUserEntity["Date"] = datetime.datetime.now()
+        newUserEntity["Date"] = datetime.now()
         newUserEntity["Action"] = "CREATE"
         data_client.put(newUserEntity)
     return metadata, 201
@@ -195,7 +194,7 @@ def ingestion(metadata, data):
         newUserEntity["packageName"] = metadata["Name"]
         newUserEntity["packageVersion"] = metadata["Version"]
         newUserEntity["packageID"] = metadata["ID"]
-        newUserEntity["Date"] = datetime.datetime.now()
+        newUserEntity["Date"] = datetime.now()
         newUserEntity["Action"] = "INGEST"
         data_client.put(newUserEntity)
 
@@ -300,7 +299,7 @@ def getPackageByID(id):
         newUserEntity["packageName"] = metadata["Name"]
         newUserEntity["packageVersion"] = metadata["Version"]
         newUserEntity["packageID"] = metadata["ID"]
-        newUserEntity["Date"] = datetime.datetime.now()
+        newUserEntity["Date"] = datetime.now()
         newUserEntity["Action"] = "DOWNLOAD BY ID"
         data_client.put(newUserEntity)
         
@@ -353,7 +352,7 @@ def packageUpdate(id):
     query.add_filter("name", "=", metadata["Name"])
     query.add_filter("version", "=", metadata["Version"])
     queryList = list(query.fetch())
-    if len(queryList) > 1 or len(queryList) == 0:
+    if len(queryList) != 1:
         return "", 400
 
     for package in query.fetch():
@@ -370,7 +369,7 @@ def packageUpdate(id):
         newUserEntity["packageName"] = metadata["Name"]
         newUserEntity["packageVersion"] = metadata["Version"]
         newUserEntity["packageID"] = metadata["ID"]
-        newUserEntity["Date"] = datetime.datetime.now()
+        newUserEntity["Date"] = datetime.now()
         newUserEntity["Action"] = "UPDATE"
         data_client.put(newUserEntity)
     return "", 200
@@ -440,7 +439,7 @@ def deletePackage(id):
             newUserEntity["packageName"] = package["name"]
             newUserEntity["packageVersion"] = package["version"]
             newUserEntity["packageID"] = package["id"]
-            newUserEntity["Date"] = datetime.datetime.now()
+            newUserEntity["Date"] = datetime.now()
             newUserEntity["Action"] = "DELETE BY ID"
             data_client.put(newUserEntity)
     
@@ -546,7 +545,7 @@ def deleteAllVersions(name):
             newUserEntity["packageName"] = package["name"]
             newUserEntity["packageVersion"] = package["version"]
             newUserEntity["packageID"] = package["id"]
-            newUserEntity["Date"] = datetime.datetime.now()
+            newUserEntity["Date"] = datetime.now()
             newUserEntity["Action"] = "DELETE ALL VERSIONS BY NAME"
             data_client.put(newUserEntity)
 
@@ -594,7 +593,7 @@ def getPackageRate(id):
             newUserEntity["packageName"] = package["name"]
             newUserEntity["packageVersion"] = package["version"]
             newUserEntity["packageID"] = package["id"]
-            newUserEntity["Date"] = datetime.datetime.now()
+            newUserEntity["Date"] = datetime.now()
             newUserEntity["Action"] = "GET RATE FROM URL"
             data_client.put(newUserEntity)
 
@@ -636,8 +635,9 @@ def getToken():
             
         token = str(uuid4())
         data_user["token"] = token
-        exp_time = datetime.datetime.now() + datetime.timedelta(hours=10)
+        exp_time = datetime.now() + timedelta(hours=10)
         data_user["expiration"] = exp_time
+        data_user["api_uses"] = 0
         data_client.put(data_user)
         
         response = "bearer " + token
