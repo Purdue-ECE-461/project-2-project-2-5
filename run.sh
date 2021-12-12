@@ -10,7 +10,7 @@ if [ "$1" == "install" ]; then
   python3 -m pip --quiet install --upgrade pip #maybe get rid of or add user
   pip install -r ./requirements.txt
   export GOOGLE_APPLICATION_CREDENTIALS="./project-2-331602-22c5987270e1.json"
-  export GITHUB_TOKEN="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"
+  export GITHUB_TOKEN="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"
   # ./google-cloud-sdk/install.sh
   # ./google-cloud-sdk/bin/gcloud init
   # gcloud init
@@ -41,6 +41,7 @@ else
   source $virtualEnvironmentName/bin/activate
   export FLASK_APP=main
   export GOOGLE_APPLICATION_CREDENTIALS="./project-2-331602-22c5987270e1.json"
+  export GITHUB_TOKEN="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"
   flask run
 fi
 
