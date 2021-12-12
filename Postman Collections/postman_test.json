@@ -139,7 +139,7 @@
                 "disableBodyPruning": true
               },
               "request": {
-                "method": "POST",
+                "method": "PUT",
                 "header": [
                   {
                     "key": "X-Authorization",
@@ -1656,12 +1656,12 @@
   ],
   "variable": [
     {
-      "id": "2e9d3c98-ccfd-4886-9b7b-48a9eec617c1",
+      "id": "a287e8eb-fe0e-434e-b615-c4e470a6d716",
       "key": "baseUrl",
       "value": "https://project-2-331602.uc.r.appspot.com/"
     },
     {
-      "id": "ce7ac788-8768-4c2f-8845-1db7b438e742",
+      "id": "47b1956b-869a-4695-b2ff-9a5cf9b623d9",
       "key": "token",
       "value": "aQoDB8ngh0sWsHlQVY8zeOwCAwTmYElwvKKZt7KUY1c2KCUa-LLETh0IGKHj7ZMqtbp6qQ-92nCBscdEFo--M3KAWVEuyj6mFB0VZIyf4WaJspmLUtmOvjg5ZSdcQx9erbVjeDiOh0ncn7a7RlvnGB4_sKNucDN3xta6-i3_lks"
     }
