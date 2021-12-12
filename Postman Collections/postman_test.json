@@ -886,7 +886,7 @@
               {
                 "description": "(Required) ",
                 "key": "X-Authorization",
-                "value": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                "value": "bearer 3b49e74a-1d80-4294-bcff-c9e98bc2c742"
               },
               {
                 "key": "Content-Type",
@@ -1531,7 +1531,7 @@
   ],
   "variable": [
     {
-      "id": "37b28929-dccf-4bd3-8693-0ba9ba0a3ad0",
+      "id": "4a922eda-e841-41b0-beb7-8e2d9bbbfa4b",
       "key": "baseUrl",
       "value": "https://project-2-331602.uc.r.appspot.com/"
     }
