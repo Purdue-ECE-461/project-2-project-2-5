@@ -132,10 +132,10 @@ def ingestion(metadata, data):
         # net, rampUp, correctness, bus_factor, responsiveness, license_score, dependency_score
         # cli.print_to_console()
         scores = cli.getScores()
-        print(scores)
+        # print(scores)
         
         for score in scores:
-            if score < 0.5:
+            if score < 0.3:
                 return "scores were bad: " + str(scores), 200
 
         data_client = datastore.Client()
@@ -152,6 +152,13 @@ def ingestion(metadata, data):
             if package["url"] != "":
                 return "URL already exists", 403
             package["url"] = data["URL"]
+            package["netScore"] = scores[0]
+            package["rampUp"] = scores[1]
+            package["correctness"] = scores[2]
+            package["busFactor"] = scores[3]
+            package["responsiveness"] = scores[4]
+            package["licenses"] = scores[5]
+            package["dependencies"] = scores[6]
             data_client.put(package)
         
         for user in q_lookup.fetch():
@@ -443,17 +450,17 @@ def getPackageRate(id):
         return error, 500
     info = {}
     for package in query.fetch():
-        url = package["url"]
-        cli = CLIHandler(url)
-        cli.calc()
+        # url = package["url"]
+        # cli = CLIHandler(url)
+        # cli.calc()
         # net, rampUp, correctness, bus_factor, responsiveness, license_score, dependency_score
-        scores = cli.getScores()
-        info["RampUp"] = scores[1]
-        info["Correctness"] = scores[2]
-        info["BusFactor"] = scores[3]
-        info["ResponsiveMaintainer"] = scores[4]
-        info["LicenseScore"] = scores[5]
-        info["GoodPinningPractice"] = scores[6]
+        # scores = cli.getScores()
+        info["RampUp"] = package["rampUp"]
+        info["Correctness"] = package["correctness"]
+        info["BusFactor"] = package["busFactor"]
+        info["ResponsiveMaintainer"] = package["responsiveness"]
+        info["LicenseScore"] = package["licenses"]
+        info["GoodPinningPractice"] = package["dependencies"]
         for user in q_lookup.fetch():
             full_key = data_client.key("UserActions", package["name"] + ": " + package["version"] + ": " + package["id"] + ": " + user["name"] +": GET RATE FROM URL")
             newUserEntity = datastore.Entity(key=full_key)
