@@ -1385,7 +1385,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n    \"User\": {\n        \"name\": \"ece461defaultadmin\",\n        \"isAdmin\": true\n    },\n    \"Secret\": {\n        \"password\": \"correcthorsebatterystaple123(!__+@**(A\"\n    }\n}",
+          "raw": "{\n    \"User\": {\n        \"name\": \"ece461defaultadminuser\",\n        \"isAdmin\": true\n    },\n    \"Secret\": {\n        \"password\": \"correcthorsebatterystaple123(!__+@**(A\"\n    }\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -1512,12 +1512,12 @@
   ],
   "variable": [
     {
-      "id": "da8e6595-c101-432e-a38f-d881d9a1ad84",
+      "id": "a18e22ec-872c-4aba-9674-3747601734b9",
       "key": "baseUrl",
       "value": "https://project-2-331602.uc.r.appspot.com/"
     },
     {
-      "id": "57fde35a-92f7-418c-8354-921fa12a40f9",
+      "id": "39e2b28e-17d6-46b0-956d-7e5b88e9cd5b",
       "key": "token",
       "value": ""
     }
