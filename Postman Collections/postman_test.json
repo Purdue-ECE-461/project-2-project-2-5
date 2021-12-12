@@ -1494,9 +1494,19 @@
         "disableBodyPruning": true
       },
       "request": {
-        "method": "GET",
-        "header": [],
-        "url": null
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"User\": {\r\n        \"name\": \"Elekin\",\r\n        \"isAdmin\": false\r\n    },\r\n    \"Secret\": {\r\n        \"password\": \"marvelous101\"\r\n    }\r\n}"
+        },
+        "url": "{{baseUrl}}/register"
       },
       "response": []
     }
@@ -1525,12 +1535,12 @@
   ],
   "variable": [
     {
-      "id": "1a60ebe6-9111-4a5c-9b65-a4424088f93c",
+      "id": "61cc2976-2cc1-495d-a966-5b6c58b7c80d",
       "key": "baseUrl",
       "value": "https://project-2-331602.uc.r.appspot.com/"
     },
     {
-      "id": "542aa460-00f5-420e-aad2-17eabc88e552",
+      "id": "6ab4d810-301e-4662-acc6-76a87e370f1e",
       "key": "token",
       "value": "aQoDB8ngh0sWsHlQVY8zeOwCAwTmYElwvKKZt7KUY1c2KCUa-LLETh0IGKHj7ZMqtbp6qQ-92nCBscdEFo--M3KAWVEuyj6mFB0VZIyf4WaJspmLUtmOvjg5ZSdcQx9erbVjeDiOh0ncn7a7RlvnGB4_sKNucDN3xta6-i3_lks"
     }
