@@ -1505,7 +1505,7 @@
     {
       "listen": "prerequest",
       "script": {
-        "id": "cd242b25-5a9f-4143-91a5-aeb7e8c5e0a8",
+        "id": "3e4234a2-0042-428d-b2cb-a98ad4102f79",
         "type": "text/javascript",
         "exec": [
           ""
@@ -1515,7 +1515,7 @@
     {
       "listen": "test",
       "script": {
-        "id": "d39fe4ca-f78b-40a4-b331-65266a97f95f",
+        "id": "9941a8e9-5be8-4565-975f-7c505a7f5dc8",
         "type": "text/javascript",
         "exec": [
           ""
@@ -1525,9 +1525,14 @@
   ],
   "variable": [
     {
-      "id": "87e48d12-9342-414a-b3ac-5f9dbe7cc01a",
+      "id": "db39ddf8-0af7-472b-a659-f4620f974ec2",
       "key": "baseUrl",
       "value": "https://project-2-331602.uc.r.appspot.com/"
+    },
+    {
+      "id": "db87ec40-96f2-4649-96be-f297042a0ab5",
+      "key": "token",
+      "value": ""
     }
   ]
 }
