@@ -1,13 +1,10 @@
 
 from flask import Flask, request, jsonify, Blueprint
 from flask_paginate import Pagination, get_page_parameter
-# from werkzeug.datastructures import FileStorage
 import nacl
 import nacl.pwhash
 from uuid import uuid4
 import datetime
-# from PIL import ImageS
-# from google.oauth2 import service_account
 
 app = Flask(__name__)
 import google.cloud.datastore as datastore
@@ -629,18 +626,14 @@ def getToken():
         key = data_client.key(sp_kind, name)
         data_user = data_client.get(key)
         data_passw = data_user["password"]
-        #dig_passw = nacl.pwhash.argon2id.str(passw_in, opslimit=nacl.pwhash.OPSLIMIT_MODERATE, memlimit=nacl.pwhash.MEMLIMIT_MODERATE)
-        # Alternatively
         try:
-            #res = nacl.pwhash.argon2id.verify(data_passw, passw_in)
-            res = passw_in
+            bytes_passw = str.encode(passw_in)
+            res = nacl.pwhash.argon2id.verify(str.encode(data_passw), bytes_passw)
+            # res = passw_in
         except:
             response = ""
             return response, 401
             
-        # if data_passw != dig_passw:
-        #     response = ""
-        #     return response, 401
         token = str(uuid4())
         data_user["token"] = token
         exp_time = datetime.datetime.now() + datetime.timedelta(hours=10)
@@ -929,11 +922,13 @@ def createUser():
     newEntity = datastore.Entity(key=registration_key)
     newEntity["name"] = regis_name
     newEntity["isAdmin"] = regis_isAdmin
-   #bytes_passw = str.encode(regis_passw) # Convert to Bytes string
-   #hashed_passw = nacl.pwhash.argon2id.str(bytes_passw, opslimit=nacl.pwhash.OPSLIMIT_MODERATE, memlimit=nacl.pwhash.MEMLIMIT_MODERATE)
-    #final_passw = hashed.decode("utf-8")
-    final_passw = regis_passw
-    newEntity["password"] = final_passw
+
+    bytes_passw = str.encode(regis_passw) # Convert to Bytes string
+    hashed_passw = nacl.pwhash.argon2id.str(bytes_passw, opslimit=nacl.pwhash.OPSLIMIT_MODERATE, memlimit=nacl.pwhash.MEMLIMIT_MODERATE)
+    final_passw = hashed.decode("utf-8")
+    #final_passw = regis_passw
+    newEntity["password"] = final_passw # stored as string
+
     newEntity["token"] = ""
     newEntity["expiration"] = ""
     data_client.put(newEntity)
@@ -963,10 +958,10 @@ def createAdmin():
     newEntity = datastore.Entity(key=registration_key)
     newEntity["name"] = regis_name
     newEntity["isAdmin"] = regis_isAdmin
-    #bytes_passw = str.encode(regis_passw) # Convert to Bytes string
-    #hashed_passw = nacl.pwhash.argon2id.str(bytes_passw, opslimit=nacl.pwhash.OPSLIMIT_MODERATE, memlimit=nacl.pwhash.MEMLIMIT_MODERATE)
-    #final_passw = hashed.decode("utf-8")
-    final_passw = regis_passw
+    bytes_passw = str.encode(regis_passw) # Convert to Bytes string
+    hashed_passw = nacl.pwhash.argon2id.str(bytes_passw, opslimit=nacl.pwhash.OPSLIMIT_MODERATE, memlimit=nacl.pwhash.MEMLIMIT_MODERATE)
+    final_passw = hashed.decode("utf-8")
+    #final_passw = regis_passw
     newEntity["password"] = final_passw 
     newEntity["token"] = ""
     newEntity["expiration"] = ""
