@@ -1314,12 +1314,15 @@
     {
       "name": "Registry Reset",
       "id": "abde5d52-fbe1-432e-89bf-d7971b5497e0",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
       "request": {
         "method": "DELETE",
         "header": [
           {
             "key": "X-Authorization",
-            "value": "<string>"
+            "value": "bearer {{token}}"
           }
         ],
         "url": "{{baseUrl}}/reset"
@@ -1522,7 +1525,7 @@
   ],
   "variable": [
     {
-      "id": "fec5ca3f-2dc8-4a91-b177-a6aaea6a3a8e",
+      "id": "87e48d12-9342-414a-b3ac-5f9dbe7cc01a",
       "key": "baseUrl",
       "value": "https://project-2-331602.uc.r.appspot.com/"
     }
