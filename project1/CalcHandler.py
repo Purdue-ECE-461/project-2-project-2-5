@@ -6,9 +6,9 @@ class CalcHandler(LogWrapper):
     Parent class for the individual classes that handle interacting with APIs # pragma: no cover
     for different websites and calculating respective scores.
     """
-    #url = ""
-    #repo_directory = ""
-    #user=""
+    url = ""
+    repo_directory = ""
+    user=""
 
 
     # @LogWrapper.log_init_decorator

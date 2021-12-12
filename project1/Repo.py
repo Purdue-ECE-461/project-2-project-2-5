@@ -2,7 +2,10 @@ from os import close # pragma: no cover
 from LogWrapper import LogWrapper # pragma: no cover
 import re, logging # pragma: no cover
 from CalcHandlerGit import CalcHandlerGit # pragma: no cover
-from CalcHandlerNpmjs import CalcHandlerNpmjs # pragma: no cover
+from CalcHandlerNpmjs import CalcHandlerNpmjs
+from CalcHandler import CalcHandler # pragma: no cover
+import requests
+from bs4 import BeautifulSoup
 
 """
 Class that represents a github repository. Takes a directory to the repo
@@ -12,7 +15,8 @@ class Repo(LogWrapper):
     def __init__(self, _url):
         super().__init__()
         self.set_logger(__name__)
-        if 'github.com' in _url.lower():   #If a Github URL is passed in do this
+        print(_url.lower())
+        if 'github' in _url.lower():   #If a Github URL is passed in do this
             self.is_good_URL = True
             self.url = _url
             self.net_score = -1
@@ -29,7 +33,7 @@ class Repo(LogWrapper):
                 # self.log_exception("Could not instantiate CalcHandlerGit object with url: " + _url)
 
 
-        elif 'npmjs.com' in _url.lower():   #If a NPM URL is passed in do this
+        elif 'npmjs' in _url.lower():   #If a NPM URL is passed in do this
             self.is_good_URL = True
             self.url = _url
             self.net_score = -1
@@ -57,7 +61,8 @@ class Repo(LogWrapper):
             self.bus_factor_score = -1
             self.maint_score = -1
             self.dependenciesScore = -1
-            #self.calc_handler = CalcHandlerGit(self.repo_directory)
+            print(self.calc_handler.get_repo_directory(self.url))
+            self.calc_handler = CalcHandlerGit(self.calc_handler.get_repo_directory(self.url))
 
     """
     print in the following format:
@@ -82,7 +87,10 @@ class Repo(LogWrapper):
         self.rampup_score = self.calc_rampup_score() #owen - Done
         self.bus_factor_score = self.calc_bus_factor_score() #Mohammed -Done
         self.maint_score = self.calc_maint_score() #Mohammed, Ryan - Done
-        self.dependenciesScore = self.getNumDependencies(self.repo_directory)
+        print(str(self.calc_handler.get_repo_directory(self.url)))
+        repoName = str(self.calc_handler.get_repo_directory(self.url))
+        print(len(self.calc_handler.get_repo_directory(self.url)))
+        self.dependenciesScore = self.getNumDependencies(repoName)
         self.net_score = self.calc_net_score() #Done
 
     #@LogWrapper.log_method_decorator # pragma: no cover
@@ -195,10 +203,10 @@ class Repo(LogWrapper):
             0.16 * self.bus_factor_score  + \
             0.16 * self.correctness_score + \
             0.1  * self.rampup_score + \
-            0.18 * self.dependenciesScope)
+            0.18 * self.dependenciesScore)
         return score
 
-    def getNumDependencies(repo) : #repo should be in the form of "expressjs/express"
+    def getNumDependencies(self, repo) : #repo should be in the form of "expressjs/express"
         score = 1
         url = 'https://github.com/{}/network/dependencies'.format(repo)
 
