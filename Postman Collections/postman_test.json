@@ -1488,34 +1488,6 @@
       ]
     },
     {
-      "name": "User Creation",
-      "id": "331a971a-ace4-4cbd-8865-f0f4c9252f64",
-      "protocolProfileBehavior": {
-        "disableBodyPruning": true
-      },
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json",
-            "type": "text"
-          },
-          {
-            "key": "X-Authorization",
-            "value": "bearer {{token}}",
-            "type": "text"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n    \"User\": {\r\n        \"name\": \"Elekin\",\r\n        \"isAdmin\": false\r\n    },\r\n    \"Secret\": {\r\n        \"password\": \"marvelous101\"\r\n    }\r\n}"
-        },
-        "url": "{{baseUrl}}/register"
-      },
-      "response": []
-    },
-    {
       "name": "Create Auth Token Copy",
       "id": "e0fef9f5-7346-43b9-b511-7ff6139efbe6",
       "protocolProfileBehavior": {
@@ -1632,6 +1604,34 @@
           "body": ""
         }
       ]
+    },
+    {
+      "name": "User Creation",
+      "id": "331a971a-ace4-4cbd-8865-f0f4c9252f64",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "X-Authorization",
+            "value": "bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"User\": {\r\n        \"name\": \"Elekin\",\r\n        \"isAdmin\": false\r\n    },\r\n    \"Secret\": {\r\n        \"password\": \"marvelous101\"\r\n    }\r\n}"
+        },
+        "url": "{{baseUrl}}/register"
+      },
+      "response": []
     }
   ],
   "event": [
@@ -1658,12 +1658,12 @@
   ],
   "variable": [
     {
-      "id": "4c29a713-96b0-4c26-8ee8-edae56154cd9",
+      "id": "6bc02d46-685a-460d-995f-56969ded5a1f",
       "key": "baseUrl",
       "value": "https://project-2-331602.uc.r.appspot.com/"
     },
     {
-      "id": "f785acdf-59fb-4dec-93dc-7264f12b8d5f",
+      "id": "800d714f-9a01-4adc-8a33-1595fb2713b1",
       "key": "token",
       "value": "aQoDB8ngh0sWsHlQVY8zeOwCAwTmYElwvKKZt7KUY1c2KCUa-LLETh0IGKHj7ZMqtbp6qQ-92nCBscdEFo--M3KAWVEuyj6mFB0VZIyf4WaJspmLUtmOvjg5ZSdcQx9erbVjeDiOh0ncn7a7RlvnGB4_sKNucDN3xta6-i3_lks"
     }
