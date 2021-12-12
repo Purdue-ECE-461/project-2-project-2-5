@@ -108,91 +108,68 @@ def create(metadata, data):
     return metadata, 201
 
 def ingestion(metadata, data):
-    if len(data) != 2 or len(metadata) != 3 or "ID" not in metadata or "Name" not in metadata or "Version" not in metadata or "URL" not in data or "JSProgram" not in data:
-        return "", 400
-    
-    # Check Token
-    auth_token = request.headers.get('X-Authorization')
-    token = auth_token.split()[1]
-
-    data_client = datastore.Client()
-    q_lookup = data_client.query(kind='Users')
-    q_lookup.add_filter("token", "=", token)
-    res = list(q_lookup.fetch())
-    error = { "code": -1, "message": "An error occurred while validating the user"}
-
-    if len(res) != 1:
-        return error, 401
-
-    # Do ingestion
-    url = data["URL"]
-    cli = CLIHandler(url)
-    cli.calc()
-    # net, rampUp, correctness, bus_factor, responsiveness, license_score, dependency_score
-    # cli.print_to_console()
-    scores = cli.getScores()
-    print(scores)
-    
-    for score in scores:
-        if score < 0.5:
-            return "scores were bad", 200
-
-    data_client = datastore.Client()
-    query = data_client.query(kind = "package")
-    query.add_filter("id", "=", metadata["ID"])
-    query.add_filter("name", "=", metadata["Name"])
-    query.add_filter("version", "=", metadata["Version"])
-    queryList = list(query.fetch())
-    if len(queryList) != 1:
-        return "error in retrieving package", 400
-
-    # full_key = data_client.key("package", metadata["Name"] + ": " + metadata["Version"] + ": " + metadata["ID"])
-    for package in query.fetch():
-        if package["url"] != "":
-            return "URL already exists", 403
-        package["url"] = data["URL"]
-        data_client.put(package)
-    
-    for user in q_lookup.fetch():
-        full_key = data_client.key("UserActions", metadata["Name"] + ": " + metadata["Version"] + ": " + metadata["ID"] + ": " + user["name"] +": INGEST")
-        newUserEntity = datastore.Entity(key=full_key)
-        newUserEntity["userName"] = user["name"]
-        newUserEntity["userIsAdmin"] = user["isAdmin"]
-        newUserEntity["packageName"] = metadata["Name"]
-        newUserEntity["packageVersion"] = metadata["Version"]
-        newUserEntity["packageID"] = metadata["ID"]
-        newUserEntity["Date"] = datetime.now()
-        newUserEntity["Action"] = "INGEST"
-        data_client.put(newUserEntity)
-
-    return metadata, 201
-    
-    """
     try:
-        #x_auth = header.split()
-        #print(x_auth)
-
-        # function calls for authentication:
-        # use x_auth[1], x_auth[2]
-
-        #dataFull = json.loads(data_raw)
-        #data = json.loads(dataFull["data"])
+        if len(data) != 2 or len(metadata) != 3 or "ID" not in metadata or "Name" not in metadata or "Version" not in metadata or "URL" not in data or "JSProgram" not in data:
+            return "", 400
         
+        # Check Token
+        auth_token = request.headers.get('X-Authorization')
+        token = auth_token.split()[1]
+
+        data_client = datastore.Client()
+        q_lookup = data_client.query(kind='Users')
+        q_lookup.add_filter("token", "=", token)
+        res = list(q_lookup.fetch())
+        error = { "code": -1, "message": "An error occurred while validating the user"}
+
+        if len(res) != 1:
+            return error, 401
+
+        # Do ingestion
         url = data["URL"]
-        cli = CLIHandler([url])
+        cli = CLIHandler(url)
         cli.calc()
-        cli.print_to_console()
+        # net, rampUp, correctness, bus_factor, responsiveness, license_score, dependency_score
+        # cli.print_to_console()
+        scores = cli.getScores()
+        print(scores)
+        
+        for score in scores:
+            if score < 0.5:
+                return "scores were bad", 200
 
-        return metadata
+        data_client = datastore.Client()
+        query = data_client.query(kind = "package")
+        query.add_filter("id", "=", metadata["ID"])
+        query.add_filter("name", "=", metadata["Name"])
+        query.add_filter("version", "=", metadata["Version"])
+        queryList = list(query.fetch())
+        if len(queryList) != 1:
+            return "error in retrieving package", 400
 
+        # full_key = data_client.key("package", metadata["Name"] + ": " + metadata["Version"] + ": " + metadata["ID"])
+        for package in query.fetch():
+            if package["url"] != "":
+                return "URL already exists", 403
+            package["url"] = data["URL"]
+            data_client.put(package)
+        
+        for user in q_lookup.fetch():
+            full_key = data_client.key("UserActions", metadata["Name"] + ": " + metadata["Version"] + ": " + metadata["ID"] + ": " + user["name"] +": INGEST")
+            newUserEntity = datastore.Entity(key=full_key)
+            newUserEntity["userName"] = user["name"]
+            newUserEntity["userIsAdmin"] = user["isAdmin"]
+            newUserEntity["packageName"] = metadata["Name"]
+            newUserEntity["packageVersion"] = metadata["Version"]
+            newUserEntity["packageID"] = metadata["ID"]
+            newUserEntity["Date"] = datetime.now()
+            newUserEntity["Action"] = "INGEST"
+            data_client.put(newUserEntity)
+
+        return metadata, 201
+    
     except:
-        if request != "https://ece461.purdue.edu/project2/package":
-            raise NameError(request)
-        if x_auth[0] != "X-Authorization:":
-            raise NameError(header)
-        else:
-            raise Exception()
-    """
+        return { "code": -1, "message": "An error occurred while ingesting the package"}, 400
 
 @app.route("/package/<id>", methods=['GET'])
 def getPackageByID(id):
