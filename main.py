@@ -301,17 +301,17 @@ def packageUpdate(id):
         package["jsprogram"] = data["JSProgram"]
 
     data_client.put(package)
-    # for user in q_lookup.fetch():
-    #     full_key = data_client.key("UserActions", metadata["Name"] + ": " + metadata["Version"] + ": " + metadata["ID"] + ": " + user["name"] +": UPDATE")
-    #     newUserEntity = datastore.Entity(key=full_key)
-    #     newUserEntity["userName"] = user["name"]
-    #     newUserEntity["userIsAdmin"] = user["isAdmin"]
-    #     newUserEntity["packageName"] = metadata["Name"]
-    #     newUserEntity["packageVersion"] = metadata["Version"]
-    #     newUserEntity["packageID"] = metadata["ID"]
-    #     newUserEntity["Date"] = datetime.now()
-    #     newUserEntity["Action"] = "UPDATE"
-    #     data_client.put(newUserEntity)
+    for user in q_lookup.fetch():
+        full_key = data_client.key("UserActions", metadata["Name"] + ": " + metadata["Version"] + ": " + metadata["ID"] + ": " + user["name"] +": UPDATE")
+        newUserEntity = datastore.Entity(key=full_key)
+        newUserEntity["userName"] = user["name"]
+        newUserEntity["userIsAdmin"] = user["isAdmin"]
+        newUserEntity["packageName"] = metadata["Name"]
+        newUserEntity["packageVersion"] = metadata["Version"]
+        newUserEntity["packageID"] = metadata["ID"]
+        newUserEntity["Date"] = datetime.now()
+        newUserEntity["Action"] = "UPDATE"
+        data_client.put(newUserEntity)
     return token, 200
 
 @app.route("/package/<id>", methods=['DELETE'])
