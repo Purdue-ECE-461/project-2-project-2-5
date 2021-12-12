@@ -1,5 +1,5 @@
 from os import close # pragma: no cover
-from LogWrapper import LogWrapper # pragma: no cover
+# from LogWrapper import LogWrapper # pragma: no cover
 import re, logging # pragma: no cover
 from CalcHandlerGit import CalcHandlerGit # pragma: no cover
 from CalcHandlerNpmjs import CalcHandlerNpmjs # pragma: no cover
@@ -8,9 +8,9 @@ from CalcHandlerNpmjs import CalcHandlerNpmjs # pragma: no cover
 Class that represents a github repository. Takes a directory to the repo
 and calculates metrics on that repository.
 """
-class Repo(LogWrapper):
+class Repo():
     def __init__(self, _url):
-        super().__init__()
+        # super().__init__()
         #self.set_logger(__name__)
         if 'github.com' in _url.lower():   #If a Github URL is passed in do this
             self.is_good_URL = True

@@ -1,11 +1,11 @@
-from LogWrapper import LogWrapper
+# from LogWrapper import LogWrapper
 from Repo import Repo
 import re
 import logging, sys
 
 
 
-class CLIHandler(LogWrapper):
+class CLIHandler():
 
     """
     This class handles whatever is passed onto the command line except "install" and "test" which are reserved
@@ -19,7 +19,7 @@ class CLIHandler(LogWrapper):
 
     #@LogWrapper.log_init_decorator
     def __init__(self, _command_line_arg):
-        super().__init__()
+        # super().__init__()
         #self.set_logger(__name__)
         
         self.command_line_arg = _command_line_arg
