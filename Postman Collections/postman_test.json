@@ -27,14 +27,9 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://project-2-331602.uc.r.appspot.com/package/:id",
-                  "protocol": "https",
+                  "raw": "{{baseUrl}}/package/:id",
                   "host": [
-                    "project-2-331602",
-                    "uc",
-                    "r",
-                    "appspot",
-                    "com"
+                    "{{baseUrl}}"
                   ],
                   "path": [
                     "package",
@@ -907,7 +902,7 @@
                 }
               }
             },
-            "url": "http://127.0.0.1:5000/package"
+            "url": "{{baseUrl}}/package"
           },
           "response": [
             {
@@ -1416,7 +1411,7 @@
             }
           }
         },
-        "url": "http://127.0.0.1:5000/authenticate"
+        "url": "{{baseURL}}/authenticate"
       },
       "response": [
         {
@@ -1516,7 +1511,7 @@
     {
       "listen": "prerequest",
       "script": {
-        "id": "db619fe6-3030-47cc-86d6-4bb12f232bbb",
+        "id": "71ff3859-a0cc-4620-95e4-9d1090d15e55",
         "type": "text/javascript",
         "exec": [
           ""
@@ -1526,7 +1521,7 @@
     {
       "listen": "test",
       "script": {
-        "id": "16888e8e-9d0f-4791-9f49-d6babb483142",
+        "id": "3b44cbc4-7236-4e99-a22c-2b7aedf58520",
         "type": "text/javascript",
         "exec": [
           ""
@@ -1536,9 +1531,9 @@
   ],
   "variable": [
     {
-      "id": "e03c18ee-5e6f-43f9-a051-38358a125481",
+      "id": "6dfadf04-fd51-49e9-9555-c0cf7c3a8705",
       "key": "baseUrl",
-      "value": "https://ece461.purdue.edu/project2"
+      "value": "http://127.0.0.1:5000"
     }
   ]
 }
