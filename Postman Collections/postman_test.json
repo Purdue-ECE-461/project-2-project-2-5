@@ -587,7 +587,7 @@
                 "header": [
                   {
                     "key": "X-Authorization",
-                    "value": "<string>"
+                    "value": "bearer 3b49e74a-1d80-4294-bcff-c9e98bc2c742"
                   }
                 ],
                 "url": {
@@ -602,9 +602,8 @@
                   ],
                   "variable": [
                     {
-                      "id": "1ecb068b-19f1-49d2-a9d5-44f3b464543c",
                       "key": "name",
-                      "value": "Underscore",
+                      "value": "Tilda",
                       "description": "(Required) "
                     }
                   ]
@@ -1525,7 +1524,7 @@
   ],
   "variable": [
     {
-      "id": "c9b856b6-e5fb-454d-b271-2f94174846ba",
+      "id": "53bc8fcb-5b8e-4135-9b58-dbf32a148dba",
       "key": "baseUrl",
       "value": "https://project-2-331602.uc.r.appspot.com/"
     }
