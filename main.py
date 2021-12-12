@@ -274,7 +274,11 @@ def packageUpdate(id):
     # if len(res) != 1:
     #     return error, 500
 
-    dataFull = request.json
+    request.get_data()
+    dat = request.data.decode("utf-8")
+    dataFull = json.loads(dat)
+
+    # dataFull = request.json
     metadata = dataFull["metadata"]
     data = dataFull["data"]
     # id = metadata["ID"]
