@@ -945,7 +945,7 @@ def createAdmin():
         regis_isAdmin = recv_json["User"]["isAdmin"]
         regis_passw = recv_json["Secret"]["password"]
     except:
-        response = ""
+        response = recv_json
         return response, 401
 
     data_client = datastore.Client()
