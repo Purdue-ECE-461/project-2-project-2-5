@@ -1,8 +1,7 @@
 
 from flask import Flask, request, jsonify, Blueprint
-import nacl
 import nacl.pwhash
-from uuid import uuid4
+from secrets import token_urlsafe
 from datetime import datetime, timedelta
 
 app = Flask(__name__)
@@ -49,24 +48,7 @@ def callHandler():
     
     return returnvVal,responseVal
 
-
-    
-
-
 def create(metadata, data):
-    # print("hello")
-    # Unpack data from JSON object
-    # try:
-    
-    # x_auth = header.split()
-    # print(x_auth)
-
-    # function calls for authentication:
-    # use x_auth[1], x_auth[2]
-
-    # dataFull = json.loads(data_raw)
-    # id = metadata["ID"]
-
     if len(data) != 2 or len(metadata) != 3 or "ID" not in metadata or "Name" not in metadata or "Version" not in metadata or "Content" not in data or "JSProgram" not in data or data["Content"] == "<base-64>" or len(metadata["Version"].split('.')) != 3:
         return "", 400
 
@@ -79,6 +61,7 @@ def create(metadata, data):
     if len(queryList) > 0:
         return "", 403
 
+    # Check Token
     auth_token = request.headers.get('X-Authorization')
     token = auth_token.split()[1]
 
@@ -91,11 +74,10 @@ def create(metadata, data):
     if len(res) != 1:
         return error, 500
 
+    # DO Package creation
     full_key = data_client.key("package", metadata["Name"] + ": " + metadata["Version"] + ": " + metadata["ID"])
     newEntity = datastore.Entity(key=full_key, exclude_from_indexes=["content"])
-    # keys = content.keys()
-    # content_entity = datastore.Entity(exclude_from_indexes=list(keys))
-    # newEntity.update(dataFull["data"])
+
     newEntity["name"] = metadata["Name"]
     newEntity["version"] = metadata["Version"]
     version = metadata["Version"].split('.')
@@ -121,31 +103,11 @@ def create(metadata, data):
         data_client.put(newUserEntity)
     return metadata, 201
 
-    # except:
-        # if request != "/packages":
-        #     raise NameError(request)
-        # if x_auth[0] != "X-Authorization:":
-        #     raise NameError(header)
-        # if len(queryList) > 0:
-        #     raise NameError(metadata["Name"] + ": " + metadata["Version"] + ": " + metadata["ID"])
-
-        # else:
-            # raise Exception()
-
-
 def ingestion(metadata, data):
-
-    #x_auth = header.split()
-    #print(x_auth)
-
-    # function calls for authentication:
-    # use x_auth[1], x_auth[2]
-
-    #dataFull = json.loads(data_raw)
-    #data = json.loads(dataFull["data"])
     if len(data) != 2 or len(metadata) != 3 or "ID" not in metadata or "Name" not in metadata or "Version" not in metadata or "URL" not in data or "JSProgram" not in data:
         return "", 400
     
+    # Check Token
     auth_token = request.headers.get('X-Authorization')
     token = auth_token.split()[1]
 
@@ -158,6 +120,7 @@ def ingestion(metadata, data):
     if len(res) != 1:
         return error, 500
 
+    # Do ingestion
     url = data["URL"]
     cli = CLIHandler(url)
     cli.calc()
@@ -376,41 +339,10 @@ def packageUpdate(id):
         newUserEntity["Action"] = "UPDATE"
         data_client.put(newUserEntity)
     return "", 200
-        # key = data_client.key(metadata["Name"], metadata["ID"])
-
-        # key = data_client.key('package', id)
-        # package = key.get()
-        # package.content = data["Content"]
-        # package.put()
-
-        # print(data_raw)
-        # return "Updating package content: "+package.id
-
-    # except:
-    #     if request != "https://ece461.purdue.edu/project2/package/" + package.id:
-    #         raise NameError(request)
-    #     if x_auth[0] != "X-Authorization:":
-    #         raise NameError(header)
-    #     if package.id != id:
-    #         raise NameError(id)
-    #     if package.id != metadata["ID"]:
-    #         raise NameError(metadata["ID"])
-    #     if package.version != metadata["Version"]:
-    #         raise NameError(metadata["Version"])
-    #     if package.name != metadata["Name"]:
-    #         raise NameError(metadata["Name"])
-    #     else:
-    #         raise Exception()
 
 @app.route("/package/<id>", methods=['DELETE'])
 def deletePackage(id):
-        # Unpack data from JSON object
-    # try:
-        # x_auth = header.split()
-        # print(x_auth)
-        
-        # function calls for authentication:
-        # use x_auth[1], x_auth[2]
+    # Check Token
     auth_token = request.headers.get('X-Authorization')
     token = auth_token.split()[1]
 
@@ -629,14 +561,13 @@ def getToken():
         data_user = data_client.get(key)
         data_passw = data_user["password"]
         try:
-            bytes_passw = str.encode(passw_in)
-            res = nacl.pwhash.argon2id.verify(str.encode(data_passw), bytes_passw)
+            res = nacl.pwhash.argon2id.verify(str.encode(data_passw), str.encode(passw_in))
             # res = passw_in
         except:
             response = ""
             return response, 401
             
-        token = str(uuid4())
+        token = token_urlsafe(128)
         data_user["token"] = token
         exp_time = datetime.now() + timedelta(hours=10)
         data_user["expiration"] = exp_time
@@ -928,7 +859,7 @@ def createUser():
 
     bytes_passw = str.encode(regis_passw) # Convert to Bytes string
     hashed_passw = nacl.pwhash.argon2id.str(bytes_passw, opslimit=nacl.pwhash.OPSLIMIT_MODERATE, memlimit=nacl.pwhash.MEMLIMIT_MODERATE)
-    final_passw = hashed.decode("utf-8")
+    final_passw = hashed_passw.decode("utf-8")
     #final_passw = regis_passw
     newEntity["password"] = final_passw # stored as string
 
@@ -963,7 +894,7 @@ def createAdmin():
     newEntity["isAdmin"] = regis_isAdmin
     bytes_passw = str.encode(regis_passw) # Convert to Bytes string
     hashed_passw = nacl.pwhash.argon2id.str(bytes_passw, opslimit=nacl.pwhash.OPSLIMIT_MODERATE, memlimit=nacl.pwhash.MEMLIMIT_MODERATE)
-    final_passw = hashed.decode("utf-8")
+    final_passw = hashed_passw.decode("utf-8")
     #final_passw = regis_passw
     newEntity["password"] = final_passw 
     newEntity["token"] = ""
