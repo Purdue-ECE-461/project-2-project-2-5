@@ -876,7 +876,7 @@ def deleteRegistry():
     for entity in userQuery.fetch():
         full_key = data_client.key("Users", entity["name"])
         data_client.delete(full_key)
-        
+
     return "", 200
 
 @app.route("/register", methods=['POST'])
@@ -909,6 +909,35 @@ def createUser(username):
         response = ""
         return response, 401
     
+    registration_key = data_client.key("Users", regis_name)
+
+    newEntity = datastore.Entity(key=registration_key)
+    newEntity["name"] = regis_name
+    newEntity["isAdmin"] = regis_isAdmin
+    hashed_passw = nacl.pwhash.argon2id.str(regis_passw, opslimit=nacl.pwhash.OPSLIMIT_MODERATE, memlimit=nacl.pwhash.MEMLIMIT_MODERATE)
+    newEntity["password"] = hashed_passw
+    newEntity["token"] = ""
+    newEntity["expiration"] = ""
+    data_client.put(newEntity)
+    response = {"message" : "Successfully created new user."}
+    return response, 200
+
+@app.route("/register/admin", methods=["POST"])
+def createAdmin():
+    error = "Incorrect administrative password"
+    auth_pw = request.headers.get('X-Authorization')
+    if auth_pw != "adminPassword":
+        return error, 401
+    recv_json = request.get_json()
+    try:
+        regis_name = recv_json["User"]["name"]
+        regis_isAdmin = recv_json["User"]["isAdmin"]
+        regis_passw = recv_json["Secret"]["password"]
+    except:
+        response = ""
+        return response, 401
+
+    data_client = datastore.Client()
     registration_key = data_client.key("Users", regis_name)
 
     newEntity = datastore.Entity(key=registration_key)
