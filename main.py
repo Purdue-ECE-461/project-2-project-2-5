@@ -261,15 +261,7 @@ def getPackageByID(id):
 
 @app.route("/package/<id>", methods=['PUT'])
 def packageUpdate(id):
-        # Unpack data from JSON object
-    # try:
-        # x_auth = header.split()
-        # print(x_auth)
-        
-        # function calls for authentication:
-        # use x_auth[1], x_auth[2]
-        # id = request
-        # id.replace("https://ece461.purdue.edu/project2/package/","")
+    # Get Token
     auth_token = request.headers.get('X-Authorization')
     token = auth_token.split()[1]
 
@@ -282,41 +274,41 @@ def packageUpdate(id):
     if len(res) != 1:
         return error, 500
 
-    dataFull = request.json
-    metadata = dataFull["metadata"]
-    data = dataFull["data"]
+    dataFull = request.get_json(force=True)
+    #metadata = dataFull["metadata"]
+    #data = dataFull["data"]
     # id = metadata["ID"]
 
-    if metadata["ID"] != id:
-        return "Parameter ID and request body ID do not match", 400
+    #if metadata["ID"] != id:
+    #    return "Parameter ID and request body ID do not match", 400
 
-    data_client = datastore.Client()
-    query = data_client.query(kind = "package")
-    query.add_filter("id", "=", metadata["ID"])
-    query.add_filter("name", "=", metadata["Name"])
-    query.add_filter("version", "=", metadata["Version"])
-    queryList = list(query.fetch())
-    if len(queryList) != 1:
-        return "No such package", 400
+    # data_client = datastore.Client()
+    # query = data_client.query(kind = "package")
+    # query.add_filter("id", "=", metadata["ID"])
+    # query.add_filter("name", "=", metadata["Name"])
+    # query.add_filter("version", "=", metadata["Version"])
+    # queryList = list(query.fetch())
+    # if len(queryList) != 1:
+    #     return "No such package", 400
 
-    for package in query.fetch():
-        package["content"] = data["Content"]
-        package["url"] = data["URL"]
-        package["jsprogram"] = data["JSProgram"]
+    # for package in query.fetch():
+    #     package["content"] = data["Content"]
+    #     package["url"] = data["URL"]
+    #     package["jsprogram"] = data["JSProgram"]
 
-    data_client.put(package)
-    for user in q_lookup.fetch():
-        full_key = data_client.key("UserActions", metadata["Name"] + ": " + metadata["Version"] + ": " + metadata["ID"] + ": " + user["name"] +": UPDATE")
-        newUserEntity = datastore.Entity(key=full_key)
-        newUserEntity["userName"] = user["name"]
-        newUserEntity["userIsAdmin"] = user["isAdmin"]
-        newUserEntity["packageName"] = metadata["Name"]
-        newUserEntity["packageVersion"] = metadata["Version"]
-        newUserEntity["packageID"] = metadata["ID"]
-        newUserEntity["Date"] = datetime.now()
-        newUserEntity["Action"] = "UPDATE"
-        data_client.put(newUserEntity)
-    return "", 200
+    # data_client.put(package)
+    # for user in q_lookup.fetch():
+    #     full_key = data_client.key("UserActions", metadata["Name"] + ": " + metadata["Version"] + ": " + metadata["ID"] + ": " + user["name"] +": UPDATE")
+    #     newUserEntity = datastore.Entity(key=full_key)
+    #     newUserEntity["userName"] = user["name"]
+    #     newUserEntity["userIsAdmin"] = user["isAdmin"]
+    #     newUserEntity["packageName"] = metadata["Name"]
+    #     newUserEntity["packageVersion"] = metadata["Version"]
+    #     newUserEntity["packageID"] = metadata["ID"]
+    #     newUserEntity["Date"] = datetime.now()
+    #     newUserEntity["Action"] = "UPDATE"
+    #     data_client.put(newUserEntity)
+    return dataFull, 200
 
 @app.route("/package/<id>", methods=['DELETE'])
 def deletePackage(id):
