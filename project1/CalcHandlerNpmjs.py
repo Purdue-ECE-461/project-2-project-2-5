@@ -12,7 +12,7 @@ class CalcHandlerNpmjs(CalcHandlerGit):
 
     """
     def __init__(self, url):
-        #self.set_logger(__name__)
+        self.set_logger(__name__)
         r = requests.get(url)
         soup = BeautifulSoup(r.content, 'html5lib')
 

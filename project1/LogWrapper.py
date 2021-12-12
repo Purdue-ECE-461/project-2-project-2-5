@@ -11,11 +11,11 @@ class LogWrapper(object):
     """
 
     logger = 0
-    LEVEL = 0
+    LEVEL = 1
 
     def __init__(self):
-        pass
-        # load_dotenv()
+        # pass
+        load_dotenv()
         # if (os.environ.get('LOG_LEVEL') == '1'):
         #     self.LEVEL = logging.INFO
         # elif (os.environ.get('LOG_LEVEL') == '2'):
@@ -29,7 +29,7 @@ class LogWrapper(object):
             method to include the file name in the log message'''
 
 
-        #TODO: add error handling in here
+        #: add error handling in here
         # print("hello")
         FORMAT = logging.Formatter("%(asctime)s — %(name)s — %(levelname)s — %(message)s")
         # print("hello")

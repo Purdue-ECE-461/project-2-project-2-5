@@ -1,5 +1,5 @@
 from os import close # pragma: no cover
-# from LogWrapper import LogWrapper # pragma: no cover
+from LogWrapper import LogWrapper # pragma: no cover
 import re, logging # pragma: no cover
 from CalcHandlerGit import CalcHandlerGit # pragma: no cover
 from CalcHandlerNpmjs import CalcHandlerNpmjs # pragma: no cover
@@ -8,10 +8,10 @@ from CalcHandlerNpmjs import CalcHandlerNpmjs # pragma: no cover
 Class that represents a github repository. Takes a directory to the repo
 and calculates metrics on that repository.
 """
-class Repo():
+class Repo(LogWrapper):
     def __init__(self, _url):
-        # super().__init__()
-        #self.set_logger(__name__)
+        super().__init__()
+        self.set_logger(__name__)
         if 'github.com' in _url.lower():   #If a Github URL is passed in do this
             self.is_good_URL = True
             self.url = _url
@@ -26,7 +26,7 @@ class Repo():
                 self.calc_handler = CalcHandlerGit(_url)
             except:
                 self.is_good_URL = False
-                self.log_exception("Could not instantiate CalcHandlerGit object with url: " + _url)
+                # self.log_exception("Could not instantiate CalcHandlerGit object with url: " + _url)
 
 
         elif 'npmjs.com' in _url.lower():   #If a NPM URL is passed in do this
@@ -43,7 +43,7 @@ class Repo():
                 self.calc_handler = CalcHandlerNpmjs(_url)
             except:
                 self.is_good_URL = False
-                self.log_exception("Could not instantiate CalcHandlerNpmjs object with url: " + _url + " Could be due to nonexistent package, or no Github Repository linked.")
+                # self.log_exception("Could not instantiate CalcHandlerNpmjs object with url: " + _url + " Could be due to nonexistent package, or no Github Repository linked.")
 
 
         else:       #Else, a non-compatible URL was fed

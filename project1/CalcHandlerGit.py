@@ -2,7 +2,7 @@
 import json # pragma: no cover
 import re # pragma: no cover
 import logging # pragma: no cover
-# import LogWrapper # pragma: no cover
+import LogWrapper # pragma: no cover
 import os # pragma: no cover
 import sys # pragma: no cover
 import stat # pragma: no cover
@@ -33,7 +33,7 @@ class CalcHandlerGit(CalcHandler):
     def __init__(self, url):
         # try:
         super().__init__(url)
-        #self.set_logger(__name__)
+        self.set_logger(__name__)
         self.token = os.environ.get('GITHUB_TOKEN')
         self.api_request_header = {'Authorization': 'token %s' % self.token}
         self.api_data = self.__api_http_get_general_repo_data()

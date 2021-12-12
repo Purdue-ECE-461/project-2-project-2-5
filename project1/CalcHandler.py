@@ -1,7 +1,7 @@
 import re, logging, sys # pragma: no cover
-# from LogWrapper import LogWrapper # pragma: no cover
+from LogWrapper import LogWrapper # pragma: no cover
 
-class CalcHandler():
+class CalcHandler(LogWrapper):
     """
     Parent class for the individual classes that handle interacting with APIs # pragma: no cover
     for different websites and calculating respective scores.
@@ -13,8 +13,8 @@ class CalcHandler():
 
     # @LogWrapper.log_init_decorator
     def __init__(self, _url):
-        # super().__init__()
-        # self.set_logger(__name__)
+        super().__init__()
+        self.set_logger(__name__)
         self.url = _url
         self.repo_directory = self.get_repo_directory(_url)
         self.user = str.split(self.repo_directory, '/')[0]
