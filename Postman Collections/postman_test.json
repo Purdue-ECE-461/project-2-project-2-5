@@ -586,7 +586,7 @@
                 "header": [
                   {
                     "key": "X-Authorization",
-                    "value": "bearer 3b49e74a-1d80-4294-bcff-c9e98bc2c742"
+                    "value": "bearer {{token}}"
                   }
                 ],
                 "url": {
@@ -1028,7 +1028,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n\t\"metadata\": {\n\t\t\"Name\": \"Underscore\",\n\t\t\"Version\": \"1.0.0\",\n\t\t\"ID\": \"underscore\"\n\t},\n\t\"data\": {\n\t\t\"URL\": \"https://github.com/jashkenas/underscore\",\n\t\t\"JSProgram\": \"if (process.argv.length === 7) {\\nconsole.log('Success')\\nprocess.exit(0)\\n} else {\\nconsole.log('Failed')\\nprocess.exit(1)\\n}\\n\"\n\t}\n}",
+              "raw": "{\n\t\"metadata\": {\n\t\t\"Name\": \"Underscore\",\n\t\t\"Version\": \"1.0.0\",\n\t\t\"ID\": \"underscore2\"\n\t},\n\t\"data\": {\n\t\t\"URL\": \"https://github.com/jashkenas/underscore\",\n\t\t\"JSProgram\": \"if (process.argv.length === 7) {\\nconsole.log('Success')\\nprocess.exit(0)\\n} else {\\nconsole.log('Failed')\\nprocess.exit(1)\\n}\\n\"\n\t}\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1486,13 +1486,159 @@
           "body": ""
         }
       ]
+    },
+    {
+      "name": "Create Auth Token for Sub User",
+      "id": "e0fef9f5-7346-43b9-b511-7ff6139efbe6",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"User\": {\n        \"name\": \"Elekin\",\n        \"isAdmin\": true\n    },\n    \"Secret\": {\n        \"password\": \"Marvelous101\"\n    }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "{{baseUrl}}/authenticate"
+      },
+      "response": [
+        {
+          "id": "b467ffbb-dfa2-46c1-a290-a827a73d14af",
+          "name": "Success.",
+          "originalRequest": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"User\": {\n        \"name\": \"ece461defaultadminuser\",\n        \"isAdmin\": true\n    },\n    \"Secret\": {\n        \"password\": \"correcthorsebatterystaple123(!__+@**(A\"\n    }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/authenticate"
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "responseTime": null,
+          "body": "\"bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c\""
+        },
+        {
+          "id": "1164fa25-e3fb-45e4-8ee5-2e67f356f931",
+          "name": "Authentication failed (e.g. no such user or invalid password)",
+          "originalRequest": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"User\": {\n        \"name\": \"unknownadmin\",\n        \"isAdmin\": true\n    },\n    \"Secret\": {\n        \"password\": \"unknownpassword(!__+@**(A\"\n    }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/authenticate"
+          },
+          "status": "Unauthorized",
+          "code": 401,
+          "_postman_previewlanguage": "text",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "text/plain"
+            }
+          ],
+          "cookie": [],
+          "responseTime": null,
+          "body": ""
+        },
+        {
+          "id": "2cc6f2c8-e05c-4856-b96d-e36174185b3f",
+          "name": "This system does not support authentication.",
+          "originalRequest": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"User\": {\n        \"name\": \"ece461defaultadminuser\",\n        \"isAdmin\": false\n    },\n    \"Secret\": {\n        \"password\": \"correcthorsebatterystaple123(!__+@**(A\"\n    }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/authenticate"
+          },
+          "status": "Not Implemented",
+          "code": 501,
+          "_postman_previewlanguage": "text",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "text/plain"
+            }
+          ],
+          "cookie": [],
+          "responseTime": null,
+          "body": ""
+        }
+      ]
+    },
+    {
+      "name": "User Creation",
+      "id": "331a971a-ace4-4cbd-8865-f0f4c9252f64",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "X-Authorization",
+            "value": "bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"User\": {\r\n        \"name\": \"Elekin\",\r\n        \"isAdmin\": false\r\n    },\r\n    \"Secret\": {\r\n        \"password\": \"marvelous101\"\r\n    }\r\n}"
+        },
+        "url": "{{baseUrl}}/register"
+      },
+      "response": []
     }
   ],
   "event": [
     {
       "listen": "prerequest",
       "script": {
-        "id": "1d182623-9c16-483d-8bd7-3e5d67b8fb98",
+        "id": "7636b006-80fc-4b6e-9de6-59ad46174731",
         "type": "text/javascript",
         "exec": [
           ""
@@ -1502,7 +1648,7 @@
     {
       "listen": "test",
       "script": {
-        "id": "ba36c246-671f-4ca4-8e32-87593c231bed",
+        "id": "d9c3469d-9259-4f71-a7ea-4b95af999898",
         "type": "text/javascript",
         "exec": [
           ""
@@ -1512,14 +1658,14 @@
   ],
   "variable": [
     {
-      "id": "ff212374-f7ac-4c83-aa33-e6c0c1cb00f4",
+      "id": "21693c5a-d9b9-4b5e-bfa2-3d2a79c3a53d",
       "key": "baseUrl",
       "value": "https://project-2-331602.uc.r.appspot.com/"
     },
     {
-      "id": "10f410ae-2548-485e-b0e8-c26fa1958ba0",
+      "id": "4c761911-a1eb-41f3-b07e-d2eaa7bec3ff",
       "key": "token",
-      "value": "i9PB78oHMbkRigwvUUQHQO5zLpBQEd8RTJWe9q0jQbnPjyUFF-8ZlADxVkrpfynR-PmSzS1LGIUxC-0P4rKO-aEjc0AUm_6dnH546sH_035ryu-upu1_C-sG0I2UcF1YQdpjICmgYWauBqsLODO-LjHkYcmy0-YA-9A3FX2MToI"
+      "value": "aQoDB8ngh0sWsHlQVY8zeOwCAwTmYElwvKKZt7KUY1c2KCUa-LLETh0IGKHj7ZMqtbp6qQ-92nCBscdEFo--M3KAWVEuyj6mFB0VZIyf4WaJspmLUtmOvjg5ZSdcQx9erbVjeDiOh0ncn7a7RlvnGB4_sKNucDN3xta6-i3_lks"
     }
   ]
 }
