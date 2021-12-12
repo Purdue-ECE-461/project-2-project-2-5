@@ -1503,7 +1503,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n    \"User\": {\n        \"name\": \"Elekin\",\n        \"isAdmin\": true\n    },\n    \"Secret\": {\n        \"password\": \"Marvelous101\"\n    }\n}",
+          "raw": "{\n    \"User\": {\n        \"name\": \"Elekin\",\n        \"isAdmin\": true\n    },\n    \"Secret\": {\n        \"password\": \"marvelous101\"\n    }\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -1658,12 +1658,12 @@
   ],
   "variable": [
     {
-      "id": "21693c5a-d9b9-4b5e-bfa2-3d2a79c3a53d",
+      "id": "6cdf2154-20ea-4da2-8f10-4ff23e2a4136",
       "key": "baseUrl",
       "value": "https://project-2-331602.uc.r.appspot.com/"
     },
     {
-      "id": "4c761911-a1eb-41f3-b07e-d2eaa7bec3ff",
+      "id": "1978c0eb-c167-4909-8cd0-fd8f77f37d92",
       "key": "token",
       "value": "aQoDB8ngh0sWsHlQVY8zeOwCAwTmYElwvKKZt7KUY1c2KCUa-LLETh0IGKHj7ZMqtbp6qQ-92nCBscdEFo--M3KAWVEuyj6mFB0VZIyf4WaJspmLUtmOvjg5ZSdcQx9erbVjeDiOh0ncn7a7RlvnGB4_sKNucDN3xta6-i3_lks"
     }
