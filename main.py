@@ -285,7 +285,7 @@ def packageUpdate(id):
         # id = metadata["ID"]
 
         if metadata["ID"] != id:
-        return { "code": -1, "message": "An error occurred while validating the package ID"}, 400
+            return { "code": -1, "message": "An error occurred while validating the package ID"}, 400
 
         data_client = datastore.Client()
         query = data_client.query(kind = "package")
@@ -314,8 +314,7 @@ def packageUpdate(id):
             newUserEntity["Action"] = "UPDATE"
             data_client.put(newUserEntity)
 
-        return { "code": 1, "message": "Package " + id + " Updated Successfully"}, 200
-        
+        return { "code": 1, "message": "Package " + id + " Updated Successfully"}, 200      
     except:
         return { "code": -1, "message": "An error occurred while attempting to delete"}, 400
 
@@ -362,24 +361,9 @@ def deletePackage(id):
         
     except:
         return { "code": -1, "message": "An error occurred while attempting to delete"}, 400
-    #     # if request != "https://ece461.purdue.edu/project2/package/" + id:
-    #     #     raise NameError(request)
-    #     # if x_auth[0] != "X-Authorization:":
-    #     #     raise NameError(header)
-    #     if i > 1:
-    #         raise NameError(id)
-    #     else:
-    #         raise Exception()
 
 @app.route("/package/byName/<name>", methods=['GET'])
 def getPackageByName(name):
-    # try:
-    # x_auth = header.split()
-    # print(x_auth)
-    
-    # function calls for authentication:
-    # use x_auth[1], x_auth[2]
-
     auth_token = request.headers.get('X-Authorization')
     token = auth_token.split()[1]
 
@@ -417,15 +401,7 @@ def getPackageByName(name):
     returnList.sort(key=sortByDateHelper)
 
     return jsonify(returnList)
-    # except:
-    #     if request != "https://ece461.purdue.edu/project2/package/" + name:
-    #         raise NameError(request)
-    #     if x_auth[0] != "X-Authorization:":
-    #         raise NameError(header)
-    #     if idCheck != id:
-    #         raise NameError(id)
-    #     else:
-    #         raise Exception()
+
 def sortByDateHelper(inputDict):
     return inputDict["Date"]
 
