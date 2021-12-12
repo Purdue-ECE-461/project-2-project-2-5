@@ -1516,7 +1516,7 @@
     {
       "listen": "prerequest",
       "script": {
-        "id": "db619fe6-3030-47cc-86d6-4bb12f232bbb",
+        "id": "abf78754-2d7f-44cc-aa60-87c7f5ad58b2",
         "type": "text/javascript",
         "exec": [
           ""
@@ -1526,7 +1526,7 @@
     {
       "listen": "test",
       "script": {
-        "id": "16888e8e-9d0f-4791-9f49-d6babb483142",
+        "id": "ea352d2b-5358-46c5-b2d1-63f9f9aec3ae",
         "type": "text/javascript",
         "exec": [
           ""
@@ -1536,9 +1536,9 @@
   ],
   "variable": [
     {
-      "id": "e03c18ee-5e6f-43f9-a051-38358a125481",
+      "id": "2f6418bd-5949-4a2c-a2ef-367c712851b2",
       "key": "baseUrl",
-      "value": "https://ece461.purdue.edu/project2"
+      "value": "http://127.0.0.1:5000"
     }
   ]
 }
