@@ -70,6 +70,7 @@ class CalcHandlerGit(CalcHandler):
             gitobject = Github(self.token)
             return gitobject
         except:
+            print("get_git_object, bad token given")
             self.log_exception("get_git_object, bad token given")
             self.github_obj = None
             raise
@@ -79,6 +80,7 @@ class CalcHandlerGit(CalcHandler):
         try:
             return self.github_obj.get_repo(repo_directory)
         except:
+            print("get_git_repo")
             self.log_exception("get_git_repo")
             raise
 
@@ -88,6 +90,7 @@ class CalcHandlerGit(CalcHandler):
         try:
             repo_license = self.git_repo.get_license()
         except:
+            print("get_licenseID")
             self.log_exception("get_licenseID")
             return ""
         license_ID = repo_license.license.spdx_id
@@ -111,6 +114,7 @@ class CalcHandlerGit(CalcHandler):
             #self.get_num_commits()
             return [count, highest, total]
         except:
+            print("get_contributions_data")
             self.log_exception("get_contributions_data")
 
     # should return a list of all the releases
