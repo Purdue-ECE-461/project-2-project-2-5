@@ -27,14 +27,9 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://project-2-331602.uc.r.appspot.com/package/:id",
-                  "protocol": "https",
+                  "raw": "{{baseUrl}}/package/:id",
                   "host": [
-                    "project-2-331602",
-                    "uc",
-                    "r",
-                    "appspot",
-                    "com"
+                    "{{baseUrl}}"
                   ],
                   "path": [
                     "package",
@@ -1536,7 +1531,7 @@
   ],
   "variable": [
     {
-      "id": "f102e4c8-c527-43ef-94a7-9d8437047ba5",
+      "id": "6dfadf04-fd51-49e9-9555-c0cf7c3a8705",
       "key": "baseUrl",
       "value": "http://127.0.0.1:5000"
     }
