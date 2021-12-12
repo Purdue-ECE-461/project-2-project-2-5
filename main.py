@@ -284,7 +284,7 @@ def packageUpdate(id):
     # id = metadata["ID"]
 
     if metadata["ID"] != id:
-       return "Parameter ID and request body ID do not match", 400
+       return metadata["ID"] + " : " + id + " : " + dataFull, 400
 
     # data_client = datastore.Client()
     # query = data_client.query(kind = "package")
