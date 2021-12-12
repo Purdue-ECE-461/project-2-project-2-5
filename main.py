@@ -262,17 +262,17 @@ def getPackageByID(id):
 @app.route("/package/<id>", methods=['PUT'])
 def packageUpdate(id):
     # Get Token
-    # auth_token = request.headers.get('X-Authorization')
-    # token = auth_token.split()[1]
+    auth_token = request.headers.get('X-Authorization')
+    token = auth_token.split()[1]
 
-    # data_client = datastore.Client()
-    # q_lookup = data_client.query(kind='Users')
-    # q_lookup.add_filter("token", "=", token)
-    # res = list(q_lookup.fetch())
-    # error = { "code": -1, "message": "An error occurred while validating the user"}
+    data_client = datastore.Client()
+    q_lookup = data_client.query(kind='Users')
+    q_lookup.add_filter("token", "=", token)
+    res = list(q_lookup.fetch())
+    error = { "code": -1, "message": "An error occurred while validating the user"}
 
-    # if len(res) != 1:
-    #     return error, 500
+    if len(res) != 1:
+        return error, 500
 
     request.get_data()
     dat = request.data.decode("utf-8")
@@ -312,7 +312,7 @@ def packageUpdate(id):
     #     newUserEntity["Date"] = datetime.now()
     #     newUserEntity["Action"] = "UPDATE"
     #     data_client.put(newUserEntity)
-    return dataFull, 200
+    return token, 200
 
 @app.route("/package/<id>", methods=['DELETE'])
 def deletePackage(id):
