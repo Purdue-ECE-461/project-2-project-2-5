@@ -14,7 +14,7 @@ elif [ "$1" == "test" ]; then
   python3 run_handler.py "$1"
 else
   source $virtualEnvironmentName/bin/activate
-  export GITHUB_TOKEN="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"
+  export GITHUB_TOKEN="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"
   python3 run_handler.py "$1"
 fi
 
