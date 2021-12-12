@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 
 app = Flask(__name__)
 import google.cloud.datastore as datastore
+from google.cloud import secretmanager
 import json
 import sys
 sys.path.append("project1")
@@ -38,8 +39,11 @@ def homepage():
 @app.route("/package", methods=['POST'])
 def callHandler():
     dataFull = request.json
-    metadata = dataFull["metadata"]
-    data = dataFull["data"]
+    try:
+        metadata = dataFull["metadata"]
+        data = dataFull["data"]
+    except:
+        return "", 403
 
     if "Content" in data.keys():
         returnvVal, responseVal = create(metadata, data)
@@ -72,7 +76,7 @@ def create(metadata, data):
     error = { "code": -1, "message": "An error occurred while validating the user"}
 
     if len(res) != 1:
-        return error, 500
+        return error, 401
 
     # DO Package creation
     full_key = data_client.key("package", metadata["Name"] + ": " + metadata["Version"] + ": " + metadata["ID"])
@@ -118,7 +122,7 @@ def ingestion(metadata, data):
     error = { "code": -1, "message": "An error occurred while validating the user"}
 
     if len(res) != 1:
-        return error, 500
+        return error, 401
 
     # Do ingestion
     url = data["URL"]
@@ -131,7 +135,7 @@ def ingestion(metadata, data):
     
     for score in scores:
         if score < 0.5:
-            return "",200
+            return "", 200
 
     data_client = datastore.Client()
     query = data_client.query(kind = "package")
@@ -189,36 +193,10 @@ def ingestion(metadata, data):
         else:
             raise Exception()
     """
-    # pass
-
-# @app.route("https://ece461.purdue.edu/project2/package", methods=['GET'])
-# def download_blob(bucket_name, source_blob_name, destination_file_name):
-#     storage_client = storage.Client()
-#     # gcp_json_credentials_dict = json.loads(gcp_credentials_string)
-#     # credentials = service_account.Credentials.from_service_account_info(gcp_json_credentials_dict)
-#     # storage_client = storage.Client(project=gcp_json_credentials_dict['project-2-331602'], credentials=credentials)
-#     bucket = storage_client.bucket(bucket_name)
-#     blob = bucket.blob(source_blob_name)
-#     # image = Image.open(source_file_name)
-#     # fs = FileStorage()
-#     # image.save(fs, format="JPEG")
-#     blob.download_to_filename(destination_file_name)
-
-#     print("Downloaded storage object {} from bucket {} to local file {}.".format(source_blob_name, bucket_name, destination_file_name))
-
-
-
 
 @app.route("/package/<id>", methods=['GET'])
 def getPackageByID(id):
-        # Unpack data from JSON object
-
-    # try:
-    # x_auth = header.split()
-    # print(x_auth)
-    
-    # function calls for authentication:
-    # use x_auth[1], x_auth[2]
+    # Get Auth Token
     auth_token = request.headers.get('X-Authorization')
     token = auth_token.split()[1]
 
