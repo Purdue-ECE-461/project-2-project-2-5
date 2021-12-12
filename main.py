@@ -346,6 +346,9 @@ def packageUpdate(id):
     data = dataFull["data"]
     # id = metadata["ID"]
 
+    if metadata["ID"] != id:
+        return "Parameter ID and request body ID do not match", 400
+
     data_client = datastore.Client()
     query = data_client.query(kind = "package")
     query.add_filter("id", "=", metadata["ID"])
@@ -353,7 +356,7 @@ def packageUpdate(id):
     query.add_filter("version", "=", metadata["Version"])
     queryList = list(query.fetch())
     if len(queryList) != 1:
-        return "", 400
+        return "No such package", 400
 
     for package in query.fetch():
         package["content"] = data["Content"]
