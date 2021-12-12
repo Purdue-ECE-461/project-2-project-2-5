@@ -1516,7 +1516,7 @@
     {
       "listen": "prerequest",
       "script": {
-        "id": "abf78754-2d7f-44cc-aa60-87c7f5ad58b2",
+        "id": "71ff3859-a0cc-4620-95e4-9d1090d15e55",
         "type": "text/javascript",
         "exec": [
           ""
@@ -1526,7 +1526,7 @@
     {
       "listen": "test",
       "script": {
-        "id": "ea352d2b-5358-46c5-b2d1-63f9f9aec3ae",
+        "id": "3b44cbc4-7236-4e99-a22c-2b7aedf58520",
         "type": "text/javascript",
         "exec": [
           ""
@@ -1536,7 +1536,7 @@
   ],
   "variable": [
     {
-      "id": "2f6418bd-5949-4a2c-a2ef-367c712851b2",
+      "id": "4dd0410a-0f1d-4a16-8f31-142df254cf8c",
       "key": "baseUrl",
       "value": "http://127.0.0.1:5000"
     }
