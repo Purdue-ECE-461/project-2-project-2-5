@@ -136,7 +136,7 @@ def ingestion(metadata, data):
         
         for score in scores:
             if score < 0.5:
-                return "scores were bad", 200
+                return "scores were bad: " + str(scores), 200
 
         data_client = datastore.Client()
         query = data_client.query(kind = "package")
