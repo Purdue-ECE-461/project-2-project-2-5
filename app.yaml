@@ -1,7 +1,6 @@
-# [START django_app]
-runtime: python38
+
+runtime: python37
 
 handlers:
-
 - url: /.*
   script: auto

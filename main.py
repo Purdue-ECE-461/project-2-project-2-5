@@ -876,11 +876,22 @@ def deleteRegistry():
     for entity in userQuery.fetch():
         full_key = data_client.key("Users", entity["name"])
         data_client.delete(full_key)
+        
+    
+    registration_key = data_client.key("Users", "ece461defaultadminuser")
+    newEntity = datastore.Entity(key=registration_key)
+    newEntity["name"] = "ece461defaultadminuser"
+    newEntity["isAdmin"] = "True"
+    hashed_passw = nacl.pwhash.argon2id.str("correcthorsebatterystaple123(!__+@**(A", opslimit=nacl.pwhash.OPSLIMIT_MODERATE, memlimit=nacl.pwhash.MEMLIMIT_MODERATE)
+    newEntity["password"] = hashed_passw
+    newEntity["token"] = ""
+    newEntity["expiration"] = ""
+    data_client.put(newEntity)
 
     return "", 200
 
 @app.route("/register", methods=['POST'])
-def createUser(username):
+def createUser():
     # passw = the plaintext password string, don't worry about the other arguments
     recv_json = request.get_json()
 
@@ -952,6 +963,4 @@ def createAdmin():
     return response, 200
 
 if __name__ == "__main__":
-    app.run(debug=True)
-    # upload_blob("main-registry-461-project-2","smile_2.zip", "test_zip2")
-    # download_blob("main-registry-461-project-2","test_zip2", "download_test2.zip")
+    app.run(port=8080, debug=True)

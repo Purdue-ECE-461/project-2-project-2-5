@@ -3,3 +3,5 @@ Flask==2.0.2
 google-cloud-datastore==2.4.0
 google-cloud-storage==1.43.0
 flask-paginate==2021.10.29
+python-dotenv==0.19.2
+beautifulsoup4==4.10.0
