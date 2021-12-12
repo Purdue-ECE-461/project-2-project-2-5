@@ -1512,12 +1512,12 @@
   ],
   "variable": [
     {
-      "id": "77b572be-58a5-421c-bf58-a222ab343a98",
+      "id": "025f0013-2003-4961-9e20-d9f7c7e3d389",
       "key": "baseUrl",
       "value": "https://project-2-331602.uc.r.appspot.com/"
     },
     {
-      "id": "6c197970-09d6-4a91-bc95-f6453aeb0e79",
+      "id": "dfd4da79-f6b7-48d1-9715-ad8725c485d6",
       "key": "token",
       "value": ""
     }
