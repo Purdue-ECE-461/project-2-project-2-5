@@ -139,7 +139,7 @@
                 "disableBodyPruning": true
               },
               "request": {
-                "method": "PUT",
+                "method": "POST",
                 "header": [
                   {
                     "key": "X-Authorization",
@@ -166,20 +166,19 @@
                   }
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/package/:id",
+                  "raw": "{{baseUrl}}/package/test/:id",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "package",
+                    "test",
                     ":id"
                   ],
                   "variable": [
                     {
-                      "id": "688fd22a-a9c8-42f2-bf9f-af8dd567cdd5",
                       "key": "id",
-                      "value": "underscore",
-                      "description": "(Required) "
+                      "value": null
                     }
                   ]
                 },
@@ -1664,12 +1663,12 @@
   ],
   "variable": [
     {
-      "id": "9f85cb8a-793b-4e4b-852d-8f2d1b03d892",
+      "id": "9c3364d6-a6e4-4a12-9b64-fd17596243dd",
       "key": "baseUrl",
       "value": "https://project-2-331602.uc.r.appspot.com/"
     },
     {
-      "id": "b8d4079a-3fca-4f02-8720-b136f65b3e52",
+      "id": "5356097e-3f6c-4708-8eaa-f492bdd224b0",
       "key": "token",
       "value": "aQoDB8ngh0sWsHlQVY8zeOwCAwTmYElwvKKZt7KUY1c2KCUa-LLETh0IGKHj7ZMqtbp6qQ-92nCBscdEFo--M3KAWVEuyj6mFB0VZIyf4WaJspmLUtmOvjg5ZSdcQx9erbVjeDiOh0ncn7a7RlvnGB4_sKNucDN3xta6-i3_lks"
     }
