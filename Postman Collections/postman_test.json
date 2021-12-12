@@ -23,7 +23,7 @@
                 "header": [
                   {
                     "key": "X-Authorization",
-                    "value": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                    "value": "bearer 3b49e74a-1d80-4294-bcff-c9e98bc2c742"
                   }
                 ],
                 "url": {
@@ -1530,7 +1530,7 @@
   ],
   "variable": [
     {
-      "id": "547efea0-4688-4bf4-b089-43ea713e034c",
+      "id": "0e7546ac-a46f-4863-9dc2-cd37382ca27c",
       "key": "baseUrl",
       "value": "https://project-2-331602.uc.r.appspot.com/"
     }
