@@ -907,7 +907,7 @@
                 }
               }
             },
-            "url": "http://127.0.0.1:5000/package"
+            "url": "{{baseUrl}}/package"
           },
           "response": [
             {
@@ -1536,7 +1536,7 @@
   ],
   "variable": [
     {
-      "id": "ad6bf573-33a1-491d-9b87-10c29295a7bd",
+      "id": "f102e4c8-c527-43ef-94a7-9d8437047ba5",
       "key": "baseUrl",
       "value": "http://127.0.0.1:5000"
     }
