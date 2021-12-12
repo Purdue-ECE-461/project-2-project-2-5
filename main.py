@@ -166,7 +166,10 @@ def ingestion(metadata, data):
     cli = CLIHandler(url)
     cli.calc()
     # net, rampUp, correctness, bus_factor, responsiveness, license_score, dependency_score
+    cli.print_to_console()
     scores = cli.getScores()
+    print(scores)()
+    
     for score in scores:
         if score < 0.5:
             return "",200
@@ -629,7 +632,8 @@ def getToken():
         #dig_passw = nacl.pwhash.argon2id.str(passw_in, opslimit=nacl.pwhash.OPSLIMIT_MODERATE, memlimit=nacl.pwhash.MEMLIMIT_MODERATE)
         # Alternatively
         try:
-            res = nacl.pwhash.argon2id.verify(data_passw, passw_in)
+            #res = nacl.pwhash.argon2id.verify(data_passw, passw_in)
+            res = passw_in
         except:
             response = ""
             return response, 401
@@ -897,6 +901,7 @@ def createUser():
 
     auth_token = request.headers.get('X-Authorization')
     token = auth_token.split()[1]
+    print("token" + token)
 
     data_client = datastore.Client()
     q_lookup = data_client.query(kind='Users')
@@ -925,7 +930,8 @@ def createUser():
     newEntity = datastore.Entity(key=registration_key)
     newEntity["name"] = regis_name
     newEntity["isAdmin"] = regis_isAdmin
-    hashed_passw = nacl.pwhash.argon2id.str(regis_passw, opslimit=nacl.pwhash.OPSLIMIT_MODERATE, memlimit=nacl.pwhash.MEMLIMIT_MODERATE)
+   #hashed_passw = nacl.pwhash.argon2id.str(regis_passw, opslimit=nacl.pwhash.OPSLIMIT_MODERATE, memlimit=nacl.pwhash.MEMLIMIT_MODERATE)
+    hashed_passw = regis_passw
     newEntity["password"] = hashed_passw
     newEntity["token"] = ""
     newEntity["expiration"] = ""
@@ -940,13 +946,14 @@ def createAdmin():
     if auth_pw != "adminPassword":
         return error, 401
     recv_json = request.json
+    print(recv_json)
     try:
         regis_name = recv_json["User"]["name"]
         regis_isAdmin = recv_json["User"]["isAdmin"]
         regis_passw = recv_json["Secret"]["password"]
     except:
-        print(recv_json)
-        response = ""
+       
+        response = "hello"
         return response, 401
 
     data_client = datastore.Client()
@@ -955,7 +962,8 @@ def createAdmin():
     newEntity = datastore.Entity(key=registration_key)
     newEntity["name"] = regis_name
     newEntity["isAdmin"] = regis_isAdmin
-    hashed_passw = nacl.pwhash.argon2id.str(regis_passw, opslimit=nacl.pwhash.OPSLIMIT_MODERATE, memlimit=nacl.pwhash.MEMLIMIT_MODERATE)
+    #hashed_passw = nacl.pwhash.argon2id.str(regis_passw, opslimit=nacl.pwhash.OPSLIMIT_MODERATE, memlimit=nacl.pwhash.MEMLIMIT_MODERATE)
+    hashed_passw = regis_passw
     newEntity["password"] = hashed_passw
     newEntity["token"] = ""
     newEntity["expiration"] = ""
