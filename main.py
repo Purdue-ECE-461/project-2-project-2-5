@@ -129,13 +129,13 @@ def ingestion(metadata, data):
     cli = CLIHandler(url)
     cli.calc()
     # net, rampUp, correctness, bus_factor, responsiveness, license_score, dependency_score
-    cli.print_to_console()
+    # cli.print_to_console()
     scores = cli.getScores()
-    print(scores)()
+    print(scores)
     
     for score in scores:
         if score < 0.5:
-            return "", 200
+            return "scores were bad", 200
 
     data_client = datastore.Client()
     query = data_client.query(kind = "package")
@@ -144,12 +144,12 @@ def ingestion(metadata, data):
     query.add_filter("version", "=", metadata["Version"])
     queryList = list(query.fetch())
     if len(queryList) != 1:
-        return "", 400
+        return "error in retrieving package", 400
 
     # full_key = data_client.key("package", metadata["Name"] + ": " + metadata["Version"] + ": " + metadata["ID"])
     for package in query.fetch():
         if package["url"] != "":
-            return "", 403
+            return "URL already exists", 403
         package["url"] = data["URL"]
         data_client.put(package)
     
