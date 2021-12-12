@@ -262,25 +262,25 @@ def getPackageByID(id):
 @app.route("/package/<id>", methods=['PUT'])
 def packageUpdate(id):
     # Get Token
-    auth_token = request.headers.get('X-Authorization')
-    token = auth_token.split()[1]
+    # auth_token = request.headers.get('X-Authorization')
+    # token = auth_token.split()[1]
 
-    data_client = datastore.Client()
-    q_lookup = data_client.query(kind='Users')
-    q_lookup.add_filter("token", "=", token)
-    res = list(q_lookup.fetch())
-    error = { "code": -1, "message": "An error occurred while validating the user"}
+    # data_client = datastore.Client()
+    # q_lookup = data_client.query(kind='Users')
+    # q_lookup.add_filter("token", "=", token)
+    # res = list(q_lookup.fetch())
+    # error = { "code": -1, "message": "An error occurred while validating the user"}
 
-    if len(res) != 1:
-        return error, 500
+    # if len(res) != 1:
+    #     return error, 500
 
-    dataFull = request.get_json(force=True)
-    #metadata = dataFull["metadata"]
-    #data = dataFull["data"]
+    dataFull = request.json
+    metadata = dataFull["metadata"]
+    data = dataFull["data"]
     # id = metadata["ID"]
 
-    #if metadata["ID"] != id:
-    #    return "Parameter ID and request body ID do not match", 400
+    if metadata["ID"] != id:
+       return "Parameter ID and request body ID do not match", 400
 
     # data_client = datastore.Client()
     # query = data_client.query(kind = "package")
