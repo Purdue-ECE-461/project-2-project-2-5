@@ -939,7 +939,7 @@ def createAdmin():
     auth_pw = request.headers.get('X-Authorization')
     if auth_pw != "adminPassword":
         return error, 401
-    recv_json = request.get_json()
+    recv_json = request.json
     try:
         regis_name = recv_json["User"]["name"]
         regis_isAdmin = recv_json["User"]["isAdmin"]
