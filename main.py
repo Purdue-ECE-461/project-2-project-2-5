@@ -886,8 +886,7 @@ def deleteRegistry():
     newEntity = datastore.Entity(key=registration_key)
     newEntity["name"] = "ece461defaultadminuser"
     newEntity["isAdmin"] = "True"
-    hashed_passw = nacl.pwhash.argon2id.str("correcthorsebatterystaple123(!__+@**(A", opslimit=nacl.pwhash.OPSLIMIT_MODERATE, memlimit=nacl.pwhash.MEMLIMIT_MODERATE)
-    newEntity["password"] = hashed_passw
+    newEntity["password"] = '$argon2id$v=19$m=262144,t=3,p=1$W5DDEKOSVOdysF/f2H4SbA$V0cwX7eh4rMSstY1UzGFuHHiHpg2B8fKbjzs2goEO9A'
     newEntity["token"] = ""
     newEntity["expiration"] = ""
     data_client.put(newEntity)
@@ -930,9 +929,11 @@ def createUser():
     newEntity = datastore.Entity(key=registration_key)
     newEntity["name"] = regis_name
     newEntity["isAdmin"] = regis_isAdmin
-   #hashed_passw = nacl.pwhash.argon2id.str(regis_passw, opslimit=nacl.pwhash.OPSLIMIT_MODERATE, memlimit=nacl.pwhash.MEMLIMIT_MODERATE)
-    hashed_passw = regis_passw
-    newEntity["password"] = hashed_passw
+   #bytes_passw = str.encode(regis_passw) # Convert to Bytes string
+   #hashed_passw = nacl.pwhash.argon2id.str(bytes_passw, opslimit=nacl.pwhash.OPSLIMIT_MODERATE, memlimit=nacl.pwhash.MEMLIMIT_MODERATE)
+    #final_passw = hashed.decode("utf-8")
+    final_passw = regis_passw
+    newEntity["password"] = final_passw
     newEntity["token"] = ""
     newEntity["expiration"] = ""
     data_client.put(newEntity)
@@ -962,9 +963,11 @@ def createAdmin():
     newEntity = datastore.Entity(key=registration_key)
     newEntity["name"] = regis_name
     newEntity["isAdmin"] = regis_isAdmin
-    #hashed_passw = nacl.pwhash.argon2id.str(regis_passw, opslimit=nacl.pwhash.OPSLIMIT_MODERATE, memlimit=nacl.pwhash.MEMLIMIT_MODERATE)
-    hashed_passw = regis_passw
-    newEntity["password"] = hashed_passw
+    #bytes_passw = str.encode(regis_passw) # Convert to Bytes string
+    #hashed_passw = nacl.pwhash.argon2id.str(bytes_passw, opslimit=nacl.pwhash.OPSLIMIT_MODERATE, memlimit=nacl.pwhash.MEMLIMIT_MODERATE)
+    #final_passw = hashed.decode("utf-8")
+    final_passw = regis_passw
+    newEntity["password"] = final_passw 
     newEntity["token"] = ""
     newEntity["expiration"] = ""
     data_client.put(newEntity)
