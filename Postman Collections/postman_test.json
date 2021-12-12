@@ -1147,6 +1147,19 @@
               "body": ""
             }
           ]
+        },
+        {
+          "name": "New Request",
+          "id": "a30d7279-738e-40a3-9a34-77a58893992f",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": null
+          },
+          "response": []
         }
       ],
       "id": "afcc90b0-d60e-43c9-b52f-83153caf9d4f"
@@ -1512,12 +1525,12 @@
   ],
   "variable": [
     {
-      "id": "28f4b5ca-0f6f-4f44-af68-fc8bf6870489",
+      "id": "b0f48238-5916-43c0-85c0-edfb0852b2fe",
       "key": "baseUrl",
       "value": "https://project-2-331602.uc.r.appspot.com/"
     },
     {
-      "id": "2bfe3072-da47-4683-ba4c-058ab72c947c",
+      "id": "28e99d13-bbbd-4e7d-a009-fce71b3d8127",
       "key": "token",
       "value": ""
     }
