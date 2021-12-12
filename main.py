@@ -313,11 +313,16 @@ def packageUpdate(id):
             newUserEntity["Date"] = datetime.now()
             newUserEntity["Action"] = "UPDATE"
             data_client.put(newUserEntity)
-        return token, 200
 
-    @app.route("/package/<id>", methods=['DELETE'])
-    def deletePackage(id):
-        # Check Token
+        return { "code": 1, "message": "Package " + id + " Updated Successfully"}, 200
+        
+    except:
+        return { "code": -1, "message": "An error occurred while attempting to delete"}, 400
+
+@app.route("/package/<id>", methods=['DELETE'])
+def deletePackage(id):
+    # Check Token
+    try:
         auth_token = request.headers.get('X-Authorization')
         token = auth_token.split()[1]
 
@@ -353,10 +358,10 @@ def packageUpdate(id):
                 newUserEntity["Action"] = "DELETE BY ID"
                 data_client.put(newUserEntity)
         
-        return { "code": 1, "message": "Package " + metadata["Name"] + " Updated Successfully"}, 200
+        return { "code": 1, "message": "Package " + id + " Deleted Successfully"}, 200
         
     except:
-        return { "code": -1, "message": "An error occurred while attempting to update"}, 400
+        return { "code": -1, "message": "An error occurred while attempting to delete"}, 400
     #     # if request != "https://ece461.purdue.edu/project2/package/" + id:
     #     #     raise NameError(request)
     #     # if x_auth[0] != "X-Authorization:":
