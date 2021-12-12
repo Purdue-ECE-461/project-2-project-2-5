@@ -1416,7 +1416,7 @@
             }
           }
         },
-        "url": "http://127.0.0.1:5000/authenticate"
+        "url": "{{baseURL}}/authenticate"
       },
       "response": [
         {
@@ -1536,7 +1536,7 @@
   ],
   "variable": [
     {
-      "id": "4dd0410a-0f1d-4a16-8f31-142df254cf8c",
+      "id": "ad6bf573-33a1-491d-9b87-10c29295a7bd",
       "key": "baseUrl",
       "value": "http://127.0.0.1:5000"
     }
