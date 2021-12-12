@@ -286,21 +286,21 @@ def packageUpdate(id):
     if metadata["ID"] != id:
        return metadata["ID"] + " : " + id + " : " + dataFull, 400
 
-    # data_client = datastore.Client()
-    # query = data_client.query(kind = "package")
-    # query.add_filter("id", "=", metadata["ID"])
-    # query.add_filter("name", "=", metadata["Name"])
-    # query.add_filter("version", "=", metadata["Version"])
-    # queryList = list(query.fetch())
-    # if len(queryList) != 1:
-    #     return "No such package", 400
+    data_client = datastore.Client()
+    query = data_client.query(kind = "package")
+    query.add_filter("id", "=", metadata["ID"])
+    query.add_filter("name", "=", metadata["Name"])
+    query.add_filter("version", "=", metadata["Version"])
+    queryList = list(query.fetch())
+    if len(queryList) != 1:
+        return "No such package", 400
 
-    # for package in query.fetch():
-    #     package["content"] = data["Content"]
-    #     package["url"] = data["URL"]
-    #     package["jsprogram"] = data["JSProgram"]
+    for package in query.fetch():
+        package["content"] = data["Content"]
+        package["url"] = data["URL"]
+        package["jsprogram"] = data["JSProgram"]
 
-    # data_client.put(package)
+    data_client.put(package)
     # for user in q_lookup.fetch():
     #     full_key = data_client.key("UserActions", metadata["Name"] + ": " + metadata["Version"] + ": " + metadata["ID"] + ": " + user["name"] +": UPDATE")
     #     newUserEntity = datastore.Entity(key=full_key)
