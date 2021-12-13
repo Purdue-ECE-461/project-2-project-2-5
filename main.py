@@ -164,7 +164,7 @@ def ingestion(metadata, data):
             newUserEntity["Date"] = datetime.now()
             newUserEntity["Action"] = "INGEST"
             data_client.put(newUserEntity)
-            
+
         if error == "":
             error = "Package Ingested Successfully"
 
