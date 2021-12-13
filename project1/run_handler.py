@@ -28,5 +28,5 @@ def runHandler(input_path):
     
 if __name__ == "__main__":
 
-    print(runHandler("https://github.com/expressjs/express"))
+    print(runHandler(sys.argv[1]))
     sys.exit(0)

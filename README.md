@@ -52,6 +52,11 @@ There are multiple different kinds of requests that the system can handle, which
         }
     }
     ```
+    * NOTE: The implementation of Project 1 works, but there is an issue with App Engine burning through our tokens. To test the functionality of our adjusted version of this project 1 implementation, complete the following steps
+        * cd into the folder "project1"
+        * run the command: ```bash run_bash_ecngrid.sh install```
+        * open the file "run_bash_ecngrid.sh" and paste in a new GitHub token in the appropriate quotations (see comment in file)
+        * run the command: ```bash run_bash_ecngrid.sh <github or npmjs URL>``` to run the project 1 implementation on any package.
 * Get a package (by ID): ```GET https://project-2-331602.uc.r.appspot.com/package/:id```
     * This will fetch the relevant package from the registry using the unique ID provided by the user. It will return an error if the action cannot be completed as desired. This action tracks the user, and thus requires an "X-Authorization" field in the form of "bearer \<token>" in the header. The body of this request is empty.
 * Update a package (by ID): ```PUT https://project-2-331602.uc.r.appspot.com/package/:id```
