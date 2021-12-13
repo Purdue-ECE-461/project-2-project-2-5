@@ -41,7 +41,7 @@ else
   source $virtualEnvironmentName/bin/activate
   export FLASK_APP=main
   export GOOGLE_APPLICATION_CREDENTIALS="./project-2-331602-22c5987270e1.json"
-  export GITHUB_TOKEN="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"
+  export GITHUB_TOKEN="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"
   flask run
 fi
 
