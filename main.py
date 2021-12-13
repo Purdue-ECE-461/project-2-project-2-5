@@ -135,7 +135,7 @@ def ingestion(metadata, data):
         
         for score in scores:
             if score < 0.5:
-                return "scores were bad: " + str(scores) + os.environ.get('GITHUB_TOKEN'), 200
+                return "scores were bad: " + str(scores), 200
         # full_key = data_client.key("package", metadata["Name"] + ": " + metadata["Version"] + ": " + metadata["ID"])
         for package in query.fetch():
             if package["url"] != "":
