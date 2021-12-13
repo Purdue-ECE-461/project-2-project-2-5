@@ -36,9 +36,9 @@ class CalcHandlerGit(CalcHandler):
         super().__init__(url)
 
         # Create the Secret Manager client.
-        client = secretmanager.SecretManagerServiceClient()
-        name = "projects/232049761783/secrets/GITHUB_TOKEN/versions/3"#f"projects/{project_id}/secrets/{secret_id}/versions/{version_id}"
-        response = client.access_secret_version(request={"name": name})
+        # client = secretmanager.SecretManagerServiceClient()
+        # name = "projects/232049761783/secrets/GITHUB_TOKEN/versions/3"#f"projects/{project_id}/secrets/{secret_id}/versions/{version_id}"
+        # response = client.access_secret_version(request={"name": name})
 
         self.token = os.environ.get('GITHUB_TOKEN')#response.payload.data.decode("UTF-8")#os.environ.get('GITHUB_TOKEN')
         print(self.token)
