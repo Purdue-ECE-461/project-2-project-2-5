@@ -36,7 +36,7 @@ if __name__ == "__main__":
 
     #Mode 3 - Run given file with URL's
     # else: 
-    input_path = "https://github.com/inversify/InversifyJS" #handle directory path here
+    input_path = "https://github.com/expressjs/express" #handle directory path here
     
     #if the input given is not an absolute path. Absolute path definition varies by OS, see https://www.computerhope.com/issues/ch001708.htm
     # if not os.path.isabs(input_path):   

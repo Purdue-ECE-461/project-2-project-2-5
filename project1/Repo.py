@@ -222,6 +222,6 @@ class Repo(LogWrapper):
             for t in soup.findAll("div", {"class": "Box-row"})
         ]
         
-        score = score / len(data)
+        score = score / max(1, (len(data) / 12))
         return (score)
 
