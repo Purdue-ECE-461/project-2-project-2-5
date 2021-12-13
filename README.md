@@ -1,4 +1,4 @@
-# ECE 46100 Fall 2021 Team 5, Project 1
+# ECE 46100 Fall 2021 Team 5, Project 2
 project-2-project-2-5 created by GitHub Classroom
 
 ## Introduction
