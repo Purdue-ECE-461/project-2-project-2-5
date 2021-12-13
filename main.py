@@ -10,8 +10,9 @@ from google.cloud import secretmanager
 import json
 import sys
 sys.path.append("project1")
-from project1.CLIHandler import CLIHandler
+from project1.run_handler import runHandler
 import os
+# import project1.run
 
 @app.route("/")
 def homepage():
@@ -126,12 +127,12 @@ def ingestion(metadata, data):
 
     # Do ingestion
     url = data["URL"]
-    cli = CLIHandler(url)
-    cli.calc()
+    # cli = CLIHandler(url)
+    # cli.calc()
     # net, rampUp, correctness, bus_factor, responsiveness, license_score, dependency_score
     # cli.print_to_console()
-    scores = cli.getScores()
-    # print(scores)
+    scores = runHandler(url)
+    print(scores)
     
     for score in scores:
         if score < 0.3:
