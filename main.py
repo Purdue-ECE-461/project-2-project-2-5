@@ -119,7 +119,7 @@ def ingestion(metadata, data):
 
         if len(res) != 1:
             return error, 401
-
+        error = ""
         query = data_client.query(kind = "package")
         query.add_filter("id", "=", metadata["ID"])
         # query.add_filter("name", "=", metadata["Name"])
@@ -135,7 +135,10 @@ def ingestion(metadata, data):
         
         for score in scores:
             if score < 0.5:
-                return "scores were bad: " + str(scores) + os.environ.get('GITHUB_TOKEN'), 200
+                if scores[0] < 0.5:
+                    return {"code": -1, "message": "Package could not be ingested because the scores were not up to par, or GitHub token is not valid. Scores: " + str(scores) + ", GitHub Token: " os.environ.get('GITHUB_TOKEN')}, 200
+                else:
+                    error = "Individual scores were not all up to par, but net score was above 0.5 so package was ingested"
         # full_key = data_client.key("package", metadata["Name"] + ": " + metadata["Version"] + ": " + metadata["ID"])
         for package in query.fetch():
             if package["url"] != "":
@@ -161,8 +164,14 @@ def ingestion(metadata, data):
             newUserEntity["Date"] = datetime.now()
             newUserEntity["Action"] = "INGEST"
             data_client.put(newUserEntity)
+            
+        if error == "":
+            error = "Package Ingested Successfully"
 
-        return metadata, 201
+        returnMessage["Package"] = metadata
+        returnMessage["Message"] = error
+
+        return returnMessage, 201
     
     except:
        return { "code": -1, "message": "An error occurred while ingesting the package"}, 400

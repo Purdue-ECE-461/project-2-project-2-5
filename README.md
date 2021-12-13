@@ -38,7 +38,7 @@ There are multiple different kinds of requests that the system can handle, which
     }
     ```
 * Ingest a package: ```POST https://project-2-331602.uc.r.appspot.com/package```
-    * This will ingest a package using an implementation of Project 1 by taking the input URL and determining scores for the Ramp Up time, Correctness, Bus Factor, Responsiveness, Licenses, and Good Pinning Practice. If the scores (which are between 0 and 1) are at LEAST 0.5 for all metrics, the package will be ingested and the URL will be placed in the relevant spot in the Datastore entry, as well as each of the individual scores for the specific package. This action tracks the user, and thus requires an "X-Authorization" field in the form of "bearer \<token>" in the header. The body of this request is the package metadata as well as the package URL and is a JSON object with the following structure:
+    * This will ingest a package using an implementation of Project 1 by taking the input URL and determining scores for the Ramp Up time, Correctness, Bus Factor, Responsiveness, Licenses, and Good Pinning Practice. Package must be ingested in order to perform other package operations. If the scores (which are between 0 and 1) are at LEAST 0.5 for all metrics, or if the net score of the package is at LEAST 0.5, the package will be ingested and the URL will be placed in the relevant spot in the Datastore entry, as well as each of the individual scores for the specific package. This action tracks the user, and thus requires an "X-Authorization" field in the form of "bearer \<token>" in the header. The body of this request is the package metadata as well as the package URL and is a JSON object with the following structure:
     ```
     {
         "metadata": {
