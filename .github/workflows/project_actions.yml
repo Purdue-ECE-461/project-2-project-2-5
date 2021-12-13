@@ -1,0 +1,54 @@
+name: Project 2 Actions
+on: [pull]
+jobs:
+  Prereq:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Installing Dependencies
+      - run:  pip install pylint
+
+on: pull_request
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: action-git-diff-suggestions
+        uses: getsentry/action-git-diff-suggestions@v1
+
+on: [push]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - name: List files in the repository
+        run: |
+          ls ${{ github.workspace }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pylint
+          pip install mypy
+      - name: Analysing the code with pylint
+        run: |
+            pylint main.py --disable=C0114,C0115,C0116
+
+      steps:
+      - uses: actions/checkout@v1
+      - uses: ricardochaves/python-lint@v1.4.0
+        with:
+          python-root-list: "python_alelo tests"
+          use-pylint: true
+          use-pycodestyle: false
+          use-flake8: false
+          use-black: false
+          use-mypy: true
+          use-isort: false
+          extra-pylint-options: ""
+          extra-pycodestyle-options: ""
+          extra-flake8-options: ""
+          extra-black-options: ""
+          extra-mypy-options: ""
+          extra-isort-options: ""
