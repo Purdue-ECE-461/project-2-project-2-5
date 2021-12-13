@@ -36,14 +36,11 @@ class CalcHandlerGit(CalcHandler):
         super().__init__(url)
 
         # Create the Secret Manager client.
-        # client = secretmanager.SecretManagerServiceClient()
-        # project_id = f"project-2-331602" #projects/232049761783/secrets/GITHUB_TOKEN/versions/2
-        # secret_id = f"GITHUB_TOKEN"
-        version_id = f""
-        name = "projects/232049761783/secrets/GITHUB_TOKEN/versions/2"#f"projects/{project_id}/secrets/{secret_id}/versions/{version_id}"
+        client = secretmanager.SecretManagerServiceClient()
+        name = "projects/232049761783/secrets/GITHUB_TOKEN/versions/3"#f"projects/{project_id}/secrets/{secret_id}/versions/{version_id}"
         response = client.access_secret_version(request={"name": name})
 
-        self.token = response.payload.data.decode("UTF-8")#os.environ.get('GITHUB_TOKEN')
+        self.token = os.environ.get('GITHUB_TOKEN')#response.payload.data.decode("UTF-8")#os.environ.get('GITHUB_TOKEN')
         print(self.token)
         self.api_request_header = {'Authorization': 'token %s' % self.token}
         self.api_data = self.__api_http_get_general_repo_data()
