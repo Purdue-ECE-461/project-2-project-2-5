@@ -62,11 +62,11 @@ def create(metadata, data):
 
         if len(res) != 1:
             return error, 401
-        for user in res:
-            if datetime.now() > user["expiration"] or user["api_uses"] > 1000:
-                return { "code": 0, "message": "Token has expired"}, 401
-            user["api_uses"] = user["api_uses"] + 1
-            data_client.put(user)
+        # for user in res:
+        #     if datetime.now() > user["expiration"] or user["api_uses"] > 1000:
+        #         return { "code": 0, "message": "Token has expired"}, 401
+        #     user["api_uses"] = user["api_uses"] + 1
+        #     data_client.put(user)
 
         # DO Package creation
         full_key = data_client.key("package", metadata["Name"] + ": " + metadata["Version"] + ": " + metadata["ID"])
@@ -95,7 +95,7 @@ def create(metadata, data):
             newUserEntity["Date"] = datetime.now()
             newUserEntity["Action"] = "CREATE"
             data_client.put(newUserEntity)
-        return {"code": 1, "message": "Package created successfully", metadata}, 201
+        return metadata, 201
     except:
         return {"code": -1, "message": "An error occurred while attempting to create the package"}, 401
         
@@ -117,11 +117,11 @@ def ingestion(metadata, data):
 
         if len(res) != 1:
             return error, 401
-        for user in res:
-            if datetime.now() > user["expiration"] or user["api_uses"] > 1000:
-                return { "code": 0, "message": "Token has expired"}, 401
-            user["api_uses"] = user["api_uses"] + 1
-            data_client.put(user)
+        # for user in res:
+        #     if datetime.now() > user["expiration"] or user["api_uses"] > 1000:
+        #         return { "code": 0, "message": "Token has expired"}, 401
+        #     user["api_uses"] = user["api_uses"] + 1
+        #     data_client.put(user)
 
         # Do ingestion
         url = data["URL"]
@@ -170,7 +170,7 @@ def ingestion(metadata, data):
             newUserEntity["Action"] = "INGEST"
             data_client.put(newUserEntity)
 
-        return { "code": 1, "message": "Package Ingested Successfully", metadata}, 201
+        return metadata, 201
     
     except:
         return { "code": -1, "message": "An error occurred while ingesting the package"}, 400
@@ -190,11 +190,11 @@ def getPackageByID(id):
 
         if len(res) != 1:
             return error, 500
-        for user in res:
-            if datetime.now() > user["expiration"] or user["api_uses"] > 1000:
-                return { "code": 0, "message": "Token has expired"}, 401
-            user["api_uses"] = user["api_uses"] + 1
-            data_client.put(user)
+        
+        # if datetime.now() > res[0]["expiration"] or res[0]["api_uses"] > 1000:
+        #     return { "code": 0, "message": "Token has expired"}, 401
+        # res[0]["api_uses"] = res[0]["api_uses"] + 1
+        # data_client.put(res[0])
         
         metadata = {}
         data = {}
@@ -249,11 +249,11 @@ def packageUpdate(id):
 
         if len(res) != 1:
             return error, 500
-        for user in res:
-            if datetime.now() > user["expiration"] or user["api_uses"] > 1000:
-                return { "code": 0, "message": "Token has expired"}, 401
-            user["api_uses"] = user["api_uses"] + 1
-            data_client.put(user)
+        # for user in res:
+        #     if datetime.now() > user["expiration"] or user["api_uses"] > 1000:
+        #         return { "code": 0, "message": "Token has expired"}, 401
+        #     user["api_uses"] = user["api_uses"] + 1
+        #     data_client.put(user)
 
         request.get_data()
         dat = request.data.decode("utf-8")
@@ -312,11 +312,11 @@ def deletePackage(id):
 
         if len(res) != 1:
             return error, 500
-        for user in res:
-            if datetime.now() > user["expiration"] or user["api_uses"] > 1000:
-                return { "code": 0, "message": "Token has expired"}, 401
-            user["api_uses"] = user["api_uses"] + 1
-            data_client.put(user)
+        # for user in res:
+        #     if datetime.now() > user["expiration"] or user["api_uses"] > 1000:
+        #         return { "code": 0, "message": "Token has expired"}, 401
+        #     user["api_uses"] = user["api_uses"] + 1
+        #     data_client.put(user)
         
         query = data_client.query(kind = "package")
         query.add_filter("id", "=", id)
@@ -359,11 +359,11 @@ def getPackageByName(name):
 
         if len(res) != 1:
             return error, 500
-        for user in res:
-            if datetime.now() > user["expiration"] or user["api_uses"] > 1000:
-                return { "code": 0, "message": "Token has expired"}, 401
-            user["api_uses"] = user["api_uses"] + 1
-            data_client.put(user)
+        # for user in res:
+        #     if datetime.now() > user["expiration"] or user["api_uses"] > 1000:
+        #         return { "code": 0, "message": "Token has expired"}, 401
+        #     user["api_uses"] = user["api_uses"] + 1
+        #     data_client.put(user)
 
         query = data_client.query(kind = "UserActions")
         query.add_filter("packageName", "=", name)
@@ -410,11 +410,11 @@ def deleteAllVersions(name):
 
         if len(res) != 1:
             return error, 500
-        for user in res:
-            if datetime.now() > user["expiration"] or user["api_uses"] > 1000:
-                return { "code": 0, "message": "Token has expired"}, 401
-            user["api_uses"] = user["api_uses"] + 1
-            data_client.put(user)
+        # for user in res:
+        #     if datetime.now() > user["expiration"] or user["api_uses"] > 1000:
+        #         return { "code": 0, "message": "Token has expired"}, 401
+        #     user["api_uses"] = user["api_uses"] + 1
+        #     data_client.put(user)
         
         query = data_client.query(kind = "package")
         query.add_filter("name", "=", name)
@@ -463,11 +463,11 @@ def getPackageRate(id):
 
         if len(res) != 1:
             return error, 500
-        for user in res:
-            if datetime.now() > user["expiration"] or user["api_uses"] > 1000:
-                return { "code": 0, "message": "Token has expired"}, 401
-            user["api_uses"] = user["api_uses"] + 1
-            data_client.put(user)
+        # for user in res:
+        #     if datetime.now() > user["expiration"] or user["api_uses"] > 1000:
+        #         return { "code": 0, "message": "Token has expired"}, 401
+        #     user["api_uses"] = user["api_uses"] + 1
+        #     data_client.put(user)
         info = {}
         for package in query.fetch():
             # url = package["url"]
