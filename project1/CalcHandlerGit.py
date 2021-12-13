@@ -13,7 +13,7 @@ from CalcHandler import CalcHandler # pragma: no cover
 from github import Github # pragma: no cover
 from collections import defaultdict # pragma: no cover
 from git import Repo as gitRepo # pragma: no cover
-from google.cloud import secretmanager
+# from google.cloud import secretmanager
 import glob # pragma: no cover
 import shutil # pragma: no cover
 import datetime # pragma: no cover
@@ -36,9 +36,9 @@ class CalcHandlerGit(CalcHandler):
         super().__init__(url)
 
         # Create the Secret Manager client.
-        client = secretmanager.SecretManagerServiceClient()
-        project_id = f"project-2-331602" #projects/232049761783/secrets/GITHUB_TOKEN/versions/2
-        secret_id = f"GITHUB_TOKEN"
+        # client = secretmanager.SecretManagerServiceClient()
+        # project_id = f"project-2-331602" #projects/232049761783/secrets/GITHUB_TOKEN/versions/2
+        # secret_id = f"GITHUB_TOKEN"
         version_id = f""
         name = "projects/232049761783/secrets/GITHUB_TOKEN/versions/2"#f"projects/{project_id}/secrets/{secret_id}/versions/{version_id}"
         response = client.access_secret_version(request={"name": name})
