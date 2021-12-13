@@ -41,7 +41,7 @@ class CalcHandlerGit(CalcHandler):
         # response = client.access_secret_version(request={"name": name})
 
         self.token = os.environ.get('GITHUB_TOKEN')#response.payload.data.decode("UTF-8")#os.environ.get('GITHUB_TOKEN')
-        print(self.token)
+        # print(self.token)
         self.api_request_header = {'Authorization': 'token %s' % self.token}
         self.api_data = self.__api_http_get_general_repo_data()
         self.file_ext_list = self.__api_parse_file_exts("file_exts.txt")

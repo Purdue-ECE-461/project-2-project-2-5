@@ -2,6 +2,7 @@ from LogWrapper import LogWrapper
 from Repo import Repo
 import re
 import logging, sys
+import os
 
 #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
 
@@ -23,10 +24,10 @@ class CLIHandler(LogWrapper):
         self.set_logger(__name__)
         
         self.command_line_arg = _command_line_arg
-        print(self.command_line_arg)
+        # print(self.command_line_arg)
         try:
             self.url_list, self.repo_list = self.parse_arg(_command_line_arg)
-            print(self.url_list, self.repo_list)
+            # print(self.url_list, self.repo_list)
         except:
            # self.logger.error("Error in parsing argument.")
            pass
