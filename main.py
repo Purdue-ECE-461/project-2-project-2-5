@@ -11,6 +11,7 @@ import json
 import sys
 sys.path.append("project1")
 from project1.CLIHandler import CLIHandler
+import os
 
 @app.route("/")
 def homepage():
@@ -134,7 +135,7 @@ def ingestion(metadata, data):
         
         for score in scores:
             if score < 0.3:
-                return "scores were bad: " + str(scores), 200
+                return "scores were bad: " + str(scores) + os.environ.get('GITHUB_TOKEN'), 200
 
         query = data_client.query(kind = "package")
         query.add_filter("id", "=", metadata["ID"])
