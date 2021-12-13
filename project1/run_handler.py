@@ -28,5 +28,5 @@ def runHandler(input_path):
     
 if __name__ == "__main__":
 
-    print(runHandler(sys.argv[1]))
+    print(runHandler(sys.argv[0]))
     sys.exit(0)
