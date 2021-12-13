@@ -122,10 +122,12 @@ def ingestion(metadata, data):
         error = ""
         query = data_client.query(kind = "package")
         query.add_filter("id", "=", metadata["ID"])
-        # query.add_filter("name", "=", metadata["Name"])
-        # query.add_filter("version", "=", metadata["Version"])
+        query2 = data_client.query(kind = "package")
+        query2.add_filter("name", "=", metadata["Name"])
+        query2.add_filter("version", "=", metadata["Version"])
         queryList = list(query.fetch())
-        if len(queryList) != 1:
+        query2List = list(query2.fetch())
+        if len(queryList) != 1 or len(query2List):
             return { "code": -1, "message": "An error occurred while retrieving the package from Datastore. Package either does not exist, or duplicates of the package exist in the registry."}, 400
         
         # Do ingestion
