@@ -1,7 +1,7 @@
 # ECE 46100 Fall 2021 Team 5, Project 1
 project-2-project-2-5 created by GitHub Classroom
 
-This project is a Flask application that serves as a package registry. It has the ability to upload, update, download, and rate packages that are stored as entities in Google Datastore. 
+This project is a Flask application that serves as a packagcloud components install app-engine-python and rate packages that are stored as entities in Google Datastore. 
 In order to use this tool, first clone the repository and change your current working directory to the root of the cloned repository.
 There are three different commands that are accepted.
 First, the dependencies must be installed to a virtual environment. To do this, run the command "bash ./run.sh install" on the command line interface. This will install all needed dependencies within a virtual environment.

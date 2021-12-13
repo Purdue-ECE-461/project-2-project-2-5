@@ -14,8 +14,11 @@
 .gitignore
 google-cloud-sdk
 templates
+Postman Collections
 
 # Python pycache:
 __pycache__/
+
 # Ignored by the build system
 /setup.cfg
+test.txt
