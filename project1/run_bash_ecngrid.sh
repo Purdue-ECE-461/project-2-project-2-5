@@ -14,7 +14,7 @@ elif [ "$1" == "test" ]; then
   python3 run_handler.py "$1"
 else
   source $virtualEnvironmentName/bin/activate
-  export GITHUB_TOKEN="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" # PASTE TOKEN HERE INSIDE OF QUOTATIONS
+  export GITHUB_TOKEN="$2" # PASTE TOKEN HERE INSIDE OF QUOTATIONS
   python3 run_handler.py "$1"
 fi
 
