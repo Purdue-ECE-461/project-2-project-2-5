@@ -47,8 +47,8 @@ def create(metadata, data):
         data_client = datastore.Client()
         query = data_client.query(kind = "package")
         query.add_filter("id", "=", metadata["ID"])
-        query.add_filter("name", "=", metadata["Name"])
-        query.add_filter("version", "=", metadata["Version"])
+        # query.add_filter("name", "=", metadata["Name"])
+        # query.add_filter("version", "=", metadata["Version"])
         queryList = list(query.fetch())
         if len(queryList) > 0:
             return { "code": -1, "message": "An error occurred while retrieving the package from Datastore. Package either does not exist, or duplicates of the package exist in the registry."}, 403
@@ -119,33 +119,23 @@ def ingestion(metadata, data):
 
     if len(res) != 1:
         return error, 401
-    # for user in res:
-    #     if datetime.now() > user["expiration"] or user["api_uses"] > 1000:
-    #         return { "code": 0, "message": "Token has expired"}, 401
-    #     user["api_uses"] = user["api_uses"] + 1
-    #     data_client.put(user)
 
+    query = data_client.query(kind = "package")
+    query.add_filter("id", "=", metadata["ID"])
+    # query.add_filter("name", "=", metadata["Name"])
+    # query.add_filter("version", "=", metadata["Version"])
+    queryList = list(query.fetch())
+    if len(queryList) != 1:
+        return { "code": -1, "message": "An error occurred while retrieving the package from Datastore. Package either does not exist, or duplicates of the package exist in the registry."}, 400
+    
     # Do ingestion
     url = data["URL"]
-    # cli = CLIHandler(url)
-    # cli.calc()
-    # net, rampUp, correctness, bus_factor, responsiveness, license_score, dependency_score
-    # cli.print_to_console()
     scores = runHandler(url)
     #print(scores)
     
     for score in scores:
         if score < 0.5:
             return "scores were bad: " + str(scores) + os.environ.get('GITHUB_TOKEN'), 200
-
-    query = data_client.query(kind = "package")
-    query.add_filter("id", "=", metadata["ID"])
-    query.add_filter("name", "=", metadata["Name"])
-    query.add_filter("version", "=", metadata["Version"])
-    queryList = list(query.fetch())
-    if len(queryList) != 1:
-        return { "code": -1, "message": "An error occurred while retrieving the package from Datastore. Package either does not exist, or duplicates of the package exist in the registry."}, 400
-
     # full_key = data_client.key("package", metadata["Name"] + ": " + metadata["Version"] + ": " + metadata["ID"])
     for package in query.fetch():
         if package["url"] != "":
