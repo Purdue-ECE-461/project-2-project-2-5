@@ -1636,7 +1636,7 @@
     {
       "listen": "prerequest",
       "script": {
-        "id": "c4ab5b1a-d88f-45c1-a04a-4e0bb88958ae",
+        "id": "10ea1e03-5b43-4754-bdcf-677a012cbd49",
         "type": "text/javascript",
         "exec": [
           ""
@@ -1646,7 +1646,7 @@
     {
       "listen": "test",
       "script": {
-        "id": "756adeac-f38f-41c4-b4fe-aed97968ae59",
+        "id": "0ce2bcf3-f727-4ae8-b00f-818198b7d5dc",
         "type": "text/javascript",
         "exec": [
           ""
@@ -1656,14 +1656,14 @@
   ],
   "variable": [
     {
-      "id": "b700ce37-fcd4-4570-9bd0-eaf86a9be9bb",
+      "id": "474adbb5-03b2-4ad2-8c3d-6fa8cdaff5c7",
       "key": "baseUrl",
       "value": "https://project-2-331602.uc.r.appspot.com/"
     },
     {
-      "id": "49537c9d-e505-4753-81b2-407f01b859c0",
+      "id": "2dcf2500-449f-4727-b074-909dc29afeb3",
       "key": "token",
-      "value": "oNVv9tLi2VHqRjlEe34Tmr4UuwmWzpyC6qCABFOhQ_IHOeAODtL-wKE1nENaPjs9dH23_ysOKJOcLaVMj0ZLEqKgnHqs7l0u6n4ffqwAyxz6bJNrL571q0pxFxNAbneWvNSVrMvOAfQwfSyhhXzfMbt0EVLZJAN97ywyMEZhDWw\n"
+      "value": "oNVv9tLi2VHqRjlEe34Tmr4UuwmWzpyC6qCABFOhQ_IHOeAODtL-wKE1nENaPjs9dH23_ysOKJOcLaVMj0ZLEqKgnHqs7l0u6n4ffqwAyxz6bJNrL571q0pxFxNAbneWvNSVrMvOAfQwfSyhhXzfMbt0EVLZJAN97ywyMEZhDWw"
     }
   ]
 }
