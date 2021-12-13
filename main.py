@@ -55,7 +55,6 @@ def create(metadata, data):
         auth_token = request.headers.get('X-Authorization')
         token = auth_token.split()[1]
 
-        data_client = datastore.Client()
         q_lookup = data_client.query(kind='Users')
         q_lookup.add_filter("token", "=", token)
         res = list(q_lookup.fetch())
@@ -63,6 +62,11 @@ def create(metadata, data):
 
         if len(res) != 1:
             return error, 401
+        for user in res:
+            if datetime.now() > user["expiration"] or user["api_uses"] > 1000:
+                return { "code": 0, "message": "Token has expired"}, 401
+            user["api_uses"] = user["api_uses"] + 1
+            data_client.put(user)
 
         # DO Package creation
         full_key = data_client.key("package", metadata["Name"] + ": " + metadata["Version"] + ": " + metadata["ID"])
@@ -94,6 +98,7 @@ def create(metadata, data):
         return {"code": 1, "message": "Package created successfully", metadata}, 201
     except:
         return {"code": -1, "message": "An error occurred while attempting to create the package"}, 401
+        
 
 def ingestion(metadata, data):
     try:
@@ -112,6 +117,11 @@ def ingestion(metadata, data):
 
         if len(res) != 1:
             return error, 401
+        for user in res:
+            if datetime.now() > user["expiration"] or user["api_uses"] > 1000:
+                return { "code": 0, "message": "Token has expired"}, 401
+            user["api_uses"] = user["api_uses"] + 1
+            data_client.put(user)
 
         # Do ingestion
         url = data["URL"]
@@ -126,7 +136,6 @@ def ingestion(metadata, data):
             if score < 0.3:
                 return "scores were bad: " + str(scores), 200
 
-        data_client = datastore.Client()
         query = data_client.query(kind = "package")
         query.add_filter("id", "=", metadata["ID"])
         query.add_filter("name", "=", metadata["Name"])
@@ -181,13 +190,16 @@ def getPackageByID(id):
 
         if len(res) != 1:
             return error, 500
+        for user in res:
+            if datetime.now() > user["expiration"] or user["api_uses"] > 1000:
+                return { "code": 0, "message": "Token has expired"}, 401
+            user["api_uses"] = user["api_uses"] + 1
+            data_client.put(user)
         
         metadata = {}
         data = {}
         dataFull = {}
-        # error = { "code": -1, "message": "An error occurred while retrieving package"}
         
-        data_client = datastore.Client()
         query = data_client.query(kind = "package")
         query.add_filter("id", "=", id)
         queryList = list(query.fetch())
@@ -202,35 +214,25 @@ def getPackageByID(id):
             data["URL"] = package["url"]
             data["JSProgram"] = package["jsprogram"]
 
-        dataFull["metadata"] = metadata
-        dataFull["data"] = data
-        for user in q_lookup.fetch():
-            full_key = data_client.key("UserActions", metadata["Name"] + ": " + metadata["Version"] + ": " + metadata["ID"] + ": " + user["name"] +": DOWNLOAD BY ID")
-            newUserEntity = datastore.Entity(key=full_key)
-            newUserEntity["userName"] = user["name"]
-            newUserEntity["userIsAdmin"] = user["isAdmin"]
-            newUserEntity["packageName"] = metadata["Name"]
-            newUserEntity["packageVersion"] = metadata["Version"]
-            newUserEntity["packageID"] = metadata["ID"]
-            newUserEntity["Date"] = datetime.now()
-            newUserEntity["Action"] = "DOWNLOAD BY ID"
-            data_client.put(newUserEntity)
-            
+            dataFull["metadata"] = metadata
+            dataFull["data"] = data
+            for user in q_lookup.fetch():
+                full_key = data_client.key("UserActions", metadata["Name"] + ": " + metadata["Version"] + ": " + metadata["ID"] + ": " + user["name"] +": DOWNLOAD BY ID")
+                newUserEntity = datastore.Entity(key=full_key)
+                newUserEntity["userName"] = user["name"]
+                newUserEntity["userIsAdmin"] = user["isAdmin"]
+                newUserEntity["packageName"] = metadata["Name"]
+                newUserEntity["packageVersion"] = metadata["Version"]
+                newUserEntity["packageID"] = metadata["ID"]
+                newUserEntity["Date"] = datetime.now()
+                newUserEntity["Action"] = "DOWNLOAD BY ID"
+                data_client.put(newUserEntity)
+        
         return dataFull, 200
 
     except:
         return { "code": -1, "message": "An error occurred while getting the package by ID"}
-    #     # if request != "https://ece461.purdue.edu/project2/package/" + id:
-    #     #     raise NameError(request)
-    #     # if x_auth[0] != "X-Authorization:":
-    #     #     raise NameError(header)
-    #     # if package.id != id:
-    #     #     raise NameError(id)
-    #     if i > 1:
-    #         return error, 500
-    #     # else:
-    #     #     raise Exception()
-    #     pass
+
 
 @app.route("/package/<id>", methods=['PUT'])
 def packageUpdate(id):
@@ -247,6 +249,11 @@ def packageUpdate(id):
 
         if len(res) != 1:
             return error, 500
+        for user in res:
+            if datetime.now() > user["expiration"] or user["api_uses"] > 1000:
+                return { "code": 0, "message": "Token has expired"}, 401
+            user["api_uses"] = user["api_uses"] + 1
+            data_client.put(user)
 
         request.get_data()
         dat = request.data.decode("utf-8")
@@ -260,7 +267,6 @@ def packageUpdate(id):
         if metadata["ID"] != id:
             return { "code": -1, "message": "An error occurred while validating the package ID. The input ID and the metadata do not match."}, 400
 
-        data_client = datastore.Client()
         query = data_client.query(kind = "package")
         query.add_filter("id", "=", metadata["ID"])
         query.add_filter("name", "=", metadata["Name"])
@@ -306,8 +312,12 @@ def deletePackage(id):
 
         if len(res) != 1:
             return error, 500
+        for user in res:
+            if datetime.now() > user["expiration"] or user["api_uses"] > 1000:
+                return { "code": 0, "message": "Token has expired"}, 401
+            user["api_uses"] = user["api_uses"] + 1
+            data_client.put(user)
         
-        data_client = datastore.Client()
         query = data_client.query(kind = "package")
         query.add_filter("id", "=", id)
         queryList = list(query.fetch())
@@ -349,8 +359,12 @@ def getPackageByName(name):
 
         if len(res) != 1:
             return error, 500
+        for user in res:
+            if datetime.now() > user["expiration"] or user["api_uses"] > 1000:
+                return { "code": 0, "message": "Token has expired"}, 401
+            user["api_uses"] = user["api_uses"] + 1
+            data_client.put(user)
 
-        data_client = datastore.Client()
         query = data_client.query(kind = "UserActions")
         query.add_filter("packageName", "=", name)
         queryList = list(query.fetch())
@@ -378,6 +392,7 @@ def getPackageByName(name):
     except:
         return { "code": -1, "message": "An error occurred while getting the package(s) by name"}
 
+
 def sortByDateHelper(inputDict):
     return inputDict["Date"]
 
@@ -395,7 +410,12 @@ def deleteAllVersions(name):
 
         if len(res) != 1:
             return error, 500
-        data_client = datastore.Client()
+        for user in res:
+            if datetime.now() > user["expiration"] or user["api_uses"] > 1000:
+                return { "code": 0, "message": "Token has expired"}, 401
+            user["api_uses"] = user["api_uses"] + 1
+            data_client.put(user)
+        
         query = data_client.query(kind = "package")
         query.add_filter("name", "=", name)
         queryList = list(query.fetch())
@@ -443,6 +463,11 @@ def getPackageRate(id):
 
         if len(res) != 1:
             return error, 500
+        for user in res:
+            if datetime.now() > user["expiration"] or user["api_uses"] > 1000:
+                return { "code": 0, "message": "Token has expired"}, 401
+            user["api_uses"] = user["api_uses"] + 1
+            data_client.put(user)
         info = {}
         for package in query.fetch():
             # url = package["url"]
