@@ -52,7 +52,7 @@ There are multiple different kinds of requests that the system can handle, which
         }
     }
     ```
-    * NOTE: The implementation of Project 1 works, but there is an issue with App Engine burning through our tokens. To test the functionality of our adjusted version of this project 1 implementation, complete the following steps
+    * NOTE: The implementation of Project 1 works. To test the functionality of our adjusted version of this project 1 implementation separate from the rest of the app, complete the following steps
         * cd into the folder "project1"
         * run the command: ```bash run_bash_ecngrid.sh install```
         * run the command: ```bash run_bash_ecngrid.sh <GitHub or npmjs URL> <GitHub token>``` to run the project 1 implementation on any package.
