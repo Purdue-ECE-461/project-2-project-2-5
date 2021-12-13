@@ -134,9 +134,9 @@ def ingestion(metadata, data):
     scores = runHandler(url)
     #print(scores)
     
-    # for score in scores:
-    #     if score < 0.3:
-    #         return "scores were bad: " + str(scores) + os.environ.get('GITHUB_TOKEN'), 200
+    for score in scores:
+        if score < 0.5:
+            return "scores were bad: " + str(scores) + os.environ.get('GITHUB_TOKEN'), 200
 
     query = data_client.query(kind = "package")
     query.add_filter("id", "=", metadata["ID"])
@@ -151,13 +151,13 @@ def ingestion(metadata, data):
         if package["url"] != "":
             return "URL already exists", 403
         package["url"] = data["URL"]
-        package["netScore"] = scores[0]
-        package["rampUp"] = scores[1]
-        package["correctness"] = scores[2]
-        package["busFactor"] = scores[3]
-        package["responsiveness"] = scores[4]
-        package["licenses"] = scores[5]
-        package["dependencies"] = scores[6]
+        package["netScore"] = "{:.2f}".format(scores[0])
+        package["rampUp"] = "{:.2f}".format(scores[1])
+        package["correctness"] = "{:.2f}".format(scores[2])
+        package["busFactor"] = "{:.2f}".format(scores[3])
+        package["responsiveness"] = "{:.2f}".format(scores[4])
+        package["licenses"] = "{:.2f}".format(scores[5])
+        package["dependencies"] = "{:.2f}".format(scores[6])
         data_client.put(package)
     
     for user in q_lookup.fetch():
@@ -279,8 +279,8 @@ def packageUpdate(id):
 
         for package in query.fetch():
             package["content"] = data["Content"]
-            package["url"] = data["URL"]
-            package["jsprogram"] = data["JSProgram"]
+            # package["url"] = data["URL"]
+            # package["jsprogram"] = data["JSProgram"]
 
         data_client.put(package)
         for user in q_lookup.fetch():
