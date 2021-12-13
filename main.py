@@ -132,11 +132,11 @@ def ingestion(metadata, data):
     # net, rampUp, correctness, bus_factor, responsiveness, license_score, dependency_score
     # cli.print_to_console()
     scores = runHandler(url)
-    print(scores)
+    #print(scores)
     
-    for score in scores:
-        if score < 0.3:
-            return "scores were bad: " + str(scores) + os.environ.get('GITHUB_TOKEN'), 200
+    # for score in scores:
+    #     if score < 0.3:
+    #         return "scores were bad: " + str(scores) + os.environ.get('GITHUB_TOKEN'), 200
 
     query = data_client.query(kind = "package")
     query.add_filter("id", "=", metadata["ID"])

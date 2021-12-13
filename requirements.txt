@@ -8,3 +8,5 @@ python-dotenv==0.19.2
 beautifulsoup4==4.10.0
 PyGithub==1.55
 GitPython==3.1.18
+coverage==6.2
+python-dotenv==0.19.2
