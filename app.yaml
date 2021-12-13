@@ -11,10 +11,12 @@ handlers:
   # the entire handlers section) when there are no static files defined.
 - url: /.*
   script: auto
-  
+includes:
+  - env_variables.yaml
+
 resources:
   cpu: 2
-  memory_gb: 2.3
+  memory_gb: 4
   disk_size_gb: 20
 
 instance_class: F4

@@ -12,8 +12,8 @@ First, the dependencies must be installed to a virtual environment. To do this, 
 
 After all dependencies are installed, you can then begin to run the environment. The system runs [here](https://project-2-331602.uc.r.appspot.com/) and is deployed by Google App Engine. 
 
-To run the app, run  ```bash ./run.sh```. To deploy the app Google App Engine, run the following command in terminal:
-```COMMAND HERE```
+To run the app, run  ```bash ./run.sh```. To deploy the app Google App Engine (with appropriate permissions), run the following command in terminal:
+```gcloud deploy app```
 
 ## Usage
 To interact with the app, you can send requests using [this link](https://go.postman.co/workspace/Team-Workspace~cd32ddf6-19ca-4a76-8445-250dc8989b0d/collection/18650989-01a09883-c276-44ea-9d79-61b905fce095). 
